@@ -1,0 +1,80 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "ti-blocks/threeimporter",
+  "version": "0.1.0",
+  "title": "Three Importer",
+  "category": "widgets",
+  "icon": "smiley",
+  "description": "Example block scaffolded with Create Block tool.",
+  "example": {},
+  "attributes": {
+    "geometry": {
+      "type": "string",
+      "default": "box"
+    },
+    "geometry_color": {
+      "type": "string",
+      "default": "#000000"
+    },
+    "geometry_size": {
+      "type": "integer",
+      "default": 1
+    },
+    "geometry_material": {
+      "type": "string",
+      "default": "basic"
+    },
+    "gltf_url": {
+      "type": "string",
+      "default": ""
+    },
+    "light": {
+      "type": "string",
+      "default": "ambient"
+    },
+    "light_color": {
+      "type": "string",
+      "default": "#FFFFFF"
+    },
+    "light_intensity": {
+      "type": "integer",
+      "default": 1
+    },
+    "light_xpos": {
+      "type": "integer",
+      "default": 1
+    },
+    "light_ypos": {
+      "type": "integer",
+      "default": 1
+    },
+    "light_zpos": {
+      "type": "integer",
+      "default": 1
+    }
+  },
+  "supports": {
+    "html": true,
+    "innerBlocks": true,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "spacing": {
+      "padding": true,
+      "margin": true
+    },
+    "color": {
+      "text": true,
+      "background": true,
+      "gradients": true
+    }
+  },
+  "textdomain": "threeimporter",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}

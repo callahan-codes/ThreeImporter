@@ -1,0 +1,37 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-ti-blocks-threeimporter {
+	background-color: #21759b;
+	color: #fff;
+	padding: 2px;
+}
+
+.three-importer-container {
+	width: 100%;
+    height: auto;
+    min-height: 400px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.three-importer-container canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+    // z-index: 0;
+}
+
+.three-importer-container .ti-content {
+    z-index: 1;
+    position: relative;
+}

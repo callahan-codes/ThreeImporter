@@ -1,0 +1,28 @@
+{
+  "name": "threeimporter",
+  "version": "0.1.0",
+  "description": "Example block scaffolded with Create Block tool.",
+  "author": "The WordPress Contributors",
+  "license": "GPL-2.0-or-later",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "wp-scripts build --blocks-manifest",
+    "postbuild": "npm run copy-three-bundle",
+	"copy-three-bundle": "cpy src/threeimporter/three-bundle.js build/threeimporter --flat --verbose",
+    "start": "wp-scripts start --blocks-manifest && npm run copy-three-bundle",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "packages-update": "wp-scripts packages-update",
+    "plugin-zip": "wp-scripts plugin-zip"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^30.17.0",
+    "cpy-cli": "^5.0.0"
+  },
+  "dependencies": {
+    "@wordpress/block-editor": "^14.19.0",
+    "@wordpress/components": "^29.10.0",
+    "three": "^0.177.0"
+  }
+}

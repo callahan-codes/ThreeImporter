@@ -1,0 +1,225 @@
+/**
+ * 
+ *  Script below written by Bryce Callahan
+ *  Last Updated: 6/24/2025
+ * 
+ *  The following code
+ * 
+*/
+
+// threejs imports
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { int } from 'three/tsl';
+
+// on page load
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // console log for user
+    console.log('Three Importer has successfully loaded.');
+
+    // all TI containers
+    document.querySelectorAll(".three-importer-container").forEach(container => {
+ 
+        // geometry attributes
+        const geometryType = container.getAttribute("data-geometry-type") || "box";
+        const geometrySize = parseInt(container.getAttribute("data-geometry-size"), 10) || 1;
+        const geometryMaterial = container.getAttribute("data-geometry-material") || "phong";
+        const geometryColor = container.getAttribute("data-geometry-color") || "#000000";
+        const gltfURL = container.getAttribute("data-geometry-gltf") || "";
+
+        // light attributes
+        const lightType = container.getAttribute("data-light") || "ambient";
+        const lightColor = container.getAttribute("data-light-color") || "#FFFFFF";
+        const lightIntensity = parseInt(container.getAttribute("data-light-intensity"), 10) || 1;
+        const lightXPos = parseInt(container.getAttribute("data-light-xpos"), 10) || 1;
+        const lightYPos = parseInt(container.getAttribute("data-light-ypos"), 10) || 1;
+        const lightZPos = parseInt(container.getAttribute("data-light-zpos"), 10) || 1;
+
+        // threejs scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 1, 5000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const controls = new OrbitControls(camera, renderer.domElement);
+        renderer.setClearColor(0x000000, 0);
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+        camera.position.set(10,0,0);
+
+        // mesh setup
+        buildMesh(geometryType, geometryMaterial, geometrySize, geometryColor);
+
+        // light setup
+        buildLight(lightType, lightColor, lightIntensity);
+
+        // threejs main animation loop
+        function animate(){
+            requestAnimationFrame(animate);
+            if (controls) controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // threejs render resize
+        function resizeRenderer(){
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        }
+        resizeRenderer();
+        window.addEventListener('resize', resizeRenderer);
+
+        // build mesh function
+        function buildMesh(type, material, size, color) {
+
+            if(type === "gltf"){
+                loadGLTF();
+            } else {
+                let assignedMaterial, assignedGeometry;
+
+                // geometry material selection
+                switch (material) {
+                    case "lambert":
+                        assignedMaterial = new THREE.MeshLambertMaterial({ color: color });
+                        break;
+                    case "phong":
+                        assignedMaterial = new THREE.MeshPhongMaterial({ color: color });
+                        break;
+                    case "standard":
+                        assignedMaterial = new THREE.MeshStandardMaterial({ color: color });
+                        break;
+                    case "physical":
+                        assignedMaterial = new THREE.MeshPhysicalMaterial({ color: color });
+                        break;
+                    case "basic":
+                    default:
+                        assignedMaterial = new THREE.MeshBasicMaterial({ color: color });
+                        break;
+                }
+
+                // geometry type selection
+                switch(type){
+                    case "torusknot":
+                        assignedGeometry = new THREE.TorusKnotGeometry(size, size * 0.33, 100, 16);
+                        break;
+                    case "tetrahedron":
+                        assignedGeometry = new THREE.TetrahedronGeometry(size, 0);
+                        break;
+                    case "sphere":
+                        assignedGeometry = new THREE.SphereGeometry(size, 64, 32);
+                        break;
+                    case "ring":
+                        assignedGeometry = new THREE.RingGeometry(size, size * 5, 32);
+                        break;
+                    case "plane":
+                        assignedGeometry = new THREE.PlaneGeometry(size, size);
+                        break;
+                    case "octahedron":
+                        assignedGeometry = new THREE.OctahedronGeometry(size, 0);
+                        break;
+                    case "icosahedron":
+                        assignedGeometry = new THREE.IcosahedronGeometry(size, 0);
+                        break;
+                    case "dodecahedron":
+                        assignedGeometry = new THREE.DodecahedronGeometry(size, 0);
+                        break;
+                    case "cylinder":
+                        assignedGeometry = new THREE.CylinderGeometry(size, size, 20, 32);
+                        break;
+                    case "cone":
+                        assignedGeometry = new THREE.ConeGeometry(size, size*4, 32);
+                        break;
+                    case "circle":
+                        assignedGeometry = new THREE.CircleGeometry(size, 32);
+                        material.side = THREE.DoubleSide;
+                        break;
+                    case "capsule":
+                        assignedGeometry = new THREE.CapsuleGeometry(size, size, 4, 8);
+                        break;
+                    case "torus":
+                        assignedGeometry = new THREE.TorusGeometry(size, size / 50, 16, 100);
+                        break;
+                    case "box":
+                        assignedGeometry = new THREE.BoxGeometry(size, size, size);
+                        break;
+                    default:
+                        break;
+                }
+
+                // create geometry
+                const mesh = new THREE.Mesh(assignedGeometry, assignedMaterial);
+                scene.add(mesh);
+            }
+
+        }
+
+        // build light function
+        function buildLight(type, color, intensity){
+
+            let dynamicLight;
+            const dynamicLightColor = new THREE.Color(color);
+
+            switch (type){
+                case "directional":
+                    const directionalLight = new THREE.DirectionalLight(dynamicLightColor, intensity);
+                    dynamicLight = directionalLight;
+                    break;
+                case "hemisphere":
+                    const hemiLight = new THREE.HemisphereLight(dynamicLightColor, intensity);
+                    dynamicLight = hemiLight;
+                    break;
+                case "point":
+                    const pointLight = new THREE.PointLight(dynamicLightColor, intensity, 100);
+                    dynamicLight = pointLight;
+                    break;
+                case "spotlight":
+                    const spotLight = new THREE.SpotLight(dynamicLightColor, intensity);
+                    dynamicLight = spotLight;
+                    break;
+                case "ambient":
+                default:
+                    const ambientLight = new THREE.AmbientLight(dynamicLightColor, intensity);
+                    dynamicLight = ambientLight;
+                    break;
+            }
+
+            dynamicLight.position.set(lightXPos, lightYPos, lightZPos);
+            scene.add(dynamicLight);
+        }
+
+        // load gltf
+        function loadGLTF() {
+
+            // valid string
+            console.log(gltfURL)
+            if (gltfURL) {
+                const loader = new GLTFLoader();
+                loader.load(gltfURL, (gltf) => {
+
+                    const meshGLTF = gltf.scene;
+                    scene.add(meshGLTF);
+
+                }, undefined, (error) => {
+
+                    // fallback mesh
+                    console.error('GLTF load error - falling back to cube.', error);
+                    const fallbackGeometry = new THREE.BoxGeometry(1,1,1);
+                    const fallbackMaterial = new THREE.MeshBasicMaterial({color:"red"});
+                    const mesh = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
+                    scene.add(mesh);
+
+                });
+            } else {
+                // warn user 
+                console.warn("GLTF type specified but no URL provided - falling back to cube.");
+                const fallbackGeometry = new THREE.BoxGeometry(1,1,1);
+                const fallbackMaterial = new THREE.MeshBasicMaterial({color:"red"});
+                const mesh = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
+                scene.add(mesh);
+            }
+        }
+    });
+});
