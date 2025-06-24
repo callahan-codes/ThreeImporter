@@ -1,6 +1,6 @@
 === Three Importer ===
-Contributors:      The WordPress Contributors
-Tags:              block
+Contributors:      Bryce Callahan
+Tags:              block, shortcode, script inject
 Tested up to:      6.7
 Stable tag:        0.1.0
 License:           GPL-2.0-or-later
