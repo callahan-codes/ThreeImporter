@@ -25,6 +25,30 @@
       "type": "string",
       "default": "basic"
     },
+    "geometry_xrotation": {
+      "type": "integer",
+      "default": 0
+    },
+    "geometry_yrotation": {
+      "type": "integer",
+      "default": 0
+    },
+    "geometry_zrotation": {
+      "type": "integer",
+      "default": 0
+    },
+    "geometry_instancing": {
+      "type": "boolean",
+      "default": false
+    },
+    "geometry_instancingNum": {
+      "type": "integer",
+      "default": 50
+    },
+    "geometry_instancingSpacing": {
+      "type": "integer",
+      "default": 1
+    },
     "gltf_url": {
       "type": "string",
       "default": ""
@@ -52,6 +76,30 @@
     "light_zpos": {
       "type": "integer",
       "default": 1
+    },
+    "camera_xpos": {
+      "type": "integer",
+      "default": 5
+    },
+    "camera_ypos": {
+      "type": "integer",
+      "default": 0
+    },
+    "camera_zpos": {
+      "type": "integer",
+      "default": 0
+    },
+    "camera_xrotation": {
+      "type": "integer",
+      "default": 0
+    },
+    "camera_yrotation": {
+      "type": "integer",
+      "default": 0
+    },
+    "camera_zrotation": {
+      "type": "integer",
+      "default": 0
     }
   },
   "supports": {

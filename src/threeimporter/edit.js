@@ -117,6 +117,26 @@ export default function Edit({ attributes, setAttributes }) {
 								</fieldset>
 							</>
 						)}
+
+						{/* geometry rotation */}
+						<ToggleControl
+							label={__("X Rotation", "ti_blocks")}
+							checked={attributes.geometry_xrotation}
+							onChange={(value) => setAttributes({ geometry_xrotation: value })}
+						/>
+
+						<ToggleControl
+							label={__("Y Rotation", "ti_blocks")}
+							checked={attributes.geometry_yrotation}
+							onChange={(value) => setAttributes({ geometry_yrotation: value })}
+						/>
+
+						<ToggleControl
+							label={__("Z Rotation", "ti_blocks")}
+							checked={attributes.geometry_zrotation}
+							onChange={(value) => setAttributes({ geometry_zrotation: value })}
+						/>
+
 					</PanelBody>
 
 					{/* light settings */}
@@ -190,7 +210,85 @@ export default function Edit({ attributes, setAttributes }) {
 
 					</PanelBody>
 
+					{/* camera settings */}
+					<PanelBody title={__("Camera Settings", "ti_blocks")}>
+
+						{/* camera x position */}
+						<TextControl
+							label={__("X Position", "ti_blocks")}
+							value={attributes.camera_xpos}
+							type="number"
+							onChange={(value) => setAttributes({ camera_xpos: value })}
+						/>
+
+						{/* camera y position */}
+						<TextControl
+							label={__("Y Position", "ti_blocks")}
+							value={attributes.camera_ypos}
+							type="number"
+							onChange={(value) => setAttributes({ camera_ypos: value })}
+						/>
+
+						{/* camera z position */}
+						<TextControl
+							label={__("Z Position", "ti_blocks")}
+							value={attributes.camera_zpos}
+							type="number"
+							onChange={(value) => setAttributes({ camera_zpos: value })}
+						/>
+
+						{/* camera rotation */}
+						<ToggleControl
+							label={__("X Rotation", "ti_blocks")}
+							checked={attributes.camera_xrotation}
+							onChange={(value) => setAttributes({ camera_xrotation: value })}
+						/>
+
+						<ToggleControl
+							label={__("Y Rotation", "ti_blocks")}
+							checked={attributes.camera_yrotation}
+							onChange={(value) => setAttributes({ camera_yrotation: value })}
+						/>
+
+						<ToggleControl
+							label={__("Z Rotation", "ti_blocks")}
+							checked={attributes.camera_zrotation}
+							onChange={(value) => setAttributes({ camera_zrotation: value })}
+						/>
+					</PanelBody>
+
 					{/* instancing settings */}
+					<PanelBody title={__("Instancing Settings", "ti_blocks")}>
+
+						{/* toggle instancing */}
+						<ToggleControl
+							label={__("Instancing", "ti_blocks")}
+							checked={attributes.geometry_instancing}
+							onChange={(value) => setAttributes({ geometry_instancing: value })}
+						/>
+
+						{/* instancing enabled */}
+						{attributes.geometry_instancing && (
+							<>
+								{/* number of instances */}
+								<TextControl
+									label={__("Number of Instances", "ti_blocks")}
+									value={attributes.geometry_instancingNum}
+									type="number"
+									onChange={(value) => setAttributes({ geometry_instancingNum: value })}
+								/>
+
+								{/* spacing */}
+								<TextControl
+									label={__("Instance Spacing", "ti_blocks")}
+									value={attributes.geometry_instancingSpacing}
+									type="number"
+									onChange={(value) => setAttributes({ geometry_instancingSpacing: value })}
+								/>
+							</>
+						)}
+	
+					</PanelBody>
 
 				</Panel>
 			</InspectorControls>

@@ -1,1 +1,40 @@
-.wp-block-ti-blocks-threeimporter{background-color:#21759b;color:#fff;padding:2px}.three-importer-container{align-items:center;display:flex;height:auto;justify-content:center;min-height:400px;position:relative;width:100%}.three-importer-container canvas{display:block;height:100%!important;left:0;position:absolute;top:0;width:100%!important}.three-importer-container .ti-content{position:relative;z-index:1}
+/*!*****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/threeimporter/style.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.wp-block-ti-blocks-threeimporter {
+  background-color: #21759b;
+  color: #fff;
+  padding: 2px;
+}
+
+.three-importer-container {
+  width: 100%;
+  height: auto;
+  min-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.three-importer-container canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.three-importer-container .ti-content {
+  z-index: 1;
+  position: relative;
+}
+
+/*# sourceMappingURL=style-index.css.map*/

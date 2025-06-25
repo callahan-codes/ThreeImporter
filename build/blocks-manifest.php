@@ -30,6 +30,30 @@ return array(
 				'type' => 'string',
 				'default' => 'basic'
 			),
+			'geometry_xrotation' => array(
+				'type' => 'integer',
+				'default' => 0
+			),
+			'geometry_yrotation' => array(
+				'type' => 'integer',
+				'default' => 0
+			),
+			'geometry_zrotation' => array(
+				'type' => 'integer',
+				'default' => 0
+			),
+			'geometry_instancing' => array(
+				'type' => 'boolean',
+				'default' => false
+			),
+			'geometry_instancingNum' => array(
+				'type' => 'integer',
+				'default' => 50
+			),
+			'geometry_instancingSpacing' => array(
+				'type' => 'integer',
+				'default' => 1
+			),
 			'gltf_url' => array(
 				'type' => 'string',
 				'default' => ''
@@ -57,6 +81,30 @@ return array(
 			'light_zpos' => array(
 				'type' => 'integer',
 				'default' => 1
+			),
+			'camera_xpos' => array(
+				'type' => 'integer',
+				'default' => 5
+			),
+			'camera_ypos' => array(
+				'type' => 'integer',
+				'default' => 0
+			),
+			'camera_zpos' => array(
+				'type' => 'integer',
+				'default' => 0
+			),
+			'camera_xrotation' => array(
+				'type' => 'integer',
+				'default' => 0
+			),
+			'camera_yrotation' => array(
+				'type' => 'integer',
+				'default' => 0
+			),
+			'camera_zrotation' => array(
+				'type' => 'integer',
+				'default' => 0
 			)
 		),
 		'supports' => array(

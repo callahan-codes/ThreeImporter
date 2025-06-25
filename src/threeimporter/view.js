@@ -27,7 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const geometrySize = parseInt(container.getAttribute("data-geometry-size"), 10) || 1;
         const geometryMaterial = container.getAttribute("data-geometry-material") || "phong";
         const geometryColor = container.getAttribute("data-geometry-color") || "#000000";
+        const geometryXRotation = container.getAttribute("data-geometry-xrotation") || "#000000";
+        const geometryYRotation = container.getAttribute("data-geometry-yrotation") || "#000000";
+        const geometryZRotation = container.getAttribute("data-geometry-zrotation") || "#000000";
         const gltfURL = container.getAttribute("data-geometry-gltf") || "";
+
+        // geometry instancing attributes
+        const geometryInstancing = container.getAttribute("data-geometry-instancing") === "true";
+        const geometryInstancingNum = parseInt(container.getAttribute("data-geometry-instancingNum"), 10) || 50;
+        const geometryInstancingSpacing = parseInt(container.getAttribute("data-geometry-instancingSpacing"), 10) || 1;
 
         // light attributes
         const lightType = container.getAttribute("data-light") || "ambient";
@@ -37,6 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const lightYPos = parseInt(container.getAttribute("data-light-ypos"), 10) || 1;
         const lightZPos = parseInt(container.getAttribute("data-light-zpos"), 10) || 1;
 
+        // camera attributes
+        const cameraXPos = parseInt(container.getAttribute("data-camera-xpos"), 10) || 5;
+        const cameraYPos = parseInt(container.getAttribute("data-camera-ypos"), 10) || 0;
+        const cameraZPos = parseInt(container.getAttribute("data-camera-zpos"), 10) || 0;
+
         // threejs scene setup
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 1, 5000);
@@ -45,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderer.setClearColor(0x000000, 0);
         renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
-        camera.position.set(10,0,0);
+        camera.position.set(cameraXPos, cameraYPos, cameraZPos);
 
         // mesh setup
         buildMesh(geometryType, geometryMaterial, geometrySize, geometryColor);
@@ -149,9 +162,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         break;
                 }
 
-                // create geometry
-                const mesh = new THREE.Mesh(assignedGeometry, assignedMaterial);
-                scene.add(mesh);
+                if(geometryInstancing){
+
+                    const mesh = new THREE.InstancedMesh(assignedGeometry, assignedMaterial, geometryInstancingNum);
+                    buildInstancedMesh(mesh);
+                    scene.add(mesh)
+
+                } else {
+
+                    // create single geometry
+                    const mesh = new THREE.Mesh(assignedGeometry, assignedMaterial);
+                    scene.add(mesh);
+                }
+
             }
 
         }
@@ -194,7 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
         function loadGLTF() {
 
             // valid string
-            console.log(gltfURL)
             if (gltfURL) {
                 const loader = new GLTFLoader();
                 loader.load(gltfURL, (gltf) => {
@@ -219,6 +241,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const fallbackMaterial = new THREE.MeshBasicMaterial({color:"red"});
                 const mesh = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
                 scene.add(mesh);
+            }
+        }
+
+        // instancing mesh
+        function buildInstancedMesh(mesh){
+            const dummyMesh = new THREE.Object3D();
+            for (let i = 0; i < geometryInstancingNum; i++) {
+                dummyMesh.position.x = Math.random() * geometryInstancingSpacing - geometryInstancingSpacing / 2;
+                dummyMesh.position.y = Math.random() * geometryInstancingSpacing - geometryInstancingSpacing / 2;
+                dummyMesh.position.z = Math.random() * geometryInstancingSpacing - geometryInstancingSpacing / 2;
+
+                dummyMesh.updateMatrix();
+                mesh.setMatrixAt(i, dummyMesh.matrix);
             }
         }
     });
