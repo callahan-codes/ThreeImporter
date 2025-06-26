@@ -28,12 +28,15 @@ import {
 	ToggleControl,
 	TextControl,
 	ColorPalette,
-	Notice
+	Notice,
+	ResizableBox
 } from '@wordpress/components';
 import './editor.scss';
 
 // block editor functionality
 export default function Edit({ attributes, setAttributes }) {
+
+	const numericHeight = parseInt(attributes.block_height, 10) || 400;
 
 	// blockProps for handling HTML structure of block
 	const blockProps = useBlockProps();
@@ -302,18 +305,27 @@ export default function Edit({ attributes, setAttributes }) {
 						{/* background type */}
 						<SelectControl
 							label={__("Type", "ti_blocks")}
-							value={attributes.background}
+							value={attributes.scene_background}
 							options={[
 								{ label: __("None", "ti_blocks"), value: "none" },
 								{ label: __("Particles", "ti_blocks"), value: "particles" },
 								{ label: __("CubeGrid", "ti_blocks"), value: "cubegrid" },
 							]}
-							onChange={(background) => setAttributes({ background })}
+							onChange={(scene_background) => setAttributes({ scene_background })}
 						/>
 
 							
 						{attributes.background === "particles" && (
 							<>
+
+								{/* particle amount */}
+								<TextControl
+									label={__("Amount", "ti_blocks")}
+									value={attributes.particle_amount}
+									type="number"
+									onChange={(value) => setAttributes({ particle_amount: value })}
+								/>
+
 								{/* particle size */}
 								<TextControl
 									label={__("Size", "ti_blocks")}
@@ -342,6 +354,14 @@ export default function Edit({ attributes, setAttributes }) {
 									]}
 									onChange={(particle_direction) => setAttributes({ particle_direction })}
 								/>
+								
+								{/* particle stretch */}
+								<TextControl
+									label={__("Stretch", "ti_blocks")}
+									value={attributes.particle_stretch}
+									type="number"
+									onChange={(value) => setAttributes({ particle_stretch: value })}
+								/>
 
 								{/* particle color */}
 								<fieldset>
@@ -362,6 +382,7 @@ export default function Edit({ attributes, setAttributes }) {
 										onChange={(particle_color) => setAttributes({ particle_color })}
 									/>
 								</fieldset>
+
 							</>
 						)}
 					</PanelBody>
@@ -369,12 +390,43 @@ export default function Edit({ attributes, setAttributes }) {
 				</Panel>
 			</InspectorControls>
 
-			{/* editor block message & InnerBlocks */}
-			<div className='ti-block-heading'>
-				<h2 style={{ textAlign: 'center' }}>{__('Your three.js scene will render on the front end.', 'threeimporter')}</h2>
-				<p style={{ textAlign: 'center'}}>{__('Scene Settings can be found in the Block settings. Enter other blocks below.', 'threeimporter')}</p>
-			</div>
-			<InnerBlocks />
+			{/* editor view */}
+			<ResizableBox
+				size={{
+					height: numericHeight,
+					width: '100%',
+				}}
+				minHeight="100"
+				enable={{
+					top: false,
+					right: false,
+					bottom: true,
+					left: false,
+					topRight: false,
+					bottomRight: false,
+					bottomLeft: false,
+					topLeft: false,
+				}}
+				onResizeStop={(event, direction, elt, delta) => {
+					const newHeight = numericHeight + delta.height;
+					setAttributes({ block_height: `${newHeight}px` });
+				}}
+				className="ti-block-resizable-box"
+			>
+				<div style={{ height: attributes.block_height, overflow: 'hidden' }}>
+					<div className="ti-block-heading">
+						<h2 style={{ textAlign: 'center' }}>
+							{__('Your three.js scene will render on the front end.', 'threeimporter')}
+						</h2>
+						<p style={{ textAlign: 'center' }}>
+							{__('Scene Settings can be found in the Block settings. Enter other blocks below.', 'threeimporter')}
+						</p>
+					</div>
+					
+					<InnerBlocks />
+				</div>
+			</ResizableBox>
+
 		</div>
 	);
 }

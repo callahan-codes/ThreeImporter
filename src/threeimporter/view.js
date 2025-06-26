@@ -57,10 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // background attributes
         const background = container.getAttribute('data-background') || 'none';
+        const particleAmount = parseInt(container.getAttribute('data-particle-amount'), 10) || 1000;
         const particleSize = parseInt(container.getAttribute('data-particle-size'), 10) || 1;
         const particleSpeed = parseInt(container.getAttribute('data-particle-speed'), 10) || 5;
         const particleDirection = container.getAttribute('data-particle-direction') || 'right';
         const particleColor = container.getAttribute('data-particle-color') || '#000000';
+        const particleStretch = parseInt(container.getAttribute('data-particle-stretch'), 10) || 5;
 
         // other variables
         let mesh,
@@ -101,17 +103,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // access particle positions
                 const positions = particlesGeo.attributes.position.array;
-                for (let i = 0; i < 1000 * 3; i += 3) {
+                for (let i = 0; i < particleAmount; i += 3) {
 
                     // direction
                     if(particleDirection === 'up') positions[i + 1] += (particleSpeed * 0.01);
                     if(particleDirection === 'down') positions[i + 1] -= (particleSpeed * 0.01);
-                    if(particleDirection === 'right') positions[i] += (particleSpeed * 0.01);
-                    if(particleDirection === 'left') positions[i] += (particleSpeed * 0.01);
+                    if(particleDirection === 'right') positions[i + 2] -= (particleSpeed * 0.01);
+                    if(particleDirection === 'left') positions[i + 2] += (particleSpeed * 0.01);
 
-                    // reset position threshold
-                    if(positions[i] > 20) positions[i] = -20;
-                    if(positions[i + 1] > 20) positions[i + 1] = -20;
+                    // reset position threshold | up/down/left/right
+                    if(positions[i + 1] > particleStretch) positions[i + 1] = -particleStretch; 
+                    if(positions[i + 1] < -particleStretch) positions[i + 1] = particleStretch; 
+                    if(positions[i + 2] < -particleStretch) positions[i + 2] = particleStretch;
+                    if(positions[i + 2] < -particleStretch) positions[i + 2] = particleStretch;
+
                 }
 
                 // update position
@@ -344,22 +349,25 @@ document.addEventListener('DOMContentLoaded', () => {
         // background particles
         function buildBackground_Particles() {
 
-            const particleCount = 1000;
-            const positions = new Float32Array(particleCount * 3);
-
-            for (let i = 0; i < particleCount * 3; i += 3) {
-                positions[i] = (Math.random() - 0.5) * 10; 
-                positions[i + 1] = (Math.random() - 0.5) * 10;
-                positions[i + 2] = (Math.random() - 0.5) * 10;
+            const positions = new Float32Array(particleAmount);
+            for (let i = 0; i < particleAmount; i += 3) {
+                positions[i] = -5; 
+                positions[i + 1] = (Math.random() - 0.5) * particleStretch;
+                positions[i + 2] = (Math.random() - 0.5) * particleStretch;
             }
 
             particlesGeo = new THREE.BufferGeometry();
             particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
             particlesMat = new THREE.PointsMaterial({ size: (particleSize * 0.1), color: particleColor });
+            
             particles = new THREE.Points(particlesGeo, particlesMat);
             scene.add(particles);
 
+        }
+
+        // controls
+        function controlsToggle() {
+            
         }
 
     });

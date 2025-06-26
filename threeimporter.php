@@ -59,7 +59,13 @@ function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
 		'camera_xpos' => '5',
 		'camera_ypos' => '0',
 		'camera_zpos' => '0',
-		'background' => 'none'
+		'background' => 'none',
+		'particle_amount' => '1000',
+		'particle_size' => '1',
+		'particle_speed' => '5',
+		'particle_direction' => 'right',
+		'particle_color' => '#000000',
+		'particle_stretch' => '5',
 
 	), $atts, 'scene' );
 
@@ -85,8 +91,14 @@ function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
 		'data-light-zpos="' . esc_attr( $atts['light_zpos'] ) . '" ' .
 		'data-camera-xpos="' . esc_attr( $atts['camera_xpos'] ) . '" ' .
 		'data-camera-ypos="' . esc_attr( $atts['camera_ypos'] ) . '" ' .
-		'data-camera-zpos="' . esc_attr( $atts['camera_zpos'] ) . '"' .
-		'data-background="' . esc_attr( $atts['background'] ) . '">' .
+		'data-camera-zpos="' . esc_attr( $atts['camera_zpos'] ) . '" ' .
+		'data-scene-background="' . esc_attr( $atts['scene_background'] ) . '" ' .
+		'data-particle-amount="' . esc_attr( $atts['particle_amount'] ) . '" ' .
+		'data-particle-size="' . esc_attr( $atts['particle_size'] ) . '" ' .
+		'data-particle-speed="' . esc_attr( $atts['particle_speed'] ) . '" ' .
+		'data-particle-direction="' . esc_attr( $atts['particle_direction'] ) . '" ' .
+		'data-particle-color="' . esc_attr( $atts['particle_color'] ) . '" ' .
+		'data-particle-stretch="' . esc_attr( $atts['particle_stretch'] ) . '">' .
 
 			'<div class="ti-content">' . do_shortcode( $content ) . '</div>' .
 		'</div>';

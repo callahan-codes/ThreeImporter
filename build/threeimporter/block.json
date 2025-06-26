@@ -9,6 +9,10 @@
   "description": "Example block scaffolded with Create Block tool.",
   "example": {},
   "attributes": {
+    "block_height": {
+      "type": "string",
+      "default": "400px"
+    },
     "geometry": {
       "type": "string",
       "default": "box"
@@ -89,9 +93,13 @@
       "type": "string",
       "default": "0"
     },
-    "background": {
+    "scene_background": {
       "type": "string",
       "default": "none"
+    },
+    "particle_amount": {
+      "type": "string",
+      "default": "1000"
     },
     "particle_size": {
       "type": "string",
@@ -108,21 +116,31 @@
     "particle_color": {
       "type": "string",
       "default": "#000000"
+    },
+    "particle_stretch": {
+      "type": "string",
+      "default": "5"
     }
   },
   "supports": {
-    "html": true,
+    "html": false,
     "innerBlocks": true,
     "align": [
       "wide",
       "full"
     ],
+    "layout": {
+      "allowSwitching": true,
+      "default": {
+        "type": "flex",
+        "justifyContent": "center"
+      }
+    },
     "spacing": {
       "padding": true,
       "margin": true
     },
     "color": {
-      "text": true,
       "background": true,
       "gradients": true
     }

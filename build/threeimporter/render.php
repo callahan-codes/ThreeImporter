@@ -2,16 +2,25 @@
 
 use function \WP_Block_Supports\render_block_core;
 
-// exit if accessed directly.
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$class_names = 'three-importer-container';
+$style = '';
+
+if ( ! empty( $attributes['style']['color']['background'] ) ) {
+	$style .= 'background-color:' . esc_attr( $attributes['style']['color']['background'] ) . ';';
+}
+
+$wrapper_attributes = get_block_wrapper_attributes( array(
+	'style' => $style,
+	'class' => 'three-importer-container'
+) );
+
 ?>
 
-<div 
-	class="<?php echo esc_attr( $class_names ); ?>"
+<div <?php echo $wrapper_attributes; ?>
 	data-geometry-type="<?php echo esc_attr($attributes['geometry']);?>"	
 	data-geometry-size="<?php echo esc_attr($attributes['geometry_size']);?>"
 	data-geometry-material="<?php echo esc_attr($attributes['geometry_material']);?>"
@@ -32,12 +41,14 @@ $class_names = 'three-importer-container';
 	data-camera-xpos="<?php echo esc_attr($attributes['camera_xpos']);?>"
 	data-camera-ypos="<?php echo esc_attr($attributes['camera_ypos']);?>"
 	data-camera-zpos="<?php echo esc_attr($attributes['camera_zpos']);?>"
-	data-background="<?php echo esc_attr($attributes['background']);?>"
+	data-scene-background="<?php echo esc_attr($attributes['scene_background']);?>"
+	data-particle-amount="<?php echo esc_attr($attributes['particle_amount']);?>"
 	data-particle-size="<?php echo esc_attr($attributes['particle_size']);?>"
 	data-particle-speed="<?php echo esc_attr($attributes['particle_speed']);?>"
 	data-particle-direction="<?php echo esc_attr($attributes['particle_direction']);?>"
 	data-particle-color="<?php echo esc_attr($attributes['particle_color']);?>"
->
+	data-particle-stretch="<?php echo esc_attr($attributes['particle_stretch']);?>">
+	
 	<div class="ti-content">
 		<?php echo $content; ?>
 	</div>

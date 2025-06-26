@@ -14,6 +14,10 @@ return array(
 			
 		),
 		'attributes' => array(
+			'block_height' => array(
+				'type' => 'string',
+				'default' => '400px'
+			),
 			'geometry' => array(
 				'type' => 'string',
 				'default' => 'box'
@@ -94,9 +98,13 @@ return array(
 				'type' => 'string',
 				'default' => '0'
 			),
-			'background' => array(
+			'scene_background' => array(
 				'type' => 'string',
 				'default' => 'none'
+			),
+			'particle_amount' => array(
+				'type' => 'string',
+				'default' => '1000'
 			),
 			'particle_size' => array(
 				'type' => 'string',
@@ -113,21 +121,31 @@ return array(
 			'particle_color' => array(
 				'type' => 'string',
 				'default' => '#000000'
+			),
+			'particle_stretch' => array(
+				'type' => 'string',
+				'default' => '5'
 			)
 		),
 		'supports' => array(
-			'html' => true,
+			'html' => false,
 			'innerBlocks' => true,
 			'align' => array(
 				'wide',
 				'full'
+			),
+			'layout' => array(
+				'allowSwitching' => true,
+				'default' => array(
+					'type' => 'flex',
+					'justifyContent' => 'center'
+				)
 			),
 			'spacing' => array(
 				'padding' => true,
 				'margin' => true
 			),
 			'color' => array(
-				'text' => true,
 				'background' => true,
 				'gradients' => true
 			)

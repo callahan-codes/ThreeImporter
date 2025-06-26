@@ -10,8 +10,15 @@
 
 .ti-block-heading {
 	background-color: #000;
+	color: white;
 	box-sizing: border-box;
 	padding: 10px;
 	border: 1.5px solid white;
 	width: 100%;
+}
+
+.ti-block-resizable-box .components-resizable-box__handle {
+	background: transparent;
+	width: 12px;
+	height: 12px;
 }
