@@ -31,28 +31,28 @@ return array(
 				'default' => 'basic'
 			),
 			'geometry_xrotation' => array(
-				'type' => 'integer',
-				'default' => 0
+				'type' => 'string',
+				'default' => '0'
 			),
 			'geometry_yrotation' => array(
-				'type' => 'integer',
-				'default' => 0
+				'type' => 'string',
+				'default' => '0'
 			),
 			'geometry_zrotation' => array(
-				'type' => 'integer',
-				'default' => 0
+				'type' => 'string',
+				'default' => '0'
 			),
 			'geometry_instancing' => array(
 				'type' => 'boolean',
 				'default' => false
 			),
 			'geometry_instancingNum' => array(
-				'type' => 'integer',
-				'default' => 50
+				'type' => 'string',
+				'default' => '50'
 			),
 			'geometry_instancingSpacing' => array(
-				'type' => 'integer',
-				'default' => 1
+				'type' => 'string',
+				'default' => '1'
 			),
 			'gltf_url' => array(
 				'type' => 'string',
@@ -67,44 +67,52 @@ return array(
 				'default' => '#FFFFFF'
 			),
 			'light_intensity' => array(
-				'type' => 'integer',
-				'default' => 1
+				'type' => 'string',
+				'default' => '1'
 			),
 			'light_xpos' => array(
-				'type' => 'integer',
-				'default' => 1
+				'type' => 'string',
+				'default' => '1'
 			),
 			'light_ypos' => array(
-				'type' => 'integer',
-				'default' => 1
+				'type' => 'string',
+				'default' => '1'
 			),
 			'light_zpos' => array(
-				'type' => 'integer',
-				'default' => 1
+				'type' => 'string',
+				'default' => '1'
 			),
 			'camera_xpos' => array(
-				'type' => 'integer',
-				'default' => 5
+				'type' => 'string',
+				'default' => '5'
 			),
 			'camera_ypos' => array(
-				'type' => 'integer',
-				'default' => 0
+				'type' => 'string',
+				'default' => '0'
 			),
 			'camera_zpos' => array(
-				'type' => 'integer',
-				'default' => 0
+				'type' => 'string',
+				'default' => '0'
 			),
-			'camera_xrotation' => array(
-				'type' => 'integer',
-				'default' => 0
+			'background' => array(
+				'type' => 'string',
+				'default' => 'none'
 			),
-			'camera_yrotation' => array(
-				'type' => 'integer',
-				'default' => 0
+			'particle_size' => array(
+				'type' => 'string',
+				'default' => '1'
 			),
-			'camera_zrotation' => array(
-				'type' => 'integer',
-				'default' => 0
+			'particle_speed' => array(
+				'type' => 'string',
+				'default' => '5'
+			),
+			'particle_direction' => array(
+				'type' => 'string',
+				'default' => 'right'
+			),
+			'particle_color' => array(
+				'type' => 'string',
+				'default' => '#000000'
 			)
 		),
 		'supports' => array(

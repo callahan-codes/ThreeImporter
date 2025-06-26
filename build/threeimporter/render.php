@@ -16,9 +16,9 @@ $class_names = 'three-importer-container';
 	data-geometry-size="<?php echo esc_attr($attributes['geometry_size']);?>"
 	data-geometry-material="<?php echo esc_attr($attributes['geometry_material']);?>"
 	data-geometry-color="<?php echo esc_attr($attributes['geometry_color']);?>"
-	data-geometry-enableXRotation="<?php echo esc_attr($attributes['geometry_xrotation']);?>"
-	data-geometry-enableYRotation="<?php echo esc_attr($attributes['geometry_yrotation']);?>"
-	data-geometry-enableZRotation="<?php echo esc_attr($attributes['geometry_zrotation']);?>"
+	data-geometry-xrotation="<?php echo esc_attr($attributes['geometry_xrotation']);?>"
+	data-geometry-yrotation="<?php echo esc_attr($attributes['geometry_yrotation']);?>"
+	data-geometry-zrotation="<?php echo esc_attr($attributes['geometry_zrotation']);?>"
 	data-geometry-instancing="<?php echo $attributes['geometry_instancing'] ? 'true' : 'false'; ?>"
 	data-geometry-instancingNum="<?php echo esc_attr($attributes['geometry_instancingNum']);?>"
 	data-geometry-instancingSpacing="<?php echo esc_attr($attributes['geometry_instancingSpacing']);?>"
@@ -32,9 +32,11 @@ $class_names = 'three-importer-container';
 	data-camera-xpos="<?php echo esc_attr($attributes['camera_xpos']);?>"
 	data-camera-ypos="<?php echo esc_attr($attributes['camera_ypos']);?>"
 	data-camera-zpos="<?php echo esc_attr($attributes['camera_zpos']);?>"
-	data-camera-xrotation="<?php echo esc_attr($attributes['camera_xrotation']);?>"
-	data-camera-yrotation="<?php echo esc_attr($attributes['camera_yrotation']);?>"
-	data-camera-zrotation="<?php echo esc_attr($attributes['camera_zrotation']);?>"
+	data-background="<?php echo esc_attr($attributes['background']);?>"
+	data-particle-size="<?php echo esc_attr($attributes['particle_size']);?>"
+	data-particle-speed="<?php echo esc_attr($attributes['particle_speed']);?>"
+	data-particle-direction="<?php echo esc_attr($attributes['particle_direction']);?>"
+	data-particle-color="<?php echo esc_attr($attributes['particle_color']);?>"
 >
 	<div class="ti-content">
 		<?php echo $content; ?>

@@ -36,86 +36,66 @@ function ti_blocks_threeimporter_block_init() {
 add_action( 'init', 'ti_blocks_threeimporter_block_init' );
 
 // Register [scene] shortcode
-function mfp_display_threejs_geometry( $atts, $content = null ) {
+function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
 
 	$atts = shortcode_atts( array(
-		'geometry' => 'geo-type-box',
+		'geometry' => 'box',
+		'geometry_color' => '#000000',
+		'geometry_material' => 'basic',
+		'geometry_size' => '1',
+		'geometry_xrotation' => '0',
+		'geometry_yrotation' => '0',
+		'geometry_zrotation' => '0',
+		'geometry_instancing' => false,
+		'geometry_instancingNum' => '50',
+		'geometry_instancingSpacing' => '1',
 		'gltf_url' => '',
-		'geometry_color' => 'geo-color-black',
-		'geometry_size' => 1,
-		'geometry_material' => 'geo-material-basic',
-		'geometry_enableXRotation' => false,
-		'geometry_enableYRotation' => false,
-		'geometry_enableZRotation' => false,
-		'geometry_enableInstancing' => false,
-		'geometry_instancingNum' => 100,
-		'geometry_instancingSpacing' => 40,
-		'controls_enableCamRotation' => false,
-		'rotation_speed' => 0,
-		'scene_light' => 'scene-light-ambient',
-		'scene_light_color' => 'scene-light-color-white',
-		'camera_xposition' => 0,
-		'camera_yposition' => 0,
-		'camera_zposition' => 0,
-		'textColor' => '',
-		'backgroundColor' => '',
-		'gradient' => ''
+		'light' => 'ambient',
+		'light_color' => '#FFFFFF',
+		'light_intensity' => '1',
+		'light_xpos' => '1',
+		'light_ypos' => '1',
+		'light_zpos' => '1',
+		'camera_xpos' => '5',
+		'camera_ypos' => '0',
+		'camera_zpos' => '0',
+		'background' => 'none'
+
 	), $atts, 'scene' );
 
-	$bool_to_flag = function( $value ) {
-		return ( $value && $value !== 'false' && $value !== '0' ) ? '1' : '0';
-	};
-
 	$class_names = 'three-importer-container';
-	if ( ! empty( $atts['textColor'] ) ) {
-		$class_names .= ' has-text-color has-' . sanitize_title( $atts['textColor'] ) . '-color';
-	}
-	if ( ! empty( $atts['backgroundColor'] ) ) {
-		$class_names .= ' has-background has-' . sanitize_title( $atts['backgroundColor'] ) . '-background-color';
-	}
-	if ( ! empty( $atts['gradient'] ) ) {
-		$class_names .= ' has-background has-' . sanitize_title( $atts['gradient'] ) . '-gradient-background';
-	}
-
-	$geometry_size      = floatval( $atts['geometry_size'] );
-	$instancing_num     = intval( $atts['geometry_instancingNum'] );
-	$instancing_spacing = floatval( $atts['geometry_instancingSpacing'] );
-	$rotation_speed     = floatval( $atts['rotation_speed'] );
-	$camera_x           = floatval( $atts['camera_xposition'] );
-	$camera_y           = floatval( $atts['camera_yposition'] );
-	$camera_z           = floatval( $atts['camera_zposition'] );
 
 	return '<div class="' . esc_attr( $class_names ) . '" ' .
 		'data-geometry-type="' . esc_attr( $atts['geometry'] ) . '" ' .
-		'data-geometry-gltf="' . esc_url( $atts['gltf_url'] ) . '" ' .
-		'data-geometry-color="' . esc_attr( $atts['geometry_color'] ) . '" ' .
-		'data-geometry-size="' . esc_attr( $geometry_size ) . '" ' .
+		'data-geometry-size="' . esc_attr( $atts['geometry_size'] ) . '" ' .
 		'data-geometry-material="' . esc_attr( $atts['geometry_material'] ) . '" ' .
-		'data-geometry-xrotate="' . $bool_to_flag( $atts['geometry_enableXRotation'] ) . '" ' .
-		'data-geometry-yrotate="' . $bool_to_flag( $atts['geometry_enableYRotation'] ) . '" ' .
-		'data-geometry-zrotate="' . $bool_to_flag( $atts['geometry_enableZRotation'] ) . '" ' .
-		'data-geometry-instancing="' . $bool_to_flag( $atts['geometry_enableInstancing'] ) . '" ' .
-		'data-geometry-instancingnum="' . esc_attr( $instancing_num ) . '" ' .
-		'data-geometry-instancing-spacing="' . esc_attr( $instancing_spacing ) . '" ' .
-		'data-controls-rotate="' . $bool_to_flag( $atts['controls_enableCamRotation'] ) . '" ' .
-		'data-rotation-speed="' . esc_attr( $rotation_speed ) . '" ' .
-		'data-scene-light="' . esc_attr( $atts['scene_light'] ) . '" ' .
-		'data-scene-light-color="' . esc_attr( $atts['scene_light_color'] ) . '" ' .
-		'data-camera-xposition="' . esc_attr( $camera_x ) . '" ' .
-		'data-camera-yposition="' . esc_attr( $camera_y ) . '" ' .
-		'data-camera-zposition="' . esc_attr( $camera_z ) . '">' .
+		'data-geometry-color="' . esc_attr( $atts['geometry_color'] ) . '" ' .
+		'data-geometry-xrotation="' . esc_attr( $atts['geometry_xrotation'] ) . '" ' .
+		'data-geometry-yrotation="' . esc_attr( $atts['geometry_yrotation'] ) . '" ' .
+		'data-geometry-zrotation="' . esc_attr( $atts['geometry_zrotation'] ) . '" ' .
+		'data-geometry-instancing="' . ( $atts['geometry_instancing'] ? 'true' : 'false' ) . '" ' .
+		'data-geometry-instancingNum="' . esc_attr( $atts['geometry_instancingNum'] ) . '" ' .
+		'data-geometry-instancingSpacing="' . esc_attr( $atts['geometry_instancingSpacing'] ) . '" ' .
+		'data-geometry-gltf="' . esc_attr( $atts['gltf_url'] ) . '" ' .
+		'data-light="' . esc_attr( $atts['light'] ) . '" ' .
+		'data-light-color="' . esc_attr( $atts['light_color'] ) . '" ' .
+		'data-light-intensity="' . esc_attr( $atts['light_intensity'] ) . '" ' .
+		'data-light-xpos="' . esc_attr( $atts['light_xpos'] ) . '" ' .
+		'data-light-ypos="' . esc_attr( $atts['light_ypos'] ) . '" ' .
+		'data-light-zpos="' . esc_attr( $atts['light_zpos'] ) . '" ' .
+		'data-camera-xpos="' . esc_attr( $atts['camera_xpos'] ) . '" ' .
+		'data-camera-ypos="' . esc_attr( $atts['camera_ypos'] ) . '" ' .
+		'data-camera-zpos="' . esc_attr( $atts['camera_zpos'] ) . '"' .
+		'data-background="' . esc_attr( $atts['background'] ) . '">' .
+
 			'<div class="ti-content">' . do_shortcode( $content ) . '</div>' .
 		'</div>';
 }
-add_shortcode( 'scene', 'mfp_display_threejs_geometry' );
+add_shortcode( 'scene', 'ti_shortcodes_threeimporter_shortcode_init' );
 
 // Conditionally enqueue scripts and styles if block or shortcodes present
 add_action( 'wp_enqueue_scripts', 'ti_enqueue_threejs_assets_if_needed' );
 function ti_enqueue_threejs_assets_if_needed() {
-
-	if ( is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
-		return;
-	}
 
 	global $post;
 	if ( ! isset( $post ) || ! $post instanceof WP_Post ) {
@@ -125,9 +105,8 @@ function ti_enqueue_threejs_assets_if_needed() {
 	$content = $post->post_content;
 	$has_block                 = has_block( 'threeimporter/scene', $post );
 	$has_scene_shortcode       = has_shortcode( $content, 'scene' );
-	$has_customscene_shortcode = has_shortcode( $content, 'customscene' );
 
-	if ( $has_block || $has_scene_shortcode || $has_customscene_shortcode ) {
+	if ( $has_block || $has_scene_shortcode ) {
 		$index_asset_path = __DIR__ . '/build/threeimporter/index.asset.php';
 		$index_asset = file_exists( $index_asset_path )
 			? require $index_asset_path
@@ -149,18 +128,3 @@ function ti_enqueue_threejs_assets_if_needed() {
 		);
 	}
 }
-
-
-function customScene_Shortcode() {
-
-    // Enqueue the script
-    wp_enqueue_script(
-        'three-bundle-script',
-        plugins_url( 'build/threeimporter/', __FILE__ ),
-        array(), 
-        '1.0.0',
-        true // load in footer
-    );
-}
-add_shortcode('customscene', 'customScene_Shortcode');
-

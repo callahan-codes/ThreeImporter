@@ -1,10 +1,16 @@
 /**
  * 
  *  Script below written by Bryce Callahan
- *  Last Updated: 6/24/2025
+ *  Last Updated: 6/25/2025
  * 
- * The following code represents the edit functionality 
- * in WordPress's block editor. 
+ * 	The following code represents the edit functionality 
+ * 	in WordPress's block editor. 
+ * 
+ *  - Geometry settings
+ * 	- Light settings
+ * 	- Camera settings
+ * 	- Instancing settings
+ *  - Background settings
  * 
  */
 
@@ -21,7 +27,8 @@ import {
 	SelectControl,
 	ToggleControl,
 	TextControl,
-	ColorPalette
+	ColorPalette,
+	Notice
 } from '@wordpress/components';
 import './editor.scss';
 
@@ -119,21 +126,24 @@ export default function Edit({ attributes, setAttributes }) {
 						)}
 
 						{/* geometry rotation */}
-						<ToggleControl
+						<TextControl
 							label={__("X Rotation", "ti_blocks")}
-							checked={attributes.geometry_xrotation}
+							value={attributes.geometry_xrotation}
+							type="number"
 							onChange={(value) => setAttributes({ geometry_xrotation: value })}
 						/>
 
-						<ToggleControl
+						<TextControl
 							label={__("Y Rotation", "ti_blocks")}
-							checked={attributes.geometry_yrotation}
+							value={attributes.geometry_yrotation}
+							type="number"
 							onChange={(value) => setAttributes({ geometry_yrotation: value })}
 						/>
 
-						<ToggleControl
+						<TextControl
 							label={__("Z Rotation", "ti_blocks")}
-							checked={attributes.geometry_zrotation}
+							value={attributes.geometry_zrotation}
+							type="number"
 							onChange={(value) => setAttributes({ geometry_zrotation: value })}
 						/>
 
@@ -237,65 +247,133 @@ export default function Edit({ attributes, setAttributes }) {
 							onChange={(value) => setAttributes({ camera_zpos: value })}
 						/>
 
-						{/* camera rotation */}
-						<ToggleControl
-							label={__("X Rotation", "ti_blocks")}
-							checked={attributes.camera_xrotation}
-							onChange={(value) => setAttributes({ camera_xrotation: value })}
-						/>
-
-						<ToggleControl
-							label={__("Y Rotation", "ti_blocks")}
-							checked={attributes.camera_yrotation}
-							onChange={(value) => setAttributes({ camera_yrotation: value })}
-						/>
-
-						<ToggleControl
-							label={__("Z Rotation", "ti_blocks")}
-							checked={attributes.camera_zrotation}
-							onChange={(value) => setAttributes({ camera_zrotation: value })}
-						/>
+						{/* camera target */}
+						
 					</PanelBody>
 
 					{/* instancing settings */}
 					<PanelBody title={__("Instancing Settings", "ti_blocks")}>
 
 						{/* toggle instancing */}
-						<ToggleControl
-							label={__("Instancing", "ti_blocks")}
-							checked={attributes.geometry_instancing}
-							onChange={(value) => setAttributes({ geometry_instancing: value })}
-						/>
-
-						{/* instancing enabled */}
-						{attributes.geometry_instancing && (
+						{attributes.geometry !== "gltf" ? (
 							<>
-								{/* number of instances */}
-								<TextControl
-									label={__("Number of Instances", "ti_blocks")}
-									value={attributes.geometry_instancingNum}
-									type="number"
-									onChange={(value) => setAttributes({ geometry_instancingNum: value })}
+								<ToggleControl
+									label={__("Instancing", "ti_blocks")}
+									checked={attributes.geometry_instancing}
+									onChange={(value) => setAttributes({ geometry_instancing: value })}
 								/>
 
-								{/* spacing */}
-								<TextControl
-									label={__("Instance Spacing", "ti_blocks")}
-									value={attributes.geometry_instancingSpacing}
-									type="number"
-									onChange={(value) => setAttributes({ geometry_instancingSpacing: value })}
-								/>
+								{/* instancing enabled */}
+								{attributes.geometry_instancing && (
+									<>
+										{/* number of instances */}
+										<TextControl
+											label={__("Number of Instances", "ti_blocks")}
+											value={attributes.geometry_instancingNum}
+											type="number"
+											onChange={(value) => setAttributes({ geometry_instancingNum: value })}
+										/>
+
+										{/* spacing */}
+										<TextControl
+											label={__("Instance Spacing", "ti_blocks")}
+											value={attributes.geometry_instancingSpacing}
+											type="number"
+											onChange={(value) => setAttributes({ geometry_instancingSpacing: value })}
+										/>
+									</>
+								)}
+
+							</>
+						) : (
+							// no instancing for gltf
+							<>
+								<Notice status="warning" isDismissible={false}>
+									{__("Instancing is not supported for URL-based models.", "ti_blocks")}
+								</Notice>
 							</>
 						)}
 	
+					</PanelBody>
+
+					{/* backgrounds */}
+					<PanelBody title={__("Backgrounds", "ti_blocks")}>
+
+						{/* background type */}
+						<SelectControl
+							label={__("Type", "ti_blocks")}
+							value={attributes.background}
+							options={[
+								{ label: __("None", "ti_blocks"), value: "none" },
+								{ label: __("Particles", "ti_blocks"), value: "particles" },
+								{ label: __("CubeGrid", "ti_blocks"), value: "cubegrid" },
+							]}
+							onChange={(background) => setAttributes({ background })}
+						/>
+
+							
+						{attributes.background === "particles" && (
+							<>
+								{/* particle size */}
+								<TextControl
+									label={__("Size", "ti_blocks")}
+									value={attributes.particle_size}
+									type="number"
+									onChange={(value) => setAttributes({ particle_size: value })}
+								/>
+
+								{/* particle speed */}
+								<TextControl
+									label={__("Speed", "ti_blocks")}
+									value={attributes.particle_speed}
+									type="number"
+									onChange={(value) => setAttributes({ particle_speed: value })}
+								/>
+
+								{/* particle direction */}
+								<SelectControl
+									label={__("Direction", "ti_blocks")}
+									value={attributes.particle_direction}
+									options={[
+										{ label: __("Up", "ti_blocks"), value: "up" },
+										{ label: __("Down", "ti_blocks"), value: "down" },
+										{ label: __("Right", "ti_blocks"), value: "right" },
+										{ label: __("Left", "ti_blocks"), value: "left" },
+									]}
+									onChange={(particle_direction) => setAttributes({ particle_direction })}
+								/>
+
+								{/* particle color */}
+								<fieldset>
+									<legend>{__("Color", "ti_blocks")}</legend>
+									<ColorPalette
+										value={attributes.particle_color}
+										colors={[
+											{ name: "Black", color: "#000000" },
+											{ name: "White", color: "#ffffff" },
+											{ name: "Red", color: "#ff0000" },
+											{ name: "Orange", color: "#ffa500" },
+											{ name: "Yellow", color: "#ffff00" },
+											{ name: "Green", color: "#00ff00" },
+											{ name: "Blue", color: "#0000ff" },
+											{ name: "Indigo", color: "#4b0082" },
+											{ name: "Violet", color: "#ee82ee" }
+										]}
+										onChange={(particle_color) => setAttributes({ particle_color })}
+									/>
+								</fieldset>
+							</>
+						)}
 					</PanelBody>
 
 				</Panel>
 			</InspectorControls>
 
 			{/* editor block message & InnerBlocks */}
-			<h2 style={{ textAlign: 'center' }}>{__('Your three.js scene will render on the front end.', 'threeimporter')}</h2>
-			<p style={{ textAlign: 'center'}}>{__('Scene Settings can be found in the Block settings. Enter other blocks below.', 'threeimporter')}</p>
+			<div className='ti-block-heading'>
+				<h2 style={{ textAlign: 'center' }}>{__('Your three.js scene will render on the front end.', 'threeimporter')}</h2>
+				<p style={{ textAlign: 'center'}}>{__('Scene Settings can be found in the Block settings. Enter other blocks below.', 'threeimporter')}</p>
+			</div>
 			<InnerBlocks />
 		</div>
 	);
