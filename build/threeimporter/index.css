@@ -20,9 +20,9 @@
 }
 
 .ti-block-resizable-box .components-resizable-box__handle {
-  background: transparent;
   width: 12px;
   height: 12px;
+  background-color: red;
 }
 
 /*# sourceMappingURL=index.css.map*/

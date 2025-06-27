@@ -221,6 +221,12 @@ export default function Edit({ attributes, setAttributes }) {
 							onChange={(value) => setAttributes({ light_zpos: value })}
 						/>
 
+						<ToggleControl
+							label={__("Light Helper", "ti_blocks")}
+							checked={attributes.light_helper}
+							onChange={(value) => setAttributes({ light_helper: value })}
+						/>
+
 					</PanelBody>
 
 					{/* camera settings */}
@@ -248,6 +254,28 @@ export default function Edit({ attributes, setAttributes }) {
 							value={attributes.camera_zpos}
 							type="number"
 							onChange={(value) => setAttributes({ camera_zpos: value })}
+						/>
+
+						{/* camera target */}
+						<TextControl
+							label={__("Target X", "ti_blocks")}
+							value={attributes.camera_xtarget}
+							type="number"
+							onChange={(value) => setAttributes({ camera_xtarget: value })}
+						/>
+
+						<TextControl
+							label={__("Target Y", "ti_blocks")}
+							value={attributes.camera_ytarget}
+							type="number"
+							onChange={(value) => setAttributes({ camera_ytarget: value })}
+						/>
+
+						<TextControl
+							label={__("Target Z", "ti_blocks")}
+							value={attributes.camera_ztarget}
+							type="number"
+							onChange={(value) => setAttributes({ camera_ztarget: value })}
 						/>
 
 						{/* camera target */}
@@ -315,7 +343,7 @@ export default function Edit({ attributes, setAttributes }) {
 						/>
 
 							
-						{attributes.background === "particles" && (
+						{attributes.scene_background === "particles" && (
 							<>
 
 								{/* particle amount */}
@@ -341,6 +369,12 @@ export default function Edit({ attributes, setAttributes }) {
 									type="number"
 									onChange={(value) => setAttributes({ particle_speed: value })}
 								/>
+
+								{attributes.particle_speed < 0 && (
+									<Notice status="warning" isDismissible={false}>
+										{__("A negative value for particle speed will affect its animation.", "ti_blocks")}
+									</Notice>
+								)}
 
 								{/* particle direction */}
 								<SelectControl

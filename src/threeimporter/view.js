@@ -44,11 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const lightXPos = parseInt(container.getAttribute('data-light-xpos'), 10) || 1;
         const lightYPos = parseInt(container.getAttribute('data-light-ypos'), 10) || 1;
         const lightZPos = parseInt(container.getAttribute('data-light-zpos'), 10) || 1;
+        const lightHelper = container.getAttribute('data-light-helper') === 'true';
 
         // camera attributes
         const cameraXPos = parseInt(container.getAttribute('data-camera-xpos'), 10) || 5;
         const cameraYPos = parseInt(container.getAttribute('data-camera-ypos'), 10) || 0;
         const cameraZPos = parseInt(container.getAttribute('data-camera-zpos'), 10) || 0;
+        const cameraXTarget = parseInt(container.getAttribute('data-camera-xtarget'), 10) || 0;
+        const cameraYTarget = parseInt(container.getAttribute('data-camera-ytarget'), 10) || 0;
+        const cameraZTarget = parseInt(container.getAttribute('data-camera-ztarget'), 10) || 0;
 
         // rotation attributes
         const geometryXRotation = parseInt(container.getAttribute('data-geometry-xrotation'), 10) || 0;
@@ -56,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const geometryZRotation = parseInt(container.getAttribute('data-geometry-zrotation'), 10) || 0;
 
         // background attributes
-        const background = container.getAttribute('data-background') || 'none';
+        const background = container.getAttribute('data-scene-background') || 'none';
         const particleAmount = parseInt(container.getAttribute('data-particle-amount'), 10) || 1000;
         const particleSize = parseInt(container.getAttribute('data-particle-size'), 10) || 1;
         const particleSpeed = parseInt(container.getAttribute('data-particle-speed'), 10) || 5;
@@ -68,7 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let mesh,
             particles,
             particlesGeo,
-            particlesMat;
+            particlesMat,
+            mouse = { x: 0, y: 0 };
 
         // threejs scene setup
         const scene = new THREE.Scene();
@@ -78,13 +83,15 @@ document.addEventListener('DOMContentLoaded', () => {
         renderer.setClearColor(0x000000, 0);
         renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
-        camera.position.set(cameraXPos, cameraYPos, cameraZPos);
+        
+        // camera/controls setup
+        buildCamera();
 
         // mesh setup
         buildMesh(geometryType, geometryMaterial, geometrySize, geometryColor);
 
         // light setup
-        buildLight(lightType, lightColor, lightIntensity);
+        buildLight(lightType, lightColor, lightIntensity, lightHelper);
 
         // background
         buildBackground();
@@ -103,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // access particle positions
                 const positions = particlesGeo.attributes.position.array;
-                for (let i = 0; i < particleAmount; i += 3) {
+                for (let i = 0; i < particleAmount * 3; i += 3) {
 
                     // direction
                     if(particleDirection === 'up') positions[i + 1] += (particleSpeed * 0.01);
@@ -138,6 +145,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         resizeRenderer();
         window.addEventListener('resize', resizeRenderer);
+
+        // build camera/controls
+        function buildCamera() {
+            camera.position.set(cameraXPos, cameraYPos, cameraZPos);
+            controls.target.set(cameraXTarget, cameraYTarget, cameraZTarget);
+            console.log(camera.position);
+            console.log(controls.target)
+        }
 
         // build mesh function
         function buildMesh(type, material, size, color) {
@@ -238,30 +253,39 @@ document.addEventListener('DOMContentLoaded', () => {
         function buildLight(type, color, intensity) {
 
             let dynamicLight;
+            let dynamicLightHelper;
             const dynamicLightColor = new THREE.Color(color);
 
-            switch (type){
+            switch(type) {
                 case 'directional':
                     const directionalLight = new THREE.DirectionalLight(dynamicLightColor, intensity);
                     dynamicLight = directionalLight;
+                    dynamicLightHelper = new THREE.DirectionalLightHelper(dynamicLight, 5);
                     break;
                 case 'hemisphere':
                     const hemiLight = new THREE.HemisphereLight(dynamicLightColor, intensity);
                     dynamicLight = hemiLight;
+                    dynamicLightHelper = new THREE.HemisphereLightHelper(dynamicLight, 5);
                     break;
                 case 'point':
                     const pointLight = new THREE.PointLight(dynamicLightColor, intensity, 100);
                     dynamicLight = pointLight;
+                    dynamicLightHelper = new THREE.PointLightHelper(dynamicLight, 1);
                     break;
                 case 'spotlight':
                     const spotLight = new THREE.SpotLight(dynamicLightColor, intensity);
                     dynamicLight = spotLight;
+                    dynamicLightHelper = new THREE.SpotLightHelper(dynamicLight);
                     break;
                 case 'ambient':
                 default:
                     const ambientLight = new THREE.AmbientLight(dynamicLightColor, intensity);
                     dynamicLight = ambientLight;
                     break;
+            }
+
+            if(lightHelper) {
+                scene.add(dynamicLightHelper);
             }
 
             dynamicLight.position.set(lightXPos, lightYPos, lightZPos);
@@ -339,9 +363,11 @@ document.addEventListener('DOMContentLoaded', () => {
             switch(background) {
                 case 'particles':
                     buildBackground_Particles();
+                    controls.enabled = false;
                     break;
                 case 'none':
                 default:
+                    controls.enabled = true;
                     break;
             }
         }
@@ -349,11 +375,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // background particles
         function buildBackground_Particles() {
 
-            const positions = new Float32Array(particleAmount);
-            for (let i = 0; i < particleAmount; i += 3) {
+            const positions = new Float32Array(particleAmount * 3);
+            for (let i = 0; i < particleAmount * 3; i += 3) {
                 positions[i] = -5; 
-                positions[i + 1] = (Math.random() - 0.5) * particleStretch;
-                positions[i + 2] = (Math.random() - 0.5) * particleStretch;
+                positions[i + 1] = (Math.random() - 0.5) * (particleStretch * 2);
+                positions[i + 2] = (Math.random() - 0.5) * (particleStretch * 2);
             }
 
             particlesGeo = new THREE.BufferGeometry();
@@ -368,6 +394,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // controls
         function controlsToggle() {
             
+        }
+
+        // camera shake
+        function enableCameraShake(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1; 
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
         }
 
     });

@@ -10,8 +10,3 @@ export default function save({ attributes }) {
 		</div>
 	);
 }
-
-// import { InnerBlocks } from '@wordpress/block-editor';
-// export default function Save() {
-// 	return <InnerBlocks.Content />;
-// }

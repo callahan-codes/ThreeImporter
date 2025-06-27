@@ -86,6 +86,10 @@ return array(
 				'type' => 'string',
 				'default' => '1'
 			),
+			'light_helper' => array(
+				'type' => 'boolean',
+				'default' => false
+			),
 			'camera_xpos' => array(
 				'type' => 'string',
 				'default' => '5'
@@ -95,6 +99,18 @@ return array(
 				'default' => '0'
 			),
 			'camera_zpos' => array(
+				'type' => 'string',
+				'default' => '0'
+			),
+			'camera_xtarget' => array(
+				'type' => 'string',
+				'default' => '0'
+			),
+			'camera_ytarget' => array(
+				'type' => 'string',
+				'default' => '0'
+			),
+			'camera_ztarget' => array(
 				'type' => 'string',
 				'default' => '0'
 			),

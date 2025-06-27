@@ -8,7 +8,7 @@
   \**************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"ti-blocks/threeimporter","version":"0.1.0","title":"Three Importer","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"attributes":{"block_height":{"type":"string","default":"400px"},"geometry":{"type":"string","default":"box"},"geometry_color":{"type":"string","default":"#000000"},"geometry_size":{"type":"integer","default":1},"geometry_material":{"type":"string","default":"basic"},"geometry_xrotation":{"type":"string","default":"0"},"geometry_yrotation":{"type":"string","default":"0"},"geometry_zrotation":{"type":"string","default":"0"},"geometry_instancing":{"type":"boolean","default":false},"geometry_instancingNum":{"type":"string","default":"50"},"geometry_instancingSpacing":{"type":"string","default":"1"},"gltf_url":{"type":"string","default":""},"light":{"type":"string","default":"ambient"},"light_color":{"type":"string","default":"#FFFFFF"},"light_intensity":{"type":"string","default":"1"},"light_xpos":{"type":"string","default":"1"},"light_ypos":{"type":"string","default":"1"},"light_zpos":{"type":"string","default":"1"},"camera_xpos":{"type":"string","default":"5"},"camera_ypos":{"type":"string","default":"0"},"camera_zpos":{"type":"string","default":"0"},"scene_background":{"type":"string","default":"none"},"particle_amount":{"type":"string","default":"1000"},"particle_size":{"type":"string","default":"1"},"particle_speed":{"type":"string","default":"5"},"particle_direction":{"type":"string","default":"right"},"particle_color":{"type":"string","default":"#000000"},"particle_stretch":{"type":"string","default":"5"}},"supports":{"html":false,"innerBlocks":true,"align":["wide","full"],"layout":{"allowSwitching":true,"default":{"type":"flex","justifyContent":"center"}},"spacing":{"padding":true,"margin":true},"color":{"background":true,"gradients":true}},"textdomain":"threeimporter","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"ti-blocks/threeimporter","version":"0.1.0","title":"Three Importer","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"attributes":{"block_height":{"type":"string","default":"400px"},"geometry":{"type":"string","default":"box"},"geometry_color":{"type":"string","default":"#000000"},"geometry_size":{"type":"integer","default":1},"geometry_material":{"type":"string","default":"basic"},"geometry_xrotation":{"type":"string","default":"0"},"geometry_yrotation":{"type":"string","default":"0"},"geometry_zrotation":{"type":"string","default":"0"},"geometry_instancing":{"type":"boolean","default":false},"geometry_instancingNum":{"type":"string","default":"50"},"geometry_instancingSpacing":{"type":"string","default":"1"},"gltf_url":{"type":"string","default":""},"light":{"type":"string","default":"ambient"},"light_color":{"type":"string","default":"#FFFFFF"},"light_intensity":{"type":"string","default":"1"},"light_xpos":{"type":"string","default":"1"},"light_ypos":{"type":"string","default":"1"},"light_zpos":{"type":"string","default":"1"},"light_helper":{"type":"boolean","default":false},"camera_xpos":{"type":"string","default":"5"},"camera_ypos":{"type":"string","default":"0"},"camera_zpos":{"type":"string","default":"0"},"camera_xtarget":{"type":"string","default":"0"},"camera_ytarget":{"type":"string","default":"0"},"camera_ztarget":{"type":"string","default":"0"},"scene_background":{"type":"string","default":"none"},"particle_amount":{"type":"string","default":"1000"},"particle_size":{"type":"string","default":"1"},"particle_speed":{"type":"string","default":"5"},"particle_direction":{"type":"string","default":"right"},"particle_color":{"type":"string","default":"#000000"},"particle_stretch":{"type":"string","default":"5"}},"supports":{"html":false,"innerBlocks":true,"align":["wide","full"],"layout":{"allowSwitching":true,"default":{"type":"flex","justifyContent":"center"}},"spacing":{"padding":true,"margin":true},"color":{"background":true,"gradients":true}},"textdomain":"threeimporter","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ }),
 
@@ -306,6 +306,12 @@ function Edit({
             onChange: value => setAttributes({
               light_zpos: value
             })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Light Helper", "ti_blocks"),
+            checked: attributes.light_helper,
+            onChange: value => setAttributes({
+              light_helper: value
+            })
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
           title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Camera Settings", "ti_blocks"),
@@ -329,6 +335,27 @@ function Edit({
             type: "number",
             onChange: value => setAttributes({
               camera_zpos: value
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Target X", "ti_blocks"),
+            value: attributes.camera_xtarget,
+            type: "number",
+            onChange: value => setAttributes({
+              camera_xtarget: value
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Target Y", "ti_blocks"),
+            value: attributes.camera_ytarget,
+            type: "number",
+            onChange: value => setAttributes({
+              camera_ytarget: value
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Target Z", "ti_blocks"),
+            value: attributes.camera_ztarget,
+            type: "number",
+            onChange: value => setAttributes({
+              camera_ztarget: value
             })
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
@@ -385,7 +412,7 @@ function Edit({
             onChange: scene_background => setAttributes({
               scene_background
             })
-          }), attributes.background === "particles" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+          }), attributes.scene_background === "particles" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Amount", "ti_blocks"),
               value: attributes.particle_amount,
@@ -407,6 +434,10 @@ function Edit({
               onChange: value => setAttributes({
                 particle_speed: value
               })
+            }), attributes.particle_speed < 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Notice, {
+              status: "warning",
+              isDismissible: false,
+              children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("A negative value for particle speed will affect its animation.", "ti_blocks")
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Direction", "ti_blocks"),
               value: attributes.particle_direction,
@@ -601,11 +632,6 @@ function save({
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.InnerBlocks.Content, {})
   });
 }
-
-// import { InnerBlocks } from '@wordpress/block-editor';
-// export default function Save() {
-// 	return <InnerBlocks.Content />;
-// }
 
 /***/ }),
 

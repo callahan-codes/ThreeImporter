@@ -81,6 +81,10 @@
       "type": "string",
       "default": "1"
     },
+    "light_helper": {
+      "type": "boolean",
+      "default": false
+    },
     "camera_xpos": {
       "type": "string",
       "default": "5"
@@ -90,6 +94,18 @@
       "default": "0"
     },
     "camera_zpos": {
+      "type": "string",
+      "default": "0"
+    },
+    "camera_xtarget": {
+      "type": "string",
+      "default": "0"
+    },
+    "camera_ytarget": {
+      "type": "string",
+      "default": "0"
+    },
+    "camera_ztarget": {
       "type": "string",
       "default": "0"
     },
