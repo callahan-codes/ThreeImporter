@@ -71,15 +71,15 @@
     },
     "light_xpos": {
       "type": "string",
-      "default": "1"
+      "default": "0"
     },
     "light_ypos": {
       "type": "string",
-      "default": "1"
+      "default": "0"
     },
     "light_zpos": {
       "type": "string",
-      "default": "1"
+      "default": "0"
     },
     "light_helper": {
       "type": "boolean",
@@ -108,6 +108,10 @@
     "camera_ztarget": {
       "type": "string",
       "default": "0"
+    },
+    "camera_followMouse": {
+      "type": "boolean",
+      "default": false
     },
     "scene_background": {
       "type": "string",
@@ -145,13 +149,6 @@
       "wide",
       "full"
     ],
-    "layout": {
-      "allowSwitching": true,
-      "default": {
-        "type": "flex",
-        "justifyContent": "center"
-      }
-    },
     "spacing": {
       "padding": true,
       "margin": true

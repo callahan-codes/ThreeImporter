@@ -45,6 +45,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	data-camera-xtarget="<?php echo esc_attr($attributes['camera_xtarget']);?>"
 	data-camera-ytarget="<?php echo esc_attr($attributes['camera_ytarget']);?>"
 	data-camera-ztarget="<?php echo esc_attr($attributes['camera_ztarget']);?>"
+	data-camera-followMouse="<?php echo $attributes['camera_followMouse'] ? 'true' : 'false'; ?>"
 	data-scene-background="<?php echo esc_attr($attributes['scene_background']);?>"
 	data-particle-amount="<?php echo esc_attr($attributes['particle_amount']);?>"
 	data-particle-size="<?php echo esc_attr($attributes['particle_size']);?>"

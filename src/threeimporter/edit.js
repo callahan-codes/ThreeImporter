@@ -197,29 +197,35 @@ export default function Edit({ attributes, setAttributes }) {
 							/>
 						</fieldset>
 
-						{/* light x position */}
-						<TextControl
-							label={__("X Position", "ti_blocks")}
-							value={attributes.light_xpos}
-							type="number"
-							onChange={(value) => setAttributes({ light_xpos: value })}
-						/>
+						{attributes.light !== 'spotlight' && attributes.light !== 'ambient' && (
+							<>
 
-						{/* light y position */}
-						<TextControl
-							label={__("Y Position", "ti_blocks")}
-							value={attributes.light_ypos}
-							type="number"
-							onChange={(value) => setAttributes({ light_ypos: value })}
-						/>
+								{/* light x position */}
+								<TextControl
+									label={__("X Position", "ti_blocks")}
+									value={attributes.light_xpos}
+									type="number"
+									onChange={(value) => setAttributes({ light_xpos: value })}
+								/>
 
-						{/* light z position */}
-						<TextControl
-							label={__("Z Position", "ti_blocks")}
-							value={attributes.light_zpos}
-							type="number"
-							onChange={(value) => setAttributes({ light_zpos: value })}
-						/>
+								{/* light y position */}
+								<TextControl
+									label={__("Y Position", "ti_blocks")}
+									value={attributes.light_ypos}
+									type="number"
+									onChange={(value) => setAttributes({ light_ypos: value })}
+								/>
+
+								{/* light z position */}
+								<TextControl
+									label={__("Z Position", "ti_blocks")}
+									value={attributes.light_zpos}
+									type="number"
+									onChange={(value) => setAttributes({ light_zpos: value })}
+								/>
+
+							</>
+						)}
 
 						<ToggleControl
 							label={__("Light Helper", "ti_blocks")}
@@ -232,53 +238,61 @@ export default function Edit({ attributes, setAttributes }) {
 					{/* camera settings */}
 					<PanelBody title={__("Camera Settings", "ti_blocks")}>
 
-						{/* camera x position */}
-						<TextControl
-							label={__("X Position", "ti_blocks")}
-							value={attributes.camera_xpos}
-							type="number"
-							onChange={(value) => setAttributes({ camera_xpos: value })}
+						<ToggleControl
+							label={__("Mouse Follow", "ti_blocks")}
+							checked={attributes.camera_followMouse}
+							onChange={(value) => setAttributes({ camera_followMouse: value })}
 						/>
 
-						{/* camera y position */}
-						<TextControl
-							label={__("Y Position", "ti_blocks")}
-							value={attributes.camera_ypos}
-							type="number"
-							onChange={(value) => setAttributes({ camera_ypos: value })}
-						/>
+						{attributes.camera_followMouse !== true && (
+							<>
+								{/* camera x position */}
+								<TextControl
+									label={__("X Position", "ti_blocks")}
+									value={attributes.camera_xpos}
+									type="number"
+									onChange={(value) => setAttributes({ camera_xpos: value })}
+								/>
 
-						{/* camera z position */}
-						<TextControl
-							label={__("Z Position", "ti_blocks")}
-							value={attributes.camera_zpos}
-							type="number"
-							onChange={(value) => setAttributes({ camera_zpos: value })}
-						/>
+								{/* camera y position */}
+								<TextControl
+									label={__("Y Position", "ti_blocks")}
+									value={attributes.camera_ypos}
+									type="number"
+									onChange={(value) => setAttributes({ camera_ypos: value })}
+								/>
 
-						{/* camera target */}
-						<TextControl
-							label={__("Target X", "ti_blocks")}
-							value={attributes.camera_xtarget}
-							type="number"
-							onChange={(value) => setAttributes({ camera_xtarget: value })}
-						/>
+								{/* camera z position */}
+								<TextControl
+									label={__("Z Position", "ti_blocks")}
+									value={attributes.camera_zpos}
+									type="number"
+									onChange={(value) => setAttributes({ camera_zpos: value })}
+								/>
 
-						<TextControl
-							label={__("Target Y", "ti_blocks")}
-							value={attributes.camera_ytarget}
-							type="number"
-							onChange={(value) => setAttributes({ camera_ytarget: value })}
-						/>
+								{/* camera target */}
+								<TextControl
+									label={__("Target X", "ti_blocks")}
+									value={attributes.camera_xtarget}
+									type="number"
+									onChange={(value) => setAttributes({ camera_xtarget: value })}
+								/>
 
-						<TextControl
-							label={__("Target Z", "ti_blocks")}
-							value={attributes.camera_ztarget}
-							type="number"
-							onChange={(value) => setAttributes({ camera_ztarget: value })}
-						/>
+								<TextControl
+									label={__("Target Y", "ti_blocks")}
+									value={attributes.camera_ytarget}
+									type="number"
+									onChange={(value) => setAttributes({ camera_ytarget: value })}
+								/>
 
-						{/* camera target */}
+								<TextControl
+									label={__("Target Z", "ti_blocks")}
+									value={attributes.camera_ztarget}
+									type="number"
+									onChange={(value) => setAttributes({ camera_ztarget: value })}
+								/>
+							</>
+						)}
 						
 					</PanelBody>
 
@@ -447,20 +461,21 @@ export default function Edit({ attributes, setAttributes }) {
 				}}
 				className="ti-block-resizable-box"
 			>
-				<div style={{ height: attributes.block_height, overflow: 'hidden' }}>
+				<div style={{ height: attributes.block_height ? attributes.block_height : 'auto', width: '100%', overflow: 'hidden' }}>
 					<div className="ti-block-heading">
-						<h2 style={{ textAlign: 'center' }}>
+						<h2>
 							{__('Your three.js scene will render on the front end.', 'threeimporter')}
 						</h2>
-						<p style={{ textAlign: 'center' }}>
+						<p>
 							{__('Scene Settings can be found in the Block settings. Enter other blocks below.', 'threeimporter')}
 						</p>
 					</div>
 					
-					<InnerBlocks />
+					<div className="ti-inner-wrapper" style={{ width: '100%' }}>
+						<InnerBlocks />
+					</div>
 				</div>
 			</ResizableBox>
-
 		</div>
 	);
 }

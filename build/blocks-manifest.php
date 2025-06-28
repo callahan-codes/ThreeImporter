@@ -76,15 +76,15 @@ return array(
 			),
 			'light_xpos' => array(
 				'type' => 'string',
-				'default' => '1'
+				'default' => '0'
 			),
 			'light_ypos' => array(
 				'type' => 'string',
-				'default' => '1'
+				'default' => '0'
 			),
 			'light_zpos' => array(
 				'type' => 'string',
-				'default' => '1'
+				'default' => '0'
 			),
 			'light_helper' => array(
 				'type' => 'boolean',
@@ -113,6 +113,10 @@ return array(
 			'camera_ztarget' => array(
 				'type' => 'string',
 				'default' => '0'
+			),
+			'camera_followMouse' => array(
+				'type' => 'boolean',
+				'default' => false
 			),
 			'scene_background' => array(
 				'type' => 'string',
@@ -149,13 +153,6 @@ return array(
 			'align' => array(
 				'wide',
 				'full'
-			),
-			'layout' => array(
-				'allowSwitching' => true,
-				'default' => array(
-					'type' => 'flex',
-					'justifyContent' => 'center'
-				)
 			),
 			'spacing' => array(
 				'padding' => true,

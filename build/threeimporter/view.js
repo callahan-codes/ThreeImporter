@@ -85358,9 +85358,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightType = container.getAttribute('data-light') || 'ambient';
     const lightColor = container.getAttribute('data-light-color') || '#FFFFFF';
     const lightIntensity = parseInt(container.getAttribute('data-light-intensity'), 10) || 1;
-    const lightXPos = parseInt(container.getAttribute('data-light-xpos'), 10) || 1;
-    const lightYPos = parseInt(container.getAttribute('data-light-ypos'), 10) || 1;
-    const lightZPos = parseInt(container.getAttribute('data-light-zpos'), 10) || 1;
+    const lightXPos = parseInt(container.getAttribute('data-light-xpos'), 10) || 0;
+    const lightYPos = parseInt(container.getAttribute('data-light-ypos'), 10) || 0;
+    const lightZPos = parseInt(container.getAttribute('data-light-zpos'), 10) || 0;
     const lightHelper = container.getAttribute('data-light-helper') === 'true';
 
     // camera attributes
@@ -85370,6 +85370,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cameraXTarget = parseInt(container.getAttribute('data-camera-xtarget'), 10) || 0;
     const cameraYTarget = parseInt(container.getAttribute('data-camera-ytarget'), 10) || 0;
     const cameraZTarget = parseInt(container.getAttribute('data-camera-ztarget'), 10) || 0;
+    const cameraFollowMouse = container.getAttribute('data-camera-followMouse') === 'true';
 
     // rotation attributes
     const geometryXRotation = parseInt(container.getAttribute('data-geometry-xrotation'), 10) || 0;
@@ -85428,6 +85429,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (geometryYRotation != 0) rotateObject('y', geometryYRotation);
       if (geometryZRotation != 0) rotateObject('z', geometryZRotation);
 
+      // camera mouse follow
+      if (cameraFollowMouse) {
+        updateCameraFollowMouse(camera);
+      }
+
       // backgrounds
       if (background === 'particles') {
         // access particle positions
@@ -85469,8 +85475,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function buildCamera() {
       camera.position.set(cameraXPos, cameraYPos, cameraZPos);
       controls.target.set(cameraXTarget, cameraYTarget, cameraZTarget);
-      console.log(camera.position);
-      console.log(controls.target);
+      if (cameraFollowMouse) {
+        document.addEventListener('mousemove', event => {
+          mouse.x = event.clientX / window.innerWidth * 2 - 1;
+          mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+      }
     }
 
     // build mesh function
@@ -85589,12 +85599,18 @@ document.addEventListener('DOMContentLoaded', () => {
         case 'point':
           const pointLight = new three__WEBPACK_IMPORTED_MODULE_0__.PointLight(dynamicLightColor, intensity, 100);
           dynamicLight = pointLight;
-          dynamicLightHelper = new three__WEBPACK_IMPORTED_MODULE_0__.PointLightHelper(dynamicLight, 1);
+          dynamicLightHelper = new three__WEBPACK_IMPORTED_MODULE_0__.PointLightHelper(dynamicLight, 5);
           break;
         case 'spotlight':
           const spotLight = new three__WEBPACK_IMPORTED_MODULE_0__.SpotLight(dynamicLightColor, intensity);
+          spotLight.position.set(10, 10, 10);
+          spotLight.angle = Math.PI / 12;
+          spotLight.penumbra = 0.2;
+          spotLight.decay = 2;
+          spotLight.distance = 30;
+          spotLight.castShadow = true;
           dynamicLight = spotLight;
-          dynamicLightHelper = new three__WEBPACK_IMPORTED_MODULE_0__.SpotLightHelper(dynamicLight);
+          dynamicLightHelper = new three__WEBPACK_IMPORTED_MODULE_0__.SpotLightHelper(dynamicLight, 5);
           break;
         case 'ambient':
         default:
@@ -85602,11 +85618,11 @@ document.addEventListener('DOMContentLoaded', () => {
           dynamicLight = ambientLight;
           break;
       }
-      if (lightHelper) {
-        scene.add(dynamicLightHelper);
-      }
       dynamicLight.position.set(lightXPos, lightYPos, lightZPos);
       scene.add(dynamicLight);
+      if (lightHelper && type != 'ambient') {
+        scene.add(dynamicLightHelper);
+      }
     }
 
     // load gltf
@@ -85702,13 +85718,41 @@ document.addEventListener('DOMContentLoaded', () => {
       scene.add(particles);
     }
 
-    // controls
-    function controlsToggle() {}
+    // background cubes
+    function buildBackground_Cubes() {
+      const cubeSize = 1;
+      const gridSize = 15;
+      const cubes = [];
+      const moveSpeeds = [];
+      for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+          const geometry = new three__WEBPACK_IMPORTED_MODULE_0__.BoxGeometry(cubeSize, cubeSize, 5);
+          const material = new three__WEBPACK_IMPORTED_MODULE_0__.MeshStandardMaterial({
+            color: 0xffffff
+          });
+          const cube = new three__WEBPACK_IMPORTED_MODULE_0__.Mesh(geometry, material);
+          cube.position.x = i * cubeSize - gridSize * cubeSize / 2;
+          cube.position.y = j * cubeSize - gridSize * cubeSize / 2;
+          scene.add(cube);
+          cubes.push(cube);
+          moveSpeeds.push(Math.random() * 0.0002 + 0.0001);
+        }
+      }
+
+      // cubes.forEach((cube, index) => {
+      //     const speed = moveSpeeds[index];
+      //     cube.position.z = Math.sin(Date.now() * speed) * 1.2; 
+      // });
+    }
 
     // camera shake
-    function enableCameraShake(event) {
-      mouse.x = event.clientX / window.innerWidth * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    function updateCameraFollowMouse(camera, target = new three__WEBPACK_IMPORTED_MODULE_0__.Vector3(cameraXTarget, cameraYTarget, cameraZTarget), radius = 5) {
+      const angleHorizontal = mouse.x * (Math.PI / 3) * 0.2;
+      const angleVertical = mouse.y * (Math.PI / 3) * 0.2;
+      camera.position.x = target.x + radius * Math.cos(angleHorizontal) * Math.cos(angleVertical);
+      camera.position.y = target.y + radius * Math.sin(angleVertical);
+      camera.position.z = target.z + radius * Math.sin(angleHorizontal) * Math.cos(angleVertical);
+      camera.lookAt(target);
     }
   });
 });
