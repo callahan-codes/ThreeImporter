@@ -68,12 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const particleDirection = container.getAttribute('data-particle-direction') || 'right';
         const particleColor = container.getAttribute('data-particle-color') || '#000000';
         const particleStretch = parseInt(container.getAttribute('data-particle-stretch'), 10) || 5;
+        const cubegridStretch = parseInt(container.getAttribute('data-cubegrid-stretch'), 10) || 15;
 
         // other variables
         let mesh,
-            particles,
-            particlesGeo,
-            particlesMat,
+            particles, particlesGeo, particlesMat,
+            cube, cubes = [], moveSpeeds = [],
             mouse = { x: 0, y: 0 };
 
         // threejs scene setup
@@ -134,6 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // update position
                 particlesGeo.attributes.position.needsUpdate = true;
+            }
+            if(background === 'cubegrid') {
+                cubes.forEach((cube, index) => {
+                    const speed = moveSpeeds[index];
+                    cube.position.z = Math.sin(Date.now() * speed) * 1.2; 
+                });
             }
             
             if (controls) controls.update();
@@ -381,6 +387,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     buildBackground_Particles();
                     controls.enabled = false;
                     break;
+                case 'cubegrid':
+                    buildBackground_Cubes();
+                    controls.enabled = false;
                 case 'none':
                 default:
                     controls.enabled = true;
@@ -411,17 +420,15 @@ document.addEventListener('DOMContentLoaded', () => {
         function buildBackground_Cubes() {
             const cubeSize = 1;
             const gridSize = 15;
-            const cubes = [];
-            const moveSpeeds = []; 
 
-            for (let i = 0; i < gridSize; i++) {
-                for (let j = 0; j < gridSize; j++) {
+            for (let i = 0; i < cubegridStretch; i++) {
+                for (let j = 0; j < cubegridStretch; j++) {
                     const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, 5);
                     const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
-                    const cube = new THREE.Mesh(geometry, material);
+                    cube = new THREE.Mesh(geometry, material);
 
-                    cube.position.x = i * cubeSize - (gridSize * cubeSize) / 2;
-                    cube.position.y = j * cubeSize - (gridSize * cubeSize) / 2; 
+                    cube.position.x = i * cubeSize - (cubegridStretch * cubeSize) / 2;
+                    cube.position.y = j * cubeSize - (cubegridStretch * cubeSize) / 2; 
 
                     scene.add(cube);
                     cubes.push(cube);
@@ -429,11 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     moveSpeeds.push(Math.random() * 0.0002 + 0.0001);
                 }
             }
-
-                // cubes.forEach((cube, index) => {
-                //     const speed = moveSpeeds[index];
-                //     cube.position.z = Math.sin(Date.now() * speed) * 1.2; 
-                // });
         }
 
         // camera shake

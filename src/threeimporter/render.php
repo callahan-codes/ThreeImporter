@@ -52,7 +52,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	data-particle-speed="<?php echo esc_attr($attributes['particle_speed']);?>"
 	data-particle-direction="<?php echo esc_attr($attributes['particle_direction']);?>"
 	data-particle-color="<?php echo esc_attr($attributes['particle_color']);?>"
-	data-particle-stretch="<?php echo esc_attr($attributes['particle_stretch']);?>">
+	data-particle-stretch="<?php echo esc_attr($attributes['particle_stretch']);?>"
+	data-cubegrid-stretch="<?php echo esc_attr($attributes['cubegrid_stretch']);?>">
 	
 	<div class="ti-content">
 		<?php echo $content; ?>

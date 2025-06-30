@@ -140,6 +140,10 @@
     "particle_stretch": {
       "type": "string",
       "default": "5"
+    },
+    "cubegrid_stretch": {
+      "type": "string",
+      "default": "5"
     }
   },
   "supports": {

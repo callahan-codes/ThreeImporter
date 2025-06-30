@@ -433,6 +433,24 @@ export default function Edit({ attributes, setAttributes }) {
 
 							</>
 						)}
+
+						{attributes.scene_background === "cubegrid" && (
+							<>
+								{/* particle amount */}
+								<TextControl
+									label={__("Stretch", "ti_blocks")}
+									value={attributes.cubegrid_stretch}
+									type="number"
+									onChange={(value) => setAttributes({ cubegrid_stretch: value })}
+								/>
+
+								{attributes.cubegrid_stretch < 0 && (
+									<Notice status="warning" isDismissible={false}>
+										{__("Using a negative numeric value will affect the CubeGrid's layout. Your negative input will be converted to positive.", "ti_blocks")}
+									</Notice>
+								)}
+							</>
+						)}
 					</PanelBody>
 
 				</Panel>

@@ -145,6 +145,10 @@ return array(
 			'particle_stretch' => array(
 				'type' => 'string',
 				'default' => '5'
+			),
+			'cubegrid_stretch' => array(
+				'type' => 'string',
+				'default' => '5'
 			)
 		),
 		'supports' => array(
