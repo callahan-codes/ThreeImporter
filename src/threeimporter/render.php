@@ -32,6 +32,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	data-geometry-instancingNum="<?php echo esc_attr($attributes['geometry_instancingNum']);?>"
 	data-geometry-instancingSpacing="<?php echo esc_attr($attributes['geometry_instancingSpacing']);?>"
 	data-geometry-gltf="<?php echo esc_attr($attributes['gltf_url']);?>"
+	data-geometry-tridText="<?php echo esc_attr($attributes['trid_text']);?>"
 	data-light="<?php echo esc_attr($attributes['light']);?>"
 	data-light-color="<?php echo esc_attr($attributes['light_color']);?>"
 	data-light-intensity="<?php echo esc_attr($attributes['light_intensity']);?>"
@@ -53,7 +54,10 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	data-particle-direction="<?php echo esc_attr($attributes['particle_direction']);?>"
 	data-particle-color="<?php echo esc_attr($attributes['particle_color']);?>"
 	data-particle-stretch="<?php echo esc_attr($attributes['particle_stretch']);?>"
-	data-cubegrid-stretch="<?php echo esc_attr($attributes['cubegrid_stretch']);?>">
+	data-cubegrid-stretch="<?php echo esc_attr($attributes['cubegrid_stretch']);?>"
+	data-cubegrid-spacing="<?php echo esc_attr($attributes['cubegrid_spacing']);?>"
+	data-cubegrid-material="<?php echo esc_attr($attributes['cubegrid_material']);?>"
+	data-cubegrid-color="<?php echo esc_attr($attributes['cubegrid_color']);?>">
 	
 	<div class="ti-content">
 		<?php echo $content; ?>

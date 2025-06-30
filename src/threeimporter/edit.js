@@ -69,25 +69,30 @@ export default function Edit({ attributes, setAttributes }) {
 								{ label: __("Torus", "ti_blocks"), value: "torus" },
 								{ label: __("Torus Knot", "ti_blocks"), value: "torusknot" },
 								{ label: __("GLTF Model", "ti_blocks"), value: "gltf" },
+								{ label: __("3D Text", "ti_blocks"), value: "3dtext" },
 							]}
 							onChange={(geometry) => setAttributes({ geometry })}
 						/>
+						
 
 						{/* geometry/gltf size */}
-						<TextControl
-							label={__("Size", "ti_blocks")}
-							value={attributes.geometry_size}
-							type="number"
-							onChange={(value) => setAttributes({ geometry_size: value })}
-						/>
-
-						{/* gltf type selected */}
 						{attributes.geometry === "gltf" ? (
+
 							<TextControl
 								label={__("GLTF Model URL", "ti_blocks")}
 								value={attributes.gltf_url}
 								onChange={(gltf_url) => setAttributes({ gltf_url })}
 							/>
+
+						) : attributes.geometry === "3dtext" ? (
+
+							<TextControl
+								label={__("Text to show", "ti_blocks")}
+								value={attributes.trid_text}
+								type="number"
+								onChange={(value) => setAttributes({ trid_text: value })}
+							/>
+
 						) : (
 							<>
 								{/* gltf type not selected, show geometry options */}
@@ -128,27 +133,31 @@ export default function Edit({ attributes, setAttributes }) {
 							</>
 						)}
 
-						{/* geometry rotation */}
-						<TextControl
-							label={__("X Rotation", "ti_blocks")}
-							value={attributes.geometry_xrotation}
-							type="number"
-							onChange={(value) => setAttributes({ geometry_xrotation: value })}
-						/>
+						{attributes.geometry !== "3dtext" && (
+							<>
+								{/* geometry rotation */}
+								<TextControl
+									label={__("X Rotation", "ti_blocks")}
+									value={attributes.geometry_xrotation}
+									type="number"
+									onChange={(value) => setAttributes({ geometry_xrotation: value })}
+								/>
 
-						<TextControl
-							label={__("Y Rotation", "ti_blocks")}
-							value={attributes.geometry_yrotation}
-							type="number"
-							onChange={(value) => setAttributes({ geometry_yrotation: value })}
-						/>
+								<TextControl
+									label={__("Y Rotation", "ti_blocks")}
+									value={attributes.geometry_yrotation}
+									type="number"
+									onChange={(value) => setAttributes({ geometry_yrotation: value })}
+								/>
 
-						<TextControl
-							label={__("Z Rotation", "ti_blocks")}
-							value={attributes.geometry_zrotation}
-							type="number"
-							onChange={(value) => setAttributes({ geometry_zrotation: value })}
-						/>
+								<TextControl
+									label={__("Z Rotation", "ti_blocks")}
+									value={attributes.geometry_zrotation}
+									type="number"
+									onChange={(value) => setAttributes({ geometry_zrotation: value })}
+								/>
+							</>
+						)}
 
 					</PanelBody>
 
@@ -436,13 +445,57 @@ export default function Edit({ attributes, setAttributes }) {
 
 						{attributes.scene_background === "cubegrid" && (
 							<>
-								{/* particle amount */}
+								{/* cube stretch/amount */}
 								<TextControl
 									label={__("Stretch", "ti_blocks")}
 									value={attributes.cubegrid_stretch}
 									type="number"
 									onChange={(value) => setAttributes({ cubegrid_stretch: value })}
 								/>
+
+								{/* cube spacing */}
+								<TextControl
+									label={__("Spacing", "ti_blocks")}
+									value={attributes.cubegrid_spacing}
+									type="number"
+									onChange={(value) => setAttributes({ cubegrid_spacing: value })}
+								/>
+
+								{/* cube material */}
+								<SelectControl
+									label={__("Material", "ti_blocks")}
+									value={attributes.cubegrid_material}
+									options={[
+										{ label: __("Basic", "ti_blocks"), value: "basic" },
+										{ label: __("Lambert", "ti_blocks"), value: "lambert" },
+										{ label: __("Phong", "ti_blocks"), value: "phong" },
+										{ label: __("Standard", "ti_blocks"), value: "standard" },
+										{ label: __("Physical", "ti_blocks"), value: "physical" },
+									]}
+									onChange={(cubegrid_material) => setAttributes({ cubegrid_material })}
+								/>
+
+								{/* cube color */}
+								<fieldset>
+									<legend>{__("Color", "ti_blocks")}</legend>
+									<ColorPalette
+										value={attributes.cubegrid_color}
+										colors={[
+											{ name: "Black", color: "#000000" },
+											{ name: "White", color: "#ffffff" },
+											{ name: "Red", color: "#ff0000" },
+											{ name: "Orange", color: "#ffa500" },
+											{ name: "Yellow", color: "#ffff00" },
+											{ name: "Green", color: "#00ff00" },
+											{ name: "Blue", color: "#0000ff" },
+											{ name: "Indigo", color: "#4b0082" },
+											{ name: "Violet", color: "#ee82ee" }
+										]}
+										onChange={(cubegrid_color) => setAttributes({ cubegrid_color })}
+									/>
+								</fieldset>
+
+								
 
 								{attributes.cubegrid_stretch < 0 && (
 									<Notice status="warning" isDismissible={false}>

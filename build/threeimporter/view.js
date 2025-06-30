@@ -78977,6 +78977,356 @@ function interceptControlUp( event ) {
 
 /***/ }),
 
+/***/ "./node_modules/three/examples/jsm/geometries/TextGeometry.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/three/examples/jsm/geometries/TextGeometry.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   TextGeometry: () => (/* binding */ TextGeometry)
+/* harmony export */ });
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.core.js");
+
+
+/**
+ * A class for generating text as a single geometry. It is constructed by providing a string of text, and a set of
+ * parameters consisting of a loaded font and extrude settings.
+ *
+ * See the {@link FontLoader} page for additional details.
+ *
+ * `TextGeometry` uses [typeface.json]{@link http://gero3.github.io/facetype.js/} generated fonts.
+ * Some existing fonts can be found located in `/examples/fonts`.
+ *
+ * ```js
+ * const loader = new FontLoader();
+ * const font = await loader.loadAsync( 'fonts/helvetiker_regular.typeface.json' );
+ * const geometry = new TextGeometry( 'Hello three.js!', {
+ * 	font: font,
+ * 	size: 80,
+ * 	depth: 5,
+ * 	curveSegments: 12
+ * } );
+ * ```
+ *
+ * @augments ExtrudeGeometry
+ * @three_import import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+ */
+class TextGeometry extends three__WEBPACK_IMPORTED_MODULE_0__.ExtrudeGeometry {
+
+	/**
+	 * Constructs a new text geometry.
+	 *
+	 * @param {string} text - The text that should be transformed into a geometry.
+	 * @param {TextGeometry~Options} [parameters] - The text settings.
+	 */
+	constructor( text, parameters = {} ) {
+
+		const font = parameters.font;
+
+		if ( font === undefined ) {
+
+			super(); // generate default extrude geometry
+
+		} else {
+
+			const shapes = font.generateShapes( text, parameters.size );
+
+			// defaults
+
+			if ( parameters.depth === undefined ) parameters.depth = 50;
+			if ( parameters.bevelThickness === undefined ) parameters.bevelThickness = 10;
+			if ( parameters.bevelSize === undefined ) parameters.bevelSize = 8;
+			if ( parameters.bevelEnabled === undefined ) parameters.bevelEnabled = false;
+
+			super( shapes, parameters );
+
+		}
+
+		this.type = 'TextGeometry';
+
+	}
+
+}
+
+/**
+ * Represents the `options` type of the geometry's constructor.
+ *
+ * @typedef {Object} TextGeometry~Options
+ * @property {Font} [font] - The font.
+ * @property {number} [size=100] - The text size.
+ * @property {number} [depth=50] - Depth to extrude the shape.
+ * @property {number} [curveSegments=12] - Number of points on the curves.
+ * @property {number} [steps=1] - Number of points used for subdividing segments along the depth of the extruded spline.
+ * @property {boolean} [bevelEnabled=false] - Whether to beveling to the shape or not.
+ * @property {number} [bevelThickness=10] - How deep into the original shape the bevel goes.
+ * @property {number} [bevelSize=8] - Distance from the shape outline that the bevel extends.
+ * @property {number} [bevelOffset=0] - Distance from the shape outline that the bevel starts.
+ * @property {number} [bevelSegments=3] - Number of bevel layers.
+ * @property {?Curve} [extrudePath=null] - A 3D spline path along which the shape should be extruded. Bevels not supported for path extrusion.
+ * @property {Object} [UVGenerator] - An object that provides UV generator functions for custom UV generation.
+ **/
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/three/examples/jsm/loaders/FontLoader.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/three/examples/jsm/loaders/FontLoader.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Font: () => (/* binding */ Font),
+/* harmony export */   FontLoader: () => (/* binding */ FontLoader)
+/* harmony export */ });
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.core.js");
+
+
+/**
+ * A loader for loading fonts.
+ *
+ * You can convert fonts online using [facetype.js]{@link https://gero3.github.io/facetype.js/}.
+ *
+ * ```js
+ * const loader = new FontLoader();
+ * const font = await loader.loadAsync( 'fonts/helvetiker_regular.typeface.json' );
+ * ```
+ *
+ * @augments Loader
+ * @three_import import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+ */
+class FontLoader extends three__WEBPACK_IMPORTED_MODULE_0__.Loader {
+
+	/**
+	 * Constructs a new font loader.
+	 *
+	 * @param {LoadingManager} [manager] - The loading manager.
+	 */
+	constructor( manager ) {
+
+		super( manager );
+
+	}
+
+	/**
+	 * Starts loading from the given URL and passes the loaded font
+	 * to the `onLoad()` callback.
+	 *
+	 * @param {string} url - The path/URL of the file to be loaded. This can also be a data URI.
+	 * @param {function(Font)} onLoad - Executed when the loading process has been finished.
+	 * @param {onProgressCallback} onProgress - Executed while the loading is in progress.
+	 * @param {onErrorCallback} onError - Executed when errors occur.
+	 */
+	load( url, onLoad, onProgress, onError ) {
+
+		const scope = this;
+
+		const loader = new three__WEBPACK_IMPORTED_MODULE_0__.FileLoader( this.manager );
+		loader.setPath( this.path );
+		loader.setRequestHeader( this.requestHeader );
+		loader.setWithCredentials( this.withCredentials );
+		loader.load( url, function ( text ) {
+
+			const font = scope.parse( JSON.parse( text ) );
+
+			if ( onLoad ) onLoad( font );
+
+		}, onProgress, onError );
+
+	}
+
+	/**
+	 * Parses the given font data and returns the resulting font.
+	 *
+	 * @param {Object} json - The raw font data as a JSON object.
+	 * @return {Font} The font.
+	 */
+	parse( json ) {
+
+		return new Font( json );
+
+	}
+
+}
+
+/**
+ * Class representing a font.
+ */
+class Font {
+
+	/**
+	 * Constructs a new font.
+	 *
+	 * @param {Object} data - The font data as JSON.
+	 */
+	constructor( data ) {
+
+		/**
+		 * This flag can be used for type testing.
+		 *
+		 * @type {boolean}
+		 * @readonly
+		 * @default true
+		 */
+		this.isFont = true;
+
+		this.type = 'Font';
+
+		/**
+		 * The font data as JSON.
+		 *
+		 * @type {Object}
+		 */
+		this.data = data;
+
+	}
+
+	/**
+	 * Generates geometry shapes from the given text and size. The result of this method
+	 * should be used with {@link ShapeGeometry} to generate the actual geometry data.
+	 *
+	 * @param {string} text - The text.
+	 * @param {number} [size=100] - The text size.
+	 * @return {Array<Shape>} An array of shapes representing the text.
+	 */
+	generateShapes( text, size = 100 ) {
+
+		const shapes = [];
+		const paths = createPaths( text, size, this.data );
+
+		for ( let p = 0, pl = paths.length; p < pl; p ++ ) {
+
+			shapes.push( ...paths[ p ].toShapes() );
+
+		}
+
+		return shapes;
+
+	}
+
+}
+
+function createPaths( text, size, data ) {
+
+	const chars = Array.from( text );
+	const scale = size / data.resolution;
+	const line_height = ( data.boundingBox.yMax - data.boundingBox.yMin + data.underlineThickness ) * scale;
+
+	const paths = [];
+
+	let offsetX = 0, offsetY = 0;
+
+	for ( let i = 0; i < chars.length; i ++ ) {
+
+		const char = chars[ i ];
+
+		if ( char === '\n' ) {
+
+			offsetX = 0;
+			offsetY -= line_height;
+
+		} else {
+
+			const ret = createPath( char, scale, offsetX, offsetY, data );
+			offsetX += ret.offsetX;
+			paths.push( ret.path );
+
+		}
+
+	}
+
+	return paths;
+
+}
+
+function createPath( char, scale, offsetX, offsetY, data ) {
+
+	const glyph = data.glyphs[ char ] || data.glyphs[ '?' ];
+
+	if ( ! glyph ) {
+
+		console.error( 'THREE.Font: character "' + char + '" does not exists in font family ' + data.familyName + '.' );
+
+		return;
+
+	}
+
+	const path = new three__WEBPACK_IMPORTED_MODULE_0__.ShapePath();
+
+	let x, y, cpx, cpy, cpx1, cpy1, cpx2, cpy2;
+
+	if ( glyph.o ) {
+
+		const outline = glyph._cachedOutline || ( glyph._cachedOutline = glyph.o.split( ' ' ) );
+
+		for ( let i = 0, l = outline.length; i < l; ) {
+
+			const action = outline[ i ++ ];
+
+			switch ( action ) {
+
+				case 'm': // moveTo
+
+					x = outline[ i ++ ] * scale + offsetX;
+					y = outline[ i ++ ] * scale + offsetY;
+
+					path.moveTo( x, y );
+
+					break;
+
+				case 'l': // lineTo
+
+					x = outline[ i ++ ] * scale + offsetX;
+					y = outline[ i ++ ] * scale + offsetY;
+
+					path.lineTo( x, y );
+
+					break;
+
+				case 'q': // quadraticCurveTo
+
+					cpx = outline[ i ++ ] * scale + offsetX;
+					cpy = outline[ i ++ ] * scale + offsetY;
+					cpx1 = outline[ i ++ ] * scale + offsetX;
+					cpy1 = outline[ i ++ ] * scale + offsetY;
+
+					path.quadraticCurveTo( cpx1, cpy1, cpx, cpy );
+
+					break;
+
+				case 'b': // bezierCurveTo
+
+					cpx = outline[ i ++ ] * scale + offsetX;
+					cpy = outline[ i ++ ] * scale + offsetY;
+					cpx1 = outline[ i ++ ] * scale + offsetX;
+					cpy1 = outline[ i ++ ] * scale + offsetY;
+					cpx2 = outline[ i ++ ] * scale + offsetX;
+					cpy2 = outline[ i ++ ] * scale + offsetY;
+
+					path.bezierCurveTo( cpx1, cpy1, cpx2, cpy2, cpx, cpy );
+
+					break;
+
+			}
+
+		}
+
+	}
+
+	return { offsetX: glyph.ha * scale, path: path };
+
+}
+
+
+
+
+/***/ }),
+
 /***/ "./node_modules/three/examples/jsm/loaders/GLTFLoader.js":
 /*!***************************************************************!*\
   !*** ./node_modules/three/examples/jsm/loaders/GLTFLoader.js ***!
@@ -85317,6 +85667,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
 /* harmony import */ var three_examples_jsm_controls_OrbitControls_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three/examples/jsm/controls/OrbitControls.js */ "./node_modules/three/examples/jsm/controls/OrbitControls.js");
 /* harmony import */ var three_examples_jsm_loaders_GLTFLoader_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! three/examples/jsm/loaders/GLTFLoader.js */ "./node_modules/three/examples/jsm/loaders/GLTFLoader.js");
+/* harmony import */ var three_examples_jsm_Addons_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! three/examples/jsm/Addons.js */ "./node_modules/three/examples/jsm/loaders/FontLoader.js");
+/* harmony import */ var three_examples_jsm_Addons_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! three/examples/jsm/Addons.js */ "./node_modules/three/examples/jsm/geometries/TextGeometry.js");
 /**
  * 
  *  Script below written by Bryce Callahan
@@ -85327,6 +85679,8 @@ __webpack_require__.r(__webpack_exports__);
 */
 
 // threejs imports
+
+
 
 
 
@@ -85348,6 +85702,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const geometryMaterial = container.getAttribute('data-geometry-material') || 'phong';
     const geometryColor = container.getAttribute('data-geometry-color') || '#000000';
     const gltfURL = container.getAttribute('data-geometry-gltf') || '';
+    const tridText = container.getAttribute('data-geometry-tridText') || 'Hello World!';
 
     // geometry instancing attributes
     const geometryInstancing = container.getAttribute('data-geometry-instancing') === 'true';
@@ -85386,15 +85741,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const particleColor = container.getAttribute('data-particle-color') || '#000000';
     const particleStretch = parseInt(container.getAttribute('data-particle-stretch'), 10) || 5;
     const cubegridStretch = parseInt(container.getAttribute('data-cubegrid-stretch'), 10) || 15;
+    const cubegridSpacing = parseInt(container.getAttribute('data-cubegrid-spacing'), 10) || 1;
+    const cubegridMaterial = container.getAttribute('data-cubegrid-material') || 'phong';
+    const cubegridColor = container.getAttribute('data-cubegrid-color') || '#FFFFFF';
 
     // other variables
+    const clock = new three__WEBPACK_IMPORTED_MODULE_0__.Clock();
+    const cubegridOffsets = [];
     let mesh,
       particles,
       particlesGeo,
       particlesMat,
-      cube,
-      cubes = [],
-      moveSpeeds = [],
+      cubegridInstance,
       mouse = {
         x: 0,
         y: 0
@@ -85412,16 +85770,10 @@ document.addEventListener('DOMContentLoaded', () => {
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
-    // camera/controls setup
+    // setup user-made components
     buildCamera();
-
-    // mesh setup
-    buildMesh(geometryType, geometryMaterial, geometrySize, geometryColor);
-
-    // light setup
-    buildLight(lightType, lightColor, lightIntensity, lightHelper);
-
-    // background
+    buildMesh();
+    buildLight();
     buildBackground();
 
     // threejs main animation loop
@@ -85429,9 +85781,11 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(animate);
 
       // rotate mesh
-      if (geometryXRotation != 0) rotateObject('x', geometryXRotation);
-      if (geometryYRotation != 0) rotateObject('y', geometryYRotation);
-      if (geometryZRotation != 0) rotateObject('z', geometryZRotation);
+      if (geometryType != "3dtext") {
+        if (geometryXRotation != 0) rotateObject('x', geometryXRotation);
+        if (geometryYRotation != 0) rotateObject('y', geometryYRotation);
+        if (geometryZRotation != 0) rotateObject('z', geometryZRotation);
+      }
 
       // camera mouse follow
       if (cameraFollowMouse) {
@@ -85460,10 +85814,23 @@ document.addEventListener('DOMContentLoaded', () => {
         particlesGeo.attributes.position.needsUpdate = true;
       }
       if (background === 'cubegrid') {
-        cubes.forEach((cube, index) => {
-          const speed = moveSpeeds[index];
-          cube.position.z = Math.sin(Date.now() * speed) * 1.2;
-        });
+        const t = clock.getElapsedTime();
+        const dummy = new three__WEBPACK_IMPORTED_MODULE_0__.Object3D();
+        let index = 0;
+        const halfSize = (cubegridStretch - 1) * 0.5 * cubegridSpacing;
+        for (let i = 0; i < cubegridStretch; i++) {
+          for (let j = 0; j < cubegridStretch; j++) {
+            const offset = cubegridOffsets[index];
+            const x = Math.sin(t + offset) * 0.5 - 10;
+            const y = i * cubegridSpacing - halfSize;
+            const z = j * cubegridSpacing - halfSize;
+            dummy.position.set(x, y, z);
+            dummy.updateMatrix();
+            cubegridInstance.setMatrixAt(index, dummy.matrix);
+            index++;
+          }
+        }
+        cubegridInstance.instanceMatrix.needsUpdate = true;
       }
       if (controls) controls.update();
       renderer.render(scene, camera);
@@ -85494,85 +85861,87 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // build mesh function
-    function buildMesh(type, material, size, color) {
-      if (type === 'gltf') {
+    function buildMesh() {
+      if (geometryType === 'gltf') {
         loadGLTF();
+      } else if (geometryType === '3dtext') {
+        loadTextGeo();
       } else {
         let assignedMaterial, assignedGeometry;
 
         // geometry material selection
-        switch (material) {
+        switch (geometryMaterial) {
           case 'lambert':
             assignedMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshLambertMaterial({
-              color: color
+              color: geometryColor
             });
             break;
           case 'phong':
             assignedMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshPhongMaterial({
-              color: color
+              color: geometryColor
             });
             break;
           case 'standard':
             assignedMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshStandardMaterial({
-              color: color
+              color: geometryColor
             });
             break;
           case 'physical':
             assignedMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshPhysicalMaterial({
-              color: color
+              color: geometryColor
             });
             break;
           case 'basic':
           default:
             assignedMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshBasicMaterial({
-              color: color
+              color: geometryColor
             });
             break;
         }
 
         // geometry type selection
-        switch (type) {
+        switch (geometryType) {
           case 'torusknot':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.TorusKnotGeometry(size, size * 0.33, 100, 16);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.TorusKnotGeometry(geometrySize, geometrySize * 0.33, 100, 16);
             break;
           case 'tetrahedron':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.TetrahedronGeometry(size, 0);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.TetrahedronGeometry(geometrySize, 0);
             break;
           case 'sphere':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.SphereGeometry(size, 64, 32);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.SphereGeometry(geometrySize, 64, 32);
             break;
           case 'ring':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.RingGeometry(size, size * 5, 32);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.RingGeometry(geometrySize, geometrySize * 5, 32);
             break;
           case 'plane':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.PlaneGeometry(size, size);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.PlaneGeometry(geometrySize, geometrySize);
             break;
           case 'octahedron':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.OctahedronGeometry(size, 0);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.OctahedronGeometry(geometrySize, 0);
             break;
           case 'icosahedron':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.IcosahedronGeometry(size, 0);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.IcosahedronGeometry(geometrySize, 0);
             break;
           case 'dodecahedron':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.DodecahedronGeometry(size, 0);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.DodecahedronGeometry(geometrySize, 0);
             break;
           case 'cylinder':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.CylinderGeometry(size, size, 20, 32);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.CylinderGeometry(geometrySize, geometrySize, 20, 32);
             break;
           case 'cone':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.ConeGeometry(size, size * 4, 32);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.ConeGeometry(geometrySize, geometrySize * 4, 32);
             break;
           case 'circle':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.CircleGeometry(size, 32);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.CircleGeometry(geometrySize, 32);
             break;
           case 'capsule':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.CapsuleGeometry(size, size, 4, 8);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.CapsuleGeometry(geometrySize, geometrySize, 4, 8);
             break;
           case 'torus':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.TorusGeometry(size, size / 50, 16, 100);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.TorusGeometry(geometrySize, geometrySize / 50, 16, 100);
             break;
           case 'box':
-            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.BoxGeometry(size, size, size);
+            assignedGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.BoxGeometry(geometrySize, geometrySize, geometrySize);
             break;
           default:
             break;
@@ -85591,28 +85960,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // build light function
-    function buildLight(type, color, intensity) {
+    function buildLight() {
       let dynamicLight;
       let dynamicLightHelper;
-      const dynamicLightColor = new three__WEBPACK_IMPORTED_MODULE_0__.Color(color);
-      switch (type) {
+      const dynamicLightColor = new three__WEBPACK_IMPORTED_MODULE_0__.Color(lightColor);
+      switch (lightType) {
         case 'directional':
-          const directionalLight = new three__WEBPACK_IMPORTED_MODULE_0__.DirectionalLight(dynamicLightColor, intensity);
+          const directionalLight = new three__WEBPACK_IMPORTED_MODULE_0__.DirectionalLight(dynamicLightColor, lightIntensity);
           dynamicLight = directionalLight;
           dynamicLightHelper = new three__WEBPACK_IMPORTED_MODULE_0__.DirectionalLightHelper(dynamicLight, 5);
           break;
         case 'hemisphere':
-          const hemiLight = new three__WEBPACK_IMPORTED_MODULE_0__.HemisphereLight(dynamicLightColor, intensity);
+          const hemiLight = new three__WEBPACK_IMPORTED_MODULE_0__.HemisphereLight(dynamicLightColor, lightIntensity);
           dynamicLight = hemiLight;
           dynamicLightHelper = new three__WEBPACK_IMPORTED_MODULE_0__.HemisphereLightHelper(dynamicLight, 5);
           break;
         case 'point':
-          const pointLight = new three__WEBPACK_IMPORTED_MODULE_0__.PointLight(dynamicLightColor, intensity, 100);
+          const pointLight = new three__WEBPACK_IMPORTED_MODULE_0__.PointLight(dynamicLightColor, lightIntensity, 100);
           dynamicLight = pointLight;
           dynamicLightHelper = new three__WEBPACK_IMPORTED_MODULE_0__.PointLightHelper(dynamicLight, 5);
           break;
         case 'spotlight':
-          const spotLight = new three__WEBPACK_IMPORTED_MODULE_0__.SpotLight(dynamicLightColor, intensity);
+          const spotLight = new three__WEBPACK_IMPORTED_MODULE_0__.SpotLight(dynamicLightColor, lightIntensity);
           spotLight.position.set(10, 10, 10);
           spotLight.angle = Math.PI / 12;
           spotLight.penumbra = 0.2;
@@ -85624,13 +85993,13 @@ document.addEventListener('DOMContentLoaded', () => {
           break;
         case 'ambient':
         default:
-          const ambientLight = new three__WEBPACK_IMPORTED_MODULE_0__.AmbientLight(dynamicLightColor, intensity);
+          const ambientLight = new three__WEBPACK_IMPORTED_MODULE_0__.AmbientLight(dynamicLightColor, lightIntensity);
           dynamicLight = ambientLight;
           break;
       }
       dynamicLight.position.set(lightXPos, lightYPos, lightZPos);
       scene.add(dynamicLight);
-      if (lightHelper && type != 'ambient') {
+      if (lightHelper && lightType != 'ambient') {
         scene.add(dynamicLightHelper);
       }
     }
@@ -85665,6 +86034,30 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // load 3d text
+    function loadTextGeo() {
+      const loader = new three_examples_jsm_Addons_js__WEBPACK_IMPORTED_MODULE_4__.FontLoader();
+      loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+        const geometry = new three_examples_jsm_Addons_js__WEBPACK_IMPORTED_MODULE_5__.TextGeometry(tridText, {
+          font: font,
+          size: 5,
+          height: 1,
+          curveSegments: 12,
+          bevelEnabled: true,
+          bevelThickness: 0.1,
+          bevelSize: 0.2,
+          bevelOffset: 0,
+          bevelSegments: 5
+        });
+        const material = new three__WEBPACK_IMPORTED_MODULE_0__.MeshStandardMaterial({
+          color: 0x00ffcc
+        });
+        const textMesh = new three__WEBPACK_IMPORTED_MODULE_0__.Mesh(geometry, material);
+        geometry.center(); // Center the text
+        scene.add(textMesh);
+      });
+    }
+
     // instancing mesh
     function buildInstancedMesh() {
       const dummyMesh = new three__WEBPACK_IMPORTED_MODULE_0__.Object3D();
@@ -85697,18 +86090,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // background
     function buildBackground() {
+      if (background === "none") {
+        controls.enabled = true;
+      } else {
+        controls.enabled = false;
+      }
+
       // type
       switch (background) {
         case 'particles':
           buildBackground_Particles();
-          controls.enabled = false;
           break;
         case 'cubegrid':
           buildBackground_Cubes();
-          controls.enabled = false;
         case 'none':
         default:
-          controls.enabled = true;
           break;
       }
     }
@@ -85717,7 +86113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function buildBackground_Particles() {
       const positions = new Float32Array(particleAmount * 3);
       for (let i = 0; i < particleAmount * 3; i += 3) {
-        positions[i] = -5;
+        positions[i] = -10;
         positions[i + 1] = (Math.random() - 0.5) * (particleStretch * 2);
         positions[i + 2] = (Math.random() - 0.5) * (particleStretch * 2);
       }
@@ -85733,28 +86129,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // background cubes
     function buildBackground_Cubes() {
-      const cubeSize = 1;
-      const gridSize = 15;
+      const count = cubegridStretch * cubegridStretch;
+      const geometry = new three__WEBPACK_IMPORTED_MODULE_0__.BoxGeometry(1, 1, 1);
+      let assignedMaterial;
+      switch (cubegridMaterial) {
+        case 'lambert':
+          assignedMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshLambertMaterial({
+            color: cubegridColor
+          });
+          break;
+        case 'basic':
+          assignedMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshBasicMaterial({
+            color: cubegridColor
+          });
+          break;
+        case 'standard':
+          assignedMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshStandardMaterial({
+            color: cubegridColor
+          });
+          break;
+        case 'physical':
+          assignedMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshPhysicalMaterial({
+            color: cubegridColor
+          });
+          break;
+        case 'phong':
+        default:
+          assignedMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshPhongMaterial({
+            color: cubegridColor
+          });
+          break;
+      }
+      cubegridInstance = new three__WEBPACK_IMPORTED_MODULE_0__.InstancedMesh(geometry, assignedMaterial, count);
+      scene.add(cubegridInstance);
+      const dummy = new three__WEBPACK_IMPORTED_MODULE_0__.Object3D();
+      const halfSize = (cubegridStretch - 1) * 0.5 * cubegridSpacing;
+      let index = 0;
       for (let i = 0; i < cubegridStretch; i++) {
         for (let j = 0; j < cubegridStretch; j++) {
-          const geometry = new three__WEBPACK_IMPORTED_MODULE_0__.BoxGeometry(cubeSize, cubeSize, 5);
-          const material = new three__WEBPACK_IMPORTED_MODULE_0__.MeshStandardMaterial({
-            color: 0xffffff
-          });
-          cube = new three__WEBPACK_IMPORTED_MODULE_0__.Mesh(geometry, material);
-          cube.position.x = i * cubeSize - cubegridStretch * cubeSize / 2;
-          cube.position.y = j * cubeSize - cubegridStretch * cubeSize / 2;
-          scene.add(cube);
-          cubes.push(cube);
-          moveSpeeds.push(Math.random() * 0.0002 + 0.0001);
+          const y = i * cubegridSpacing - halfSize;
+          const z = j * cubegridSpacing - halfSize;
+          dummy.position.set(-10, y, z);
+          dummy.updateMatrix();
+          cubegridInstance.setMatrixAt(index, dummy.matrix);
+          cubegridOffsets[index] = Math.random() * Math.PI * 2;
+          index++;
         }
       }
+      cubegridInstance.instanceMatrix.needsUpdate = true;
     }
 
     // camera shake
     function updateCameraFollowMouse(camera, target = new three__WEBPACK_IMPORTED_MODULE_0__.Vector3(cameraXTarget, cameraYTarget, cameraZTarget), radius = 5) {
-      const angleHorizontal = mouse.x * (Math.PI / 3) * 0.2;
-      const angleVertical = mouse.y * (Math.PI / 3) * 0.2;
+      const angleHorizontal = mouse.x * (Math.PI / 3) * 0.1;
+      const angleVertical = mouse.y * (Math.PI / 3) * 0.1;
       camera.position.x = target.x + radius * Math.cos(angleHorizontal) * Math.cos(angleVertical);
       camera.position.y = target.y + radius * Math.sin(angleVertical);
       camera.position.z = target.z + radius * Math.sin(angleHorizontal) * Math.cos(angleVertical);

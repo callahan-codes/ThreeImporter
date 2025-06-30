@@ -32,7 +32,7 @@ return array(
 			),
 			'geometry_material' => array(
 				'type' => 'string',
-				'default' => 'basic'
+				'default' => 'phong'
 			),
 			'geometry_xrotation' => array(
 				'type' => 'string',
@@ -61,6 +61,10 @@ return array(
 			'gltf_url' => array(
 				'type' => 'string',
 				'default' => ''
+			),
+			'trid_text' => array(
+				'type' => 'string',
+				'default' => 'Hello World!'
 			),
 			'light' => array(
 				'type' => 'string',
@@ -149,6 +153,18 @@ return array(
 			'cubegrid_stretch' => array(
 				'type' => 'string',
 				'default' => '5'
+			),
+			'cubegrid_spacing' => array(
+				'type' => 'integer',
+				'default' => '1'
+			),
+			'cubegrid_material' => array(
+				'type' => 'string',
+				'default' => 'phong'
+			),
+			'cubegrid_color' => array(
+				'type' => 'string',
+				'default' => '#FFFFFF'
 			)
 		),
 		'supports' => array(

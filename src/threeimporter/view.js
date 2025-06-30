@@ -11,6 +11,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { FontLoader } from 'three/examples/jsm/Addons.js';
+import { TextGeometry } from 'three/examples/jsm/Addons.js';
 
 // on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -31,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const geometryMaterial = container.getAttribute('data-geometry-material') || 'phong';
         const geometryColor = container.getAttribute('data-geometry-color') || '#000000';
         const gltfURL = container.getAttribute('data-geometry-gltf') || '';
+        const tridText= container.getAttribute('data-geometry-tridText') || 'Hello World!';
 
         // geometry instancing attributes
         const geometryInstancing = container.getAttribute('data-geometry-instancing') === 'true';
@@ -69,12 +72,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const particleColor = container.getAttribute('data-particle-color') || '#000000';
         const particleStretch = parseInt(container.getAttribute('data-particle-stretch'), 10) || 5;
         const cubegridStretch = parseInt(container.getAttribute('data-cubegrid-stretch'), 10) || 15;
+        const cubegridSpacing = parseInt(container.getAttribute('data-cubegrid-spacing'), 10) || 1;
+        const cubegridMaterial = container.getAttribute('data-cubegrid-material') || 'phong';
+        const cubegridColor = container.getAttribute('data-cubegrid-color') || '#FFFFFF';
 
         // other variables
+        const clock = new THREE.Clock();
+        const cubegridOffsets = [];
         let mesh,
             particles, particlesGeo, particlesMat,
-            cube, cubes = [], moveSpeeds = [],
-            mouse = { x: 0, y: 0 };
+            cubegridInstance, mouse = { x: 0, y: 0 };
 
         // threejs scene setup
         const scene = new THREE.Scene();
@@ -85,16 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
         renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
         
-        // camera/controls setup
+        // setup user-made components
         buildCamera();
-
-        // mesh setup
-        buildMesh(geometryType, geometryMaterial, geometrySize, geometryColor);
-
-        // light setup
-        buildLight(lightType, lightColor, lightIntensity, lightHelper);
-
-        // background
+        buildMesh();
+        buildLight();
         buildBackground();
 
         // threejs main animation loop
@@ -102,9 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
             requestAnimationFrame(animate);
 
             // rotate mesh
-            if(geometryXRotation != 0) rotateObject('x', geometryXRotation);
-            if(geometryYRotation != 0) rotateObject('y', geometryYRotation);
-            if(geometryZRotation != 0) rotateObject('z', geometryZRotation);
+            if(geometryType != "3dtext") {
+                if(geometryXRotation != 0) rotateObject('x', geometryXRotation);
+                if(geometryYRotation != 0) rotateObject('y', geometryYRotation);
+                if(geometryZRotation != 0) rotateObject('z', geometryZRotation);
+            }
+            
 
             // camera mouse follow
             if (cameraFollowMouse) {
@@ -135,12 +139,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 // update position
                 particlesGeo.attributes.position.needsUpdate = true;
             }
-            if(background === 'cubegrid') {
-                cubes.forEach((cube, index) => {
-                    const speed = moveSpeeds[index];
-                    cube.position.z = Math.sin(Date.now() * speed) * 1.2; 
-                });
+            if (background === 'cubegrid') {
+                const t = clock.getElapsedTime();
+                const dummy = new THREE.Object3D();
+
+                let index = 0;
+                const halfSize = (cubegridStretch - 1) * 0.5 * cubegridSpacing;
+
+                for (let i = 0; i < cubegridStretch; i++) {
+                    for (let j = 0; j < cubegridStretch; j++) {
+                        const offset = cubegridOffsets[index];
+                        const x = Math.sin(t + offset) * 0.5 - 10;
+                        const y = i * cubegridSpacing - halfSize;
+                        const z = j * cubegridSpacing - halfSize;
+
+                        dummy.position.set(x, y, z);
+                        dummy.updateMatrix();
+                        cubegridInstance.setMatrixAt(index, dummy.matrix);
+
+                        index++;
+                    }
+                }
+
+                cubegridInstance.instanceMatrix.needsUpdate = true;
             }
+
             
             if (controls) controls.update();
             renderer.render(scene, camera);
@@ -172,76 +195,80 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // build mesh function
-        function buildMesh(type, material, size, color) {
+        function buildMesh() {
 
-            if(type === 'gltf'){
+            if(geometryType === 'gltf'){
                 loadGLTF();
-            } else {
+            } 
+            else if (geometryType === '3dtext'){
+                loadTextGeo();
+            }
+            else {
                 let assignedMaterial, assignedGeometry;
 
                 // geometry material selection
-                switch (material) {
+                switch (geometryMaterial) {
                     case 'lambert':
-                        assignedMaterial = new THREE.MeshLambertMaterial({ color: color });
+                        assignedMaterial = new THREE.MeshLambertMaterial({ color: geometryColor });
                         break;
                     case 'phong':
-                        assignedMaterial = new THREE.MeshPhongMaterial({ color: color });
+                        assignedMaterial = new THREE.MeshPhongMaterial({ color: geometryColor });
                         break;
                     case 'standard':
-                        assignedMaterial = new THREE.MeshStandardMaterial({ color: color });
+                        assignedMaterial = new THREE.MeshStandardMaterial({ color: geometryColor });
                         break;
                     case 'physical':
-                        assignedMaterial = new THREE.MeshPhysicalMaterial({ color: color });
+                        assignedMaterial = new THREE.MeshPhysicalMaterial({ color: geometryColor });
                         break;
                     case 'basic':
                     default:
-                        assignedMaterial = new THREE.MeshBasicMaterial({ color: color });
+                        assignedMaterial = new THREE.MeshBasicMaterial({ color: geometryColor });
                         break;
                 }
 
                 // geometry type selection
-                switch(type){
+                switch(geometryType){
                     case 'torusknot':
-                        assignedGeometry = new THREE.TorusKnotGeometry(size, size * 0.33, 100, 16);
+                        assignedGeometry = new THREE.TorusKnotGeometry(geometrySize, geometrySize * 0.33, 100, 16);
                         break;
                     case 'tetrahedron':
-                        assignedGeometry = new THREE.TetrahedronGeometry(size, 0);
+                        assignedGeometry = new THREE.TetrahedronGeometry(geometrySize, 0);
                         break;
                     case 'sphere':
-                        assignedGeometry = new THREE.SphereGeometry(size, 64, 32);
+                        assignedGeometry = new THREE.SphereGeometry(geometrySize, 64, 32);
                         break;
                     case 'ring':
-                        assignedGeometry = new THREE.RingGeometry(size, size * 5, 32);
+                        assignedGeometry = new THREE.RingGeometry(geometrySize, geometrySize * 5, 32);
                         break;
                     case 'plane':
-                        assignedGeometry = new THREE.PlaneGeometry(size, size);
+                        assignedGeometry = new THREE.PlaneGeometry(geometrySize, geometrySize);
                         break;
                     case 'octahedron':
-                        assignedGeometry = new THREE.OctahedronGeometry(size, 0);
+                        assignedGeometry = new THREE.OctahedronGeometry(geometrySize, 0);
                         break;
                     case 'icosahedron':
-                        assignedGeometry = new THREE.IcosahedronGeometry(size, 0);
+                        assignedGeometry = new THREE.IcosahedronGeometry(geometrySize, 0);
                         break;
                     case 'dodecahedron':
-                        assignedGeometry = new THREE.DodecahedronGeometry(size, 0);
+                        assignedGeometry = new THREE.DodecahedronGeometry(geometrySize, 0);
                         break;
                     case 'cylinder':
-                        assignedGeometry = new THREE.CylinderGeometry(size, size, 20, 32);
+                        assignedGeometry = new THREE.CylinderGeometry(geometrySize, geometrySize, 20, 32);
                         break;
                     case 'cone':
-                        assignedGeometry = new THREE.ConeGeometry(size, size*4, 32);
+                        assignedGeometry = new THREE.ConeGeometry(geometrySize, geometrySize*4, 32);
                         break;
                     case 'circle':
-                        assignedGeometry = new THREE.CircleGeometry(size, 32);
+                        assignedGeometry = new THREE.CircleGeometry(geometrySize, 32);
                         break;
                     case 'capsule':
-                        assignedGeometry = new THREE.CapsuleGeometry(size, size, 4, 8);
+                        assignedGeometry = new THREE.CapsuleGeometry(geometrySize, geometrySize, 4, 8);
                         break;
                     case 'torus':
-                        assignedGeometry = new THREE.TorusGeometry(size, size / 50, 16, 100);
+                        assignedGeometry = new THREE.TorusGeometry(geometrySize, geometrySize / 50, 16, 100);
                         break;
                     case 'box':
-                        assignedGeometry = new THREE.BoxGeometry(size, size, size);
+                        assignedGeometry = new THREE.BoxGeometry(geometrySize, geometrySize, geometrySize);
                         break;
                     default:
                         break;
@@ -266,30 +293,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // build light function
-        function buildLight(type, color, intensity) {
+        function buildLight() {
 
             let dynamicLight;
             let dynamicLightHelper;
-            const dynamicLightColor = new THREE.Color(color);
+            const dynamicLightColor = new THREE.Color(lightColor);
 
-            switch(type) {
+            switch(lightType) {
                 case 'directional':
-                    const directionalLight = new THREE.DirectionalLight(dynamicLightColor, intensity);
+                    const directionalLight = new THREE.DirectionalLight(dynamicLightColor, lightIntensity);
                     dynamicLight = directionalLight;
                     dynamicLightHelper = new THREE.DirectionalLightHelper(dynamicLight, 5);
                     break;
                 case 'hemisphere':
-                    const hemiLight = new THREE.HemisphereLight(dynamicLightColor, intensity);
+                    const hemiLight = new THREE.HemisphereLight(dynamicLightColor, lightIntensity);
                     dynamicLight = hemiLight;
                     dynamicLightHelper = new THREE.HemisphereLightHelper(dynamicLight, 5);
                     break;
                 case 'point':
-                    const pointLight = new THREE.PointLight(dynamicLightColor, intensity, 100);
+                    const pointLight = new THREE.PointLight(dynamicLightColor, lightIntensity, 100);
                     dynamicLight = pointLight;
                     dynamicLightHelper = new THREE.PointLightHelper(dynamicLight, 5);
                     break;
                 case 'spotlight':
-                    const spotLight = new THREE.SpotLight(dynamicLightColor, intensity); 
+                    const spotLight = new THREE.SpotLight(dynamicLightColor, lightIntensity); 
                     spotLight.position.set(10, 10, 10);
                     spotLight.angle = Math.PI / 12; 
                     spotLight.penumbra = 0.2; 
@@ -301,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'ambient':
                 default:
-                    const ambientLight = new THREE.AmbientLight(dynamicLightColor, intensity);
+                    const ambientLight = new THREE.AmbientLight(dynamicLightColor, lightIntensity);
                     dynamicLight = ambientLight;
                     break;
             }
@@ -309,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dynamicLight.position.set(lightXPos, lightYPos, lightZPos);
             scene.add(dynamicLight);
 
-            if(lightHelper && type != 'ambient') {
+            if(lightHelper && lightType != 'ambient') {
                 scene.add(dynamicLightHelper);
             }
         }
@@ -343,6 +370,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 mesh = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
                 scene.add(mesh);
             }
+        }
+
+        // load 3d text
+        function loadTextGeo() {
+            
+            const loader = new FontLoader();
+            loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+            const geometry = new TextGeometry(tridText, {
+                font: font,
+                size: 5,
+                height: 1,
+                curveSegments: 12,
+                bevelEnabled: true,
+                bevelThickness: 0.1,
+                bevelSize: 0.2,
+                bevelOffset: 0,
+                bevelSegments: 5
+            });
+
+            const material = new THREE.MeshStandardMaterial({ color: 0x00ffcc });
+            const textMesh = new THREE.Mesh(geometry, material);
+            geometry.center(); // Center the text
+            scene.add(textMesh);
+            });
         }
 
         // instancing mesh
@@ -381,18 +432,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // background
         function buildBackground() {
 
+            if(background === "none") {
+                controls.enabled = true;
+            } else {
+                controls.enabled = false;
+            }
+
             // type
             switch(background) {
                 case 'particles':
                     buildBackground_Particles();
-                    controls.enabled = false;
                     break;
                 case 'cubegrid':
                     buildBackground_Cubes();
-                    controls.enabled = false;
                 case 'none':
                 default:
-                    controls.enabled = true;
                     break;
             }
         }
@@ -402,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const positions = new Float32Array(particleAmount * 3);
             for (let i = 0; i < particleAmount * 3; i += 3) {
-                positions[i] = -5; 
+                positions[i] = -10; 
                 positions[i + 1] = (Math.random() - 0.5) * (particleStretch * 2);
                 positions[i + 2] = (Math.random() - 0.5) * (particleStretch * 2);
             }
@@ -418,30 +472,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // background cubes
         function buildBackground_Cubes() {
-            const cubeSize = 1;
-            const gridSize = 15;
+            const count = cubegridStretch * cubegridStretch;
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            let assignedMaterial;
+
+            switch (cubegridMaterial) {
+                case 'lambert':
+                    assignedMaterial = new THREE.MeshLambertMaterial({ color: cubegridColor});
+                    break;
+                case 'basic':
+                    assignedMaterial = new THREE.MeshBasicMaterial({ color: cubegridColor});
+                    break;
+                case 'standard':
+                    assignedMaterial = new THREE.MeshStandardMaterial({ color: cubegridColor});
+                    break;
+                case 'physical':
+                    assignedMaterial = new THREE.MeshPhysicalMaterial({ color: cubegridColor});
+                    break;
+                case 'phong':
+                default:
+                    assignedMaterial = new THREE.MeshPhongMaterial({ color: cubegridColor});
+                    break;
+            }
+            
+            cubegridInstance = new THREE.InstancedMesh(geometry, assignedMaterial, count);
+            scene.add(cubegridInstance);
+
+            const dummy = new THREE.Object3D();
+            const halfSize = (cubegridStretch - 1) * 0.5 * cubegridSpacing;
+            let index = 0;
 
             for (let i = 0; i < cubegridStretch; i++) {
                 for (let j = 0; j < cubegridStretch; j++) {
-                    const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, 5);
-                    const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
-                    cube = new THREE.Mesh(geometry, material);
+                    const y = i * cubegridSpacing - halfSize;
+                    const z = j * cubegridSpacing - halfSize;
 
-                    cube.position.x = i * cubeSize - (cubegridStretch * cubeSize) / 2;
-                    cube.position.y = j * cubeSize - (cubegridStretch * cubeSize) / 2; 
+                    dummy.position.set(-10, y, z);
+                    dummy.updateMatrix();
+                    cubegridInstance.setMatrixAt(index, dummy.matrix);
 
-                    scene.add(cube);
-                    cubes.push(cube);
-
-                    moveSpeeds.push(Math.random() * 0.0002 + 0.0001);
+                    cubegridOffsets[index] = Math.random() * Math.PI * 2;
+                    index++;
                 }
             }
+
+            cubegridInstance.instanceMatrix.needsUpdate = true;
         }
 
         // camera shake
         function updateCameraFollowMouse(camera, target = new THREE.Vector3(cameraXTarget, cameraYTarget, cameraZTarget), radius = 5) {
-            const angleHorizontal = mouse.x * (Math.PI / 3) * 0.2;        
-            const angleVertical = mouse.y * (Math.PI / 3) * 0.2; 
+            const angleHorizontal = mouse.x * (Math.PI / 3) * 0.1;        
+            const angleVertical = mouse.y * (Math.PI / 3) * 0.1; 
 
             camera.position.x = target.x + radius * Math.cos(angleHorizontal) * Math.cos(angleVertical);
             camera.position.y = target.y + radius * Math.sin(angleVertical);

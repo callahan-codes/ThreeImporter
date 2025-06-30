@@ -27,7 +27,7 @@
 		},
 		"geometry_material" :{
 			"type":"string",
-			"default":"basic"
+			"default":"phong"
 		},
 		"geometry_xrotation" :{
 			"type":"string",
@@ -56,6 +56,10 @@
 		"gltf_url" :{
 			"type":"string",
 			"default":""
+		},
+		"trid_text" :{
+			"type":"string",
+			"default":"Hello World!"
 		},
 		"light" :{
 			"type":"string",
@@ -144,6 +148,18 @@
 		"cubegrid_stretch" :{
 			"type":"string",
 			"default":"5"
+		},
+		"cubegrid_spacing" :{
+			"type":"integer",
+			"default":"1"
+		},
+		"cubegrid_material" :{
+			"type":"string",
+			"default":"phong"
+		},
+		"cubegrid_color" :{
+			"type":"string",
+			"default":"#FFFFFF"
 		}
 	},
 	"supports": {
