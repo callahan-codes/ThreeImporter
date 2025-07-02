@@ -85703,6 +85703,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const geometryColor = container.getAttribute('data-geometry-color') || '#000000';
     const gltfURL = container.getAttribute('data-geometry-gltf') || '';
     const tridText = container.getAttribute('data-geometry-tridText') || 'Hello World!';
+    const tridTextColor = container.getAttribute('data-tridText-color') || '#FFFFFF';
+    const tridTextSize = parseInt(container.getAttribute('data-tridText-size'), 10) || 1;
 
     // geometry instancing attributes
     const geometryInstancing = container.getAttribute('data-geometry-instancing') === 'true';
@@ -86037,23 +86039,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // load 3d text
     function loadTextGeo() {
       const loader = new three_examples_jsm_Addons_js__WEBPACK_IMPORTED_MODULE_4__.FontLoader();
-      loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+      loader.load('https://raw.githubusercontent.com/callahan-codes/font/refs/heads/main/Open%20Sans%20Condensed_Bold.json', function (font) {
         const geometry = new three_examples_jsm_Addons_js__WEBPACK_IMPORTED_MODULE_5__.TextGeometry(tridText, {
           font: font,
-          size: 5,
-          height: 1,
-          curveSegments: 12,
-          bevelEnabled: true,
-          bevelThickness: 0.1,
-          bevelSize: 0.2,
-          bevelOffset: 0,
-          bevelSegments: 5
+          size: tridTextSize * 0.5,
+          height: 0.05,
+          depth: 0.5
         });
         const material = new three__WEBPACK_IMPORTED_MODULE_0__.MeshStandardMaterial({
-          color: 0x00ffcc
+          color: tridTextColor
         });
         const textMesh = new three__WEBPACK_IMPORTED_MODULE_0__.Mesh(geometry, material);
-        geometry.center(); // Center the text
+        geometry.center();
+        textMesh.rotation.y = Math.PI / 2;
         scene.add(textMesh);
       });
     }

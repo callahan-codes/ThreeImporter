@@ -85,13 +85,40 @@ export default function Edit({ attributes, setAttributes }) {
 							/>
 
 						) : attributes.geometry === "3dtext" ? (
+							<>
+								<TextControl
+									label={__("Text to show", "ti_blocks")}
+									value={attributes.trid_text}
+									onChange={(trid_text) => setAttributes({ trid_text })}
+								/>	
 
-							<TextControl
-								label={__("Text to show", "ti_blocks")}
-								value={attributes.trid_text}
-								type="number"
-								onChange={(value) => setAttributes({ trid_text: value })}
-							/>
+								<fieldset>
+									<legend>{__("Color", "ti_blocks")}</legend>
+									<ColorPalette
+										value={attributes.trid_color}
+										colors={[
+											{ name: "Black", color: "#000000" },
+											{ name: "White", color: "#ffffff" },
+											{ name: "Red", color: "#ff0000" },
+											{ name: "Orange", color: "#ffa500" },
+											{ name: "Yellow", color: "#ffff00" },
+											{ name: "Green", color: "#00ff00" },
+											{ name: "Blue", color: "#0000ff" },
+											{ name: "Indigo", color: "#4b0082" },
+											{ name: "Violet", color: "#ee82ee" }
+										]}
+										onChange={(trid_color) => setAttributes({ trid_color })}
+									/>
+								</fieldset>		
+
+								<TextControl
+									label={__("Size", "ti_blocks")}
+									value={attributes.trid_size}
+									type="number"
+									onChange={(value) => setAttributes({ trid_size: value })}
+								/>	
+							
+							</>
 
 						) : (
 							<>

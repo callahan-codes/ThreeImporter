@@ -8,7 +8,7 @@
   \**************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"ti-blocks/threeimporter","version":"0.1.0","title":"Three Importer","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"attributes":{"block_height":{"type":"string","default":"400px"},"geometry":{"type":"string","default":"box"},"geometry_color":{"type":"string","default":"#000000"},"geometry_size":{"type":"integer","default":1},"geometry_material":{"type":"string","default":"phong"},"geometry_xrotation":{"type":"string","default":"0"},"geometry_yrotation":{"type":"string","default":"0"},"geometry_zrotation":{"type":"string","default":"0"},"geometry_instancing":{"type":"boolean","default":false},"geometry_instancingNum":{"type":"string","default":"50"},"geometry_instancingSpacing":{"type":"string","default":"1"},"gltf_url":{"type":"string","default":""},"trid_text":{"type":"string","default":"Hello World!"},"light":{"type":"string","default":"ambient"},"light_color":{"type":"string","default":"#FFFFFF"},"light_intensity":{"type":"string","default":"1"},"light_xpos":{"type":"string","default":"0"},"light_ypos":{"type":"string","default":"0"},"light_zpos":{"type":"string","default":"0"},"light_helper":{"type":"boolean","default":false},"camera_xpos":{"type":"string","default":"5"},"camera_ypos":{"type":"string","default":"0"},"camera_zpos":{"type":"string","default":"0"},"camera_xtarget":{"type":"string","default":"0"},"camera_ytarget":{"type":"string","default":"0"},"camera_ztarget":{"type":"string","default":"0"},"camera_followMouse":{"type":"boolean","default":false},"scene_background":{"type":"string","default":"none"},"particle_amount":{"type":"string","default":"1000"},"particle_size":{"type":"string","default":"1"},"particle_speed":{"type":"string","default":"5"},"particle_direction":{"type":"string","default":"right"},"particle_color":{"type":"string","default":"#000000"},"particle_stretch":{"type":"string","default":"5"},"cubegrid_stretch":{"type":"string","default":"5"},"cubegrid_spacing":{"type":"integer","default":"1"},"cubegrid_material":{"type":"string","default":"phong"},"cubegrid_color":{"type":"string","default":"#FFFFFF"}},"supports":{"html":false,"innerBlocks":true,"align":["wide","full"],"spacing":{"padding":true,"margin":true},"color":{"background":true,"gradients":true}},"textdomain":"threeimporter","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"ti-blocks/threeimporter","version":"0.1.0","title":"Three Importer","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"attributes":{"block_height":{"type":"string","default":"400px"},"geometry":{"type":"string","default":"box"},"geometry_color":{"type":"string","default":"#000000"},"geometry_size":{"type":"integer","default":1},"geometry_material":{"type":"string","default":"phong"},"geometry_xrotation":{"type":"string","default":"0"},"geometry_yrotation":{"type":"string","default":"0"},"geometry_zrotation":{"type":"string","default":"0"},"geometry_instancing":{"type":"boolean","default":false},"geometry_instancingNum":{"type":"string","default":"50"},"geometry_instancingSpacing":{"type":"string","default":"1"},"gltf_url":{"type":"string","default":""},"trid_text":{"type":"string","default":"Hello World!"},"trid_color":{"type":"string","default":"#FFFFFF"},"trid_size":{"type":"string","default":"1"},"light":{"type":"string","default":"ambient"},"light_color":{"type":"string","default":"#FFFFFF"},"light_intensity":{"type":"string","default":"1"},"light_xpos":{"type":"string","default":"0"},"light_ypos":{"type":"string","default":"0"},"light_zpos":{"type":"string","default":"0"},"light_helper":{"type":"boolean","default":false},"camera_xpos":{"type":"string","default":"5"},"camera_ypos":{"type":"string","default":"0"},"camera_zpos":{"type":"string","default":"0"},"camera_xtarget":{"type":"string","default":"0"},"camera_ytarget":{"type":"string","default":"0"},"camera_ztarget":{"type":"string","default":"0"},"camera_followMouse":{"type":"boolean","default":false},"scene_background":{"type":"string","default":"none"},"particle_amount":{"type":"string","default":"1000"},"particle_size":{"type":"string","default":"1"},"particle_speed":{"type":"string","default":"5"},"particle_direction":{"type":"string","default":"right"},"particle_color":{"type":"string","default":"#000000"},"particle_stretch":{"type":"string","default":"5"},"cubegrid_stretch":{"type":"string","default":"5"},"cubegrid_spacing":{"type":"integer","default":"1"},"cubegrid_material":{"type":"string","default":"phong"},"cubegrid_color":{"type":"string","default":"#FFFFFF"}},"supports":{"html":false,"innerBlocks":true,"align":["wide","full"],"spacing":{"padding":true,"margin":true},"color":{"background":true,"gradients":true}},"textdomain":"threeimporter","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ }),
 
@@ -130,13 +130,58 @@ function Edit({
             onChange: gltf_url => setAttributes({
               gltf_url
             })
-          }) : attributes.geometry === "3dtext" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Text to show", "ti_blocks"),
-            value: attributes.trid_text,
-            type: "number",
-            onChange: value => setAttributes({
-              trid_text: value
-            })
+          }) : attributes.geometry === "3dtext" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Text to show", "ti_blocks"),
+              value: attributes.trid_text,
+              onChange: trid_text => setAttributes({
+                trid_text
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("fieldset", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("legend", {
+                children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Color", "ti_blocks")
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
+                value: attributes.trid_color,
+                colors: [{
+                  name: "Black",
+                  color: "#000000"
+                }, {
+                  name: "White",
+                  color: "#ffffff"
+                }, {
+                  name: "Red",
+                  color: "#ff0000"
+                }, {
+                  name: "Orange",
+                  color: "#ffa500"
+                }, {
+                  name: "Yellow",
+                  color: "#ffff00"
+                }, {
+                  name: "Green",
+                  color: "#00ff00"
+                }, {
+                  name: "Blue",
+                  color: "#0000ff"
+                }, {
+                  name: "Indigo",
+                  color: "#4b0082"
+                }, {
+                  name: "Violet",
+                  color: "#ee82ee"
+                }],
+                onChange: trid_color => setAttributes({
+                  trid_color
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Size", "ti_blocks"),
+              value: attributes.trid_size,
+              type: "number",
+              onChange: value => setAttributes({
+                trid_size: value
+              })
+            })]
           }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Material", "ti_blocks"),

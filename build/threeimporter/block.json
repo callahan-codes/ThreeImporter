@@ -61,6 +61,14 @@
       "type": "string",
       "default": "Hello World!"
     },
+    "trid_color": {
+      "type": "string",
+      "default": "#FFFFFF"
+    },
+    "trid_size": {
+      "type": "string",
+      "default": "1"
+    },
     "light": {
       "type": "string",
       "default": "ambient"

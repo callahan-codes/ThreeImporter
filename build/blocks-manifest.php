@@ -66,6 +66,14 @@ return array(
 				'type' => 'string',
 				'default' => 'Hello World!'
 			),
+			'trid_color' => array(
+				'type' => 'string',
+				'default' => '#FFFFFF'
+			),
+			'trid_size' => array(
+				'type' => 'string',
+				'default' => '1'
+			),
 			'light' => array(
 				'type' => 'string',
 				'default' => 'ambient'

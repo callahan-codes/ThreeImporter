@@ -57,7 +57,9 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	data-cubegrid-stretch="<?php echo esc_attr($attributes['cubegrid_stretch']);?>"
 	data-cubegrid-spacing="<?php echo esc_attr($attributes['cubegrid_spacing']);?>"
 	data-cubegrid-material="<?php echo esc_attr($attributes['cubegrid_material']);?>"
-	data-cubegrid-color="<?php echo esc_attr($attributes['cubegrid_color']);?>">
+	data-cubegrid-color="<?php echo esc_attr($attributes['cubegrid_color']);?>"
+	data-tridText-color="<?php echo esc_attr($attributes['trid_color']);?>"
+	data-tridText-size="<?php echo esc_attr($attributes['trid_size']);?>">
 	
 	<div class="ti-content">
 		<?php echo $content; ?>
