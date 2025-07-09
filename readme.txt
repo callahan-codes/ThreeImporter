@@ -6,28 +6,34 @@ Stable tag:        0.1.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Example block scaffolded with Create Block tool.
-
 == Description ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+Three Importer (TI) is a WordPress plugin that was built with all users in mind.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+A custom ThreeJS scene can be fabricated by the user using either a block, shortcode, or custom script injection. This allows people with little-to-no coding experience
+to well-seasoned developers to create beautiful, 3D websites with full control over the scene settings.
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
+<em>This plugin is currently under development and therefore is only available via this Github Repository.</em>
 
-e.g.
-
-1. Upload the plugin files to the `/wp-content/plugins/threeimporter` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
+<ol>
+    <li>Click the green "Code" button at the top-right of the repository.</li>
+    <li>A dropdown menu should appear, click "Download ZIP" and remember where you save the ZIP folder.</li>
+    <li>In your WordPress editor, click "Plugins" to view the plugins tab.</li>
+    <li>Click "Add Plugin" in the top-left of the plugins page.</li>
+    <li>Click "Upload Plugin" in the top-left of the Add Plugin page.</li>
+    <li>Browse and select (or drag-and-drop) the Three Importer ZIP folder into the Upload Plugin page.</li>
+    <li>Click "Active" and you're good to go!</li>
+</ol>
 
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+Q: Why cant I see my Geometry? 
+    A: 3 reasons can cause this: Camera Position, Geometry Position, Geometry Rotation. Make sure your camera isn't inside the mesh 
+    by adjusting the camera or geometry x/y/z position settings. Also try rotating the object some; the Circle Geometry, for example, 
+    is so thin that if viewed from the side it appears invisible. 
 
 An answer to that question.
 
@@ -37,11 +43,6 @@ Answer to foo bar dilemma.
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
 
 == Changelog ==
 
@@ -50,6 +51,3 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Arbitrary section ==
 
-You may provide arbitrary sections, in the same format as the ones above. This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation." Arbitrary sections will be shown below the built-in sections outlined above.

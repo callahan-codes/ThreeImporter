@@ -47,25 +47,37 @@ function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
 		'geometry_yrotation' => '0',
 		'geometry_zrotation' => '0',
 		'geometry_instancing' => false,
-		'geometry_instancingNum' => '50',
-		'geometry_instancingSpacing' => '1',
+		'geometry_instancingnum' => '50',
+		'geometry_instancingspacing' => '1',
 		'gltf_url' => '',
+		'trid_text' => 'TI',
 		'light' => 'ambient',
 		'light_color' => '#FFFFFF',
 		'light_intensity' => '1',
 		'light_xpos' => '1',
 		'light_ypos' => '1',
 		'light_zpos' => '1',
+		'light_helper' => false,
 		'camera_xpos' => '5',
 		'camera_ypos' => '0',
 		'camera_zpos' => '0',
-		'background' => 'none',
+		'camera_xtarget' => '0',
+		'camera_ytarget' => '0',
+		'camera_ztarget' => '0',
+		'camera_followmouse' => 'false',
+		'scene_background' => 'none',
 		'particle_amount' => '1000',
 		'particle_size' => '1',
 		'particle_speed' => '5',
 		'particle_direction' => 'right',
 		'particle_color' => '#000000',
 		'particle_stretch' => '5',
+		'cubegrid_stretch' => '120',
+		'cubegrid_spacing' => '1',
+		'cubegrid_material' => 'phong',
+		'cubegrid_color' => '#FFFFFF',
+		'trid_color' => '#FFFFFF',
+		'trid_size' => '1'
 
 	), $atts, 'scene' );
 
@@ -80,30 +92,64 @@ function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
 		'data-geometry-yrotation="' . esc_attr( $atts['geometry_yrotation'] ) . '" ' .
 		'data-geometry-zrotation="' . esc_attr( $atts['geometry_zrotation'] ) . '" ' .
 		'data-geometry-instancing="' . ( $atts['geometry_instancing'] ? 'true' : 'false' ) . '" ' .
-		'data-geometry-instancingNum="' . esc_attr( $atts['geometry_instancingNum'] ) . '" ' .
-		'data-geometry-instancingSpacing="' . esc_attr( $atts['geometry_instancingSpacing'] ) . '" ' .
+		'data-geometry-instancingnum="' . esc_attr( $atts['geometry_instancingnum'] ) . '" ' .
+		'data-geometry-instancingspacing="' . esc_attr( $atts['geometry_instancingspacing'] ) . '" ' .
 		'data-geometry-gltf="' . esc_attr( $atts['gltf_url'] ) . '" ' .
+		'data-geometry-tridText="' . esc_attr( $atts['trid_text'] ) . '"' .
 		'data-light="' . esc_attr( $atts['light'] ) . '" ' .
 		'data-light-color="' . esc_attr( $atts['light_color'] ) . '" ' .
 		'data-light-intensity="' . esc_attr( $atts['light_intensity'] ) . '" ' .
 		'data-light-xpos="' . esc_attr( $atts['light_xpos'] ) . '" ' .
 		'data-light-ypos="' . esc_attr( $atts['light_ypos'] ) . '" ' .
 		'data-light-zpos="' . esc_attr( $atts['light_zpos'] ) . '" ' .
+		'data-light-helper="' . ( $atts['light_helper'] ? 'true' : 'false' ) . '" ' .
 		'data-camera-xpos="' . esc_attr( $atts['camera_xpos'] ) . '" ' .
 		'data-camera-ypos="' . esc_attr( $atts['camera_ypos'] ) . '" ' .
 		'data-camera-zpos="' . esc_attr( $atts['camera_zpos'] ) . '" ' .
+		'data-camera-xtarget="' . esc_attr( $atts['camera_xtarget'] ) . '" ' .
+		'data-camera-ytarget="' . esc_attr( $atts['camera_ytarget'] ) . '" ' .
+		'data-camera-ztarget="' . esc_attr( $atts['camera_ztarget'] ) . '" ' .
+		'data-camera-followMouse="' . ( $atts['camera_followmouse'] === 'true' ? 'true' : 'false' ) . '" ' .
 		'data-scene-background="' . esc_attr( $atts['scene_background'] ) . '" ' .
 		'data-particle-amount="' . esc_attr( $atts['particle_amount'] ) . '" ' .
 		'data-particle-size="' . esc_attr( $atts['particle_size'] ) . '" ' .
 		'data-particle-speed="' . esc_attr( $atts['particle_speed'] ) . '" ' .
 		'data-particle-direction="' . esc_attr( $atts['particle_direction'] ) . '" ' .
 		'data-particle-color="' . esc_attr( $atts['particle_color'] ) . '" ' .
-		'data-particle-stretch="' . esc_attr( $atts['particle_stretch'] ) . '">' .
+		'data-particle-stretch="' . esc_attr( $atts['particle_stretch'] ) . '"' .
+		'data-cubegrid-stretch="' . esc_attr( $atts['cubegrid_stretch'] ) . '"' .
+		'data-cubegrid-spacing="' . esc_attr( $atts['cubegrid_spacing'] ) . '"' .
+		'data-cubegrid-material="' . esc_attr( $atts['cubegrid_material'] ) . '"' .
+		'data-cubegrid-color="' . esc_attr( $atts['cubegrid_color'] ) . '"' .
+		'data-tridText-color="' . esc_attr( $atts['trid_color'] ) . '"' .
+		'data-tridText-size="' . esc_attr( $atts['trid_size'] ) . '">' .
 
 			'<div class="ti-content">' . do_shortcode( $content ) . '</div>' .
 		'</div>';
 }
 add_shortcode( 'scene', 'ti_shortcodes_threeimporter_shortcode_init' );
+
+// Register [sceneinject] shortcode (three-bundle.js enqueue)
+function ti_shortcodes_sceneinject_shortcode_init() {
+	wp_enqueue_script(
+		'three-bundle',
+		plugins_url( 'build/threeimporter/three-bundle.js', __FILE__ ),
+		array(), 
+		'0.1.0',
+		true  // load in footer
+	);
+
+	// Ensure the script tag includes type="module"
+	add_filter('script_loader_tag', function($tag, $handle, $src) {
+		if ($handle === 'three-bundle') {
+			return '<script type="module" src="' . esc_url($src) . '"></script>';
+		}
+		return $tag;
+	}, 10, 3);
+}
+add_shortcode( 'sceneinject', 'ti_shortcodes_sceneinject_shortcode_init' );
+
+
 
 // Conditionally enqueue scripts and styles if block or shortcodes present
 add_action( 'wp_enqueue_scripts', 'ti_enqueue_threejs_assets_if_needed' );

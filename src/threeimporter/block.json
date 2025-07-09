@@ -45,11 +45,11 @@
 			"type":"boolean",
 			"default":false
 		},
-		"geometry_instancingNum" :{
+		"geometry_instancingnum" :{
 			"type":"string",
 			"default":"50"
 		},
-		"geometry_instancingSpacing" :{
+		"geometry_instancingspacing" :{
 			"type":"string",
 			"default":"1"
 		},
@@ -59,7 +59,7 @@
 		},
 		"trid_text" :{
 			"type":"string",
-			"default":"Hello World!"
+			"default":"TI"
 		},
 		"trid_color" :{
 			"type":"string",
@@ -121,7 +121,7 @@
 			"type":"string",
 			"default":"0"
 		},
-		"camera_followMouse" :{
+		"camera_followmouse" :{
 			"type":"boolean",
 			"default":false
 		},
@@ -155,7 +155,7 @@
 		},
 		"cubegrid_stretch" :{
 			"type":"string",
-			"default":"5"
+			"default":"120"
 		},
 		"cubegrid_spacing" :{
 			"type":"integer",

@@ -276,11 +276,11 @@ export default function Edit({ attributes, setAttributes }) {
 
 						<ToggleControl
 							label={__("Mouse Follow", "ti_blocks")}
-							checked={attributes.camera_followMouse}
-							onChange={(value) => setAttributes({ camera_followMouse: value })}
+							checked={attributes.camera_followmouse}
+							onChange={(value) => setAttributes({ camera_followmouse: value })}
 						/>
 
-						{attributes.camera_followMouse !== true && (
+						{attributes.camera_followmouse !== true && (
 							<>
 								{/* camera x position */}
 								<TextControl
@@ -350,17 +350,17 @@ export default function Edit({ attributes, setAttributes }) {
 										{/* number of instances */}
 										<TextControl
 											label={__("Number of Instances", "ti_blocks")}
-											value={attributes.geometry_instancingNum}
+											value={attributes.geometry_instancingnum}
 											type="number"
-											onChange={(value) => setAttributes({ geometry_instancingNum: value })}
+											onChange={(value) => setAttributes({ geometry_instancingnum: value })}
 										/>
 
 										{/* spacing */}
 										<TextControl
 											label={__("Instance Spacing", "ti_blocks")}
-											value={attributes.geometry_instancingSpacing}
+											value={attributes.geometry_instancingspacing}
 											type="number"
-											onChange={(value) => setAttributes({ geometry_instancingSpacing: value })}
+											onChange={(value) => setAttributes({ geometry_instancingspacing: value })}
 										/>
 									</>
 								)}

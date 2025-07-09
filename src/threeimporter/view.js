@@ -33,14 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const geometryMaterial = container.getAttribute('data-geometry-material') || 'phong';
         const geometryColor = container.getAttribute('data-geometry-color') || '#000000';
         const gltfURL = container.getAttribute('data-geometry-gltf') || '';
-        const tridText= container.getAttribute('data-geometry-tridText') || 'Hello World!';
+        const tridText= container.getAttribute('data-geometry-tridText') || 'TI';
         const tridTextColor= container.getAttribute('data-tridText-color') || '#FFFFFF';
         const tridTextSize = parseInt(container.getAttribute('data-tridText-size'), 10) || 1;
 
         // geometry instancing attributes
         const geometryInstancing = container.getAttribute('data-geometry-instancing') === 'true';
-        const geometryInstancingNum = parseInt(container.getAttribute('data-geometry-instancingNum'), 10) || 50;
-        const geometryInstancingSpacing = parseInt(container.getAttribute('data-geometry-instancingSpacing'), 10) || 1;
+        const geometryInstancingNum = parseInt(container.getAttribute('data-geometry-instancingnum'), 10) || 50;
+        const geometryInstancingSpacing = parseInt(container.getAttribute('data-geometry-instancingspacing'), 10) || 1;
 
         // light attributes
         const lightType = container.getAttribute('data-light') || 'ambient';
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cameraXTarget = parseInt(container.getAttribute('data-camera-xtarget'), 10) || 0;
         const cameraYTarget = parseInt(container.getAttribute('data-camera-ytarget'), 10) || 0;
         const cameraZTarget = parseInt(container.getAttribute('data-camera-ztarget'), 10) || 0;
-        const cameraFollowMouse = container.getAttribute('data-camera-followMouse') === 'true';
+        const cameraFollowMouse = container.getAttribute('data-camera-followmouse') === 'true';
 
         // rotation attributes
         const geometryXRotation = parseInt(container.getAttribute('data-geometry-xrotation'), 10) || 0;
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const particleDirection = container.getAttribute('data-particle-direction') || 'right';
         const particleColor = container.getAttribute('data-particle-color') || '#000000';
         const particleStretch = parseInt(container.getAttribute('data-particle-stretch'), 10) || 5;
-        const cubegridStretch = parseInt(container.getAttribute('data-cubegrid-stretch'), 10) || 15;
+        const cubegridStretch = parseInt(container.getAttribute('data-cubegrid-stretch'), 10) || 120;
         const cubegridSpacing = parseInt(container.getAttribute('data-cubegrid-spacing'), 10) || 1;
         const cubegridMaterial = container.getAttribute('data-cubegrid-material') || 'phong';
         const cubegridColor = container.getAttribute('data-cubegrid-color') || '#FFFFFF';

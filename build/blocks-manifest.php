@@ -50,11 +50,11 @@ return array(
 				'type' => 'boolean',
 				'default' => false
 			),
-			'geometry_instancingNum' => array(
+			'geometry_instancingnum' => array(
 				'type' => 'string',
 				'default' => '50'
 			),
-			'geometry_instancingSpacing' => array(
+			'geometry_instancingspacing' => array(
 				'type' => 'string',
 				'default' => '1'
 			),
@@ -64,7 +64,7 @@ return array(
 			),
 			'trid_text' => array(
 				'type' => 'string',
-				'default' => 'Hello World!'
+				'default' => 'TI'
 			),
 			'trid_color' => array(
 				'type' => 'string',
@@ -126,7 +126,7 @@ return array(
 				'type' => 'string',
 				'default' => '0'
 			),
-			'camera_followMouse' => array(
+			'camera_followmouse' => array(
 				'type' => 'boolean',
 				'default' => false
 			),
@@ -160,7 +160,7 @@ return array(
 			),
 			'cubegrid_stretch' => array(
 				'type' => 'string',
-				'default' => '5'
+				'default' => '120'
 			),
 			'cubegrid_spacing' => array(
 				'type' => 'integer',
