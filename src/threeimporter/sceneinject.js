@@ -1,5 +1,6 @@
 // Core
 import * as THREE from 'three';
+window.THREE = THREE;
 
 // Controls
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -47,7 +48,7 @@ import { AnimationMixer } from 'three/src/animation/AnimationMixer.js';
 // GUI
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 
-window.MyThreeBundle = {
+export {
     THREE,
     OrbitControls, FlyControls, FirstPersonControls, PointerLockControls, TrackballControls,
     GLTFLoader, OBJLoader, TextureLoader, CubeTextureLoader, DRACOLoader, RGBELoader,
@@ -59,4 +60,4 @@ window.MyThreeBundle = {
 };
 
 
-console.log('called');
+console.log('Three.js loaded via shortcode sceneinject');

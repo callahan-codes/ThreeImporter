@@ -5,7 +5,7 @@
  * Version:           0.1.1
  * Requires at least: 6.7
  * Requires PHP:      7.4
- * Author:            The WordPress Contributors
+ * Author:            Bryce Callahan
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       threeimporter
@@ -37,7 +37,6 @@ add_action( 'init', 'ti_blocks_threeimporter_block_init' );
 
 // Register [scene] shortcode
 function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
-
 	$atts = shortcode_atts( array(
 		'geometry' => 'box',
 		'geometry_color' => '#000000',
@@ -77,84 +76,37 @@ function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
 		'cubegrid_material' => 'phong',
 		'cubegrid_color' => '#FFFFFF',
 		'trid_color' => '#FFFFFF',
-		'trid_size' => '1'
-
+		'trid_size' => '1',
 	), $atts, 'scene' );
 
 	$class_names = 'three-importer-container';
 
 	return '<div class="' . esc_attr( $class_names ) . '" ' .
 		'data-geometry-type="' . esc_attr( $atts['geometry'] ) . '" ' .
-		'data-geometry-size="' . esc_attr( $atts['geometry_size'] ) . '" ' .
-		'data-geometry-material="' . esc_attr( $atts['geometry_material'] ) . '" ' .
-		'data-geometry-color="' . esc_attr( $atts['geometry_color'] ) . '" ' .
-		'data-geometry-xrotation="' . esc_attr( $atts['geometry_xrotation'] ) . '" ' .
-		'data-geometry-yrotation="' . esc_attr( $atts['geometry_yrotation'] ) . '" ' .
-		'data-geometry-zrotation="' . esc_attr( $atts['geometry_zrotation'] ) . '" ' .
-		'data-geometry-instancing="' . ( $atts['geometry_instancing'] ? 'true' : 'false' ) . '" ' .
-		'data-geometry-instancingnum="' . esc_attr( $atts['geometry_instancingnum'] ) . '" ' .
-		'data-geometry-instancingspacing="' . esc_attr( $atts['geometry_instancingspacing'] ) . '" ' .
-		'data-geometry-gltf="' . esc_attr( $atts['gltf_url'] ) . '" ' .
-		'data-geometry-tridText="' . esc_attr( $atts['trid_text'] ) . '"' .
-		'data-light="' . esc_attr( $atts['light'] ) . '" ' .
-		'data-light-color="' . esc_attr( $atts['light_color'] ) . '" ' .
-		'data-light-intensity="' . esc_attr( $atts['light_intensity'] ) . '" ' .
-		'data-light-xpos="' . esc_attr( $atts['light_xpos'] ) . '" ' .
-		'data-light-ypos="' . esc_attr( $atts['light_ypos'] ) . '" ' .
-		'data-light-zpos="' . esc_attr( $atts['light_zpos'] ) . '" ' .
-		'data-light-helper="' . ( $atts['light_helper'] ? 'true' : 'false' ) . '" ' .
-		'data-camera-xpos="' . esc_attr( $atts['camera_xpos'] ) . '" ' .
-		'data-camera-ypos="' . esc_attr( $atts['camera_ypos'] ) . '" ' .
-		'data-camera-zpos="' . esc_attr( $atts['camera_zpos'] ) . '" ' .
-		'data-camera-xtarget="' . esc_attr( $atts['camera_xtarget'] ) . '" ' .
-		'data-camera-ytarget="' . esc_attr( $atts['camera_ytarget'] ) . '" ' .
-		'data-camera-ztarget="' . esc_attr( $atts['camera_ztarget'] ) . '" ' .
-		'data-camera-followMouse="' . ( $atts['camera_followmouse'] === 'true' ? 'true' : 'false' ) . '" ' .
-		'data-scene-background="' . esc_attr( $atts['scene_background'] ) . '" ' .
-		'data-particle-amount="' . esc_attr( $atts['particle_amount'] ) . '" ' .
-		'data-particle-size="' . esc_attr( $atts['particle_size'] ) . '" ' .
-		'data-particle-speed="' . esc_attr( $atts['particle_speed'] ) . '" ' .
-		'data-particle-direction="' . esc_attr( $atts['particle_direction'] ) . '" ' .
-		'data-particle-color="' . esc_attr( $atts['particle_color'] ) . '" ' .
-		'data-particle-stretch="' . esc_attr( $atts['particle_stretch'] ) . '"' .
-		'data-cubegrid-stretch="' . esc_attr( $atts['cubegrid_stretch'] ) . '"' .
-		'data-cubegrid-spacing="' . esc_attr( $atts['cubegrid_spacing'] ) . '"' .
-		'data-cubegrid-material="' . esc_attr( $atts['cubegrid_material'] ) . '"' .
-		'data-cubegrid-color="' . esc_attr( $atts['cubegrid_color'] ) . '"' .
-		'data-tridText-color="' . esc_attr( $atts['trid_color'] ) . '"' .
 		'data-tridText-size="' . esc_attr( $atts['trid_size'] ) . '">' .
-
 			'<div class="ti-content">' . do_shortcode( $content ) . '</div>' .
 		'</div>';
 }
 add_shortcode( 'scene', 'ti_shortcodes_threeimporter_shortcode_init' );
 
-// Register [sceneinject] shortcode (three-bundle.js enqueue)
-function ti_shortcodes_sceneinject_shortcode_init() {
+// Register [sceneinject] shortcode
+function threeimporter_sceneinject_shortcode() {
+	// Enqueue the compiled sceneinject.js
 	wp_enqueue_script(
-		'three-bundle',
-		plugins_url( 'build/threeimporter/three-bundle.js', __FILE__ ),
-		array(), 
-		'0.1.0',
-		true  // load in footer
+		'three-sceneinject',
+		plugin_dir_url(__FILE__) . 'build/threeimporter/sceneinject.js',
+		array(), // No dependencies
+		filemtime(plugin_dir_path(__FILE__) . 'build/threeimporter/sceneinject.js'),
+		true
 	);
 
-	// Ensure the script tag includes type="module"
-	add_filter('script_loader_tag', function($tag, $handle, $src) {
-		if ($handle === 'three-bundle') {
-			return '<script type="module" src="' . esc_url($src) . '"></script>';
-		}
-		return $tag;
-	}, 10, 3);
+	return '<!-- [sceneinject] loaded three.js -->';
 }
-add_shortcode( 'sceneinject', 'ti_shortcodes_sceneinject_shortcode_init' );
+add_shortcode( 'sceneinject', 'threeimporter_sceneinject_shortcode' );
 
-
-
-// Conditionally enqueue scripts and styles if block or shortcodes present
+// Conditionally enqueue scripts and styles
 add_action( 'wp_enqueue_scripts', 'ti_enqueue_threejs_assets_if_needed' );
 function ti_enqueue_threejs_assets_if_needed() {
-
 	global $post;
 	if ( ! isset( $post ) || ! $post instanceof WP_Post ) {
 		return;
@@ -185,4 +137,5 @@ function ti_enqueue_threejs_assets_if_needed() {
 			'0.1.0'
 		);
 	}
+
 }
