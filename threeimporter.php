@@ -8,7 +8,7 @@
  * Author:            Bryce Callahan
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       three-importer
+ * Text Domain:       threeimporter
  *
  * @package TiBlocks
  */

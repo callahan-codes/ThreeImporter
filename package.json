@@ -6,13 +6,14 @@
   "license": "GPL-2.0-or-later",
   "main": "build/index.js",
   "scripts": {
-    "build": "wp-scripts build --blocks-manifest && node src/threeimporter/post-build-move.js"
+    "build": "wp-scripts build --blocks-manifest && node src/threeimporter/post-build-move.js",
+    "zip": "wp-scripts plugin-zip"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",
     "@babel/plugin-syntax-export-namespace-from": "^7.8.3",
     "@babel/preset-env": "^7.28.0",
-    "@wordpress/scripts": "^30.17.0",
+    "@wordpress/scripts": "^30.19.0",
     "babel-loader": "^10.0.0",
     "copy-webpack-plugin": "^13.0.0",
     "webpack": "^5.100.0",

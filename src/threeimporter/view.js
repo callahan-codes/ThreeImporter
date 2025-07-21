@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         assignedGeometry = new THREE.DodecahedronGeometry(geometrySize, 0);
                         break;
                     case 'cylinder':
-                        assignedGeometry = new THREE.CylinderGeometry(geometrySize, geometrySize, 20, 32);
+                        assignedGeometry = new THREE.CylinderGeometry(geometrySize, geometrySize, geometrySize*4, 32);
                         break;
                     case 'cone':
                         assignedGeometry = new THREE.ConeGeometry(geometrySize, geometrySize*4, 32);
