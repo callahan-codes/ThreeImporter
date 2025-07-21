@@ -18,8 +18,8 @@ module.exports = {
     ...defaultConfig.output,
     path: buildPath,
     filename: 'threeimporter/[name].js',
-    chunkFilename: 'threeimporter/[name].js', // 👈 Ensures dynamic chunks are in correct folder
-    assetModuleFilename: 'threeimporter/[name][ext]', // 👈 For assets like RTL CSS
+    chunkFilename: 'threeimporter/[name].js',
+    assetModuleFilename: 'threeimporter/[name][ext]',
   },
 
   plugins: [

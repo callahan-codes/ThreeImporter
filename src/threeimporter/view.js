@@ -3,7 +3,8 @@
  *  Script below written by Bryce Callahan
  *  Last Updated: 6/24/2025
  * 
- *  ...
+ *  This code handles all the attributes in the TI DOM element
+ *  and displays the appropriate threejs
  * 
 */
 
