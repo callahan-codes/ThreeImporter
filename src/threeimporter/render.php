@@ -1,3 +1,15 @@
+<!-- 
+/**
+ * 
+ *  Script below written by Bryce Callahan
+ *  Last Updated: 6/25/2025
+ * 
+ *  The following code moves stylesheets to the 
+ *  /build/threeimporter folder.
+ * 
+*/ 
+-->
+
 <?php
 
 use function \WP_Block_Supports\render_block_core;

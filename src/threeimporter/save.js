@@ -1,3 +1,12 @@
+/**
+ * 
+ *  Script below written by Bryce Callahan
+ *  Last Updated: 6/25/2025
+ * 
+ *  The following code saves TI Block innercontent
+ * 
+*/ 
+
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
 export default function save({ attributes }) {

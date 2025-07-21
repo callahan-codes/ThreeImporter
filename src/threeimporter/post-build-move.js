@@ -1,17 +1,22 @@
-// src/threeimporter/post-build-move.js
+/**
+ * 
+ *  Script below written by Bryce Callahan
+ *  Last Updated: 7/21/2025
+ * 
+ *  The following code moves stylesheets to the 
+ *  /build/threeimporter folder.
+ * 
+*/
+
 const fs = require('fs');
 const path = require('path');
 
-// build folder (project root/build)
+// target folder and files to move
 const buildDir = path.resolve(__dirname, '../../build');
-
-// Target folder inside build (build/threeimporter)
 const targetDir = path.join(buildDir, 'threeimporter');
-
-// List of RTL CSS files to move
 const filesToMove = ['index-rtl.css', 'style-index-rtl.css'];
 
-// Ensure the target directory exists
+// ensure dir exist
 if (!fs.existsSync(targetDir)) {
   fs.mkdirSync(targetDir, { recursive: true });
 }
