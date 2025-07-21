@@ -32,7 +32,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 
 ?>
 
-<div <?php echo $wrapper_attributes; ?>
+<div <?php echo wp_kses_post($wrapper_attributes); ?>
 	data-geometry-type="<?php echo esc_attr($attributes['geometry']);?>"	
 	data-geometry-size="<?php echo esc_attr($attributes['geometry_size']);?>"
 	data-geometry-material="<?php echo esc_attr($attributes['geometry_material']);?>"
@@ -74,7 +74,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	data-tridText-size="<?php echo esc_attr($attributes['trid_size']);?>">
 	
 	<div class="ti-content">
-		<?php echo $content; ?>
+		<?php echo wp_kses_post($content); ?>
 	</div>
 
 </div>

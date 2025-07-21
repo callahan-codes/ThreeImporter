@@ -2,13 +2,13 @@
 /**
  * Plugin Name:       Three Importer
  * Description:       Import and render Three.js scenes via Block or Shortcode.
- * Version:           0.1.1
+ * Version:           0.1.0
  * Requires at least: 6.7
  * Requires PHP:      7.4
  * Author:            Bryce Callahan
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       threeimporter
+ * Text Domain:       three-importer
  *
  * @package TiBlocks
  */

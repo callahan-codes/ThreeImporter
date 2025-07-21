@@ -1,21 +1,19 @@
 === Three Importer ===
 Contributors:      Bryce Callahan
 Tags:              block, shortcode, script inject
-Tested up to:      6.7
+Tested up to:      6.8
 Stable tag:        0.1.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
+Three Importer (TI) is a WordPress plugin that was built with all users in mind. A custom ThreeJS scene can be fabricated by the user using either a block, shortcode, or custom script injection. This allows people with little-to-no coding experience to well-seasoned developers to create beautiful, 3D websites with full control over the scene settings.
 
-Three Importer (TI) is a WordPress plugin that was built with all users in mind.
-
-A custom ThreeJS scene can be fabricated by the user using either a block, shortcode, or custom script injection. This allows people with little-to-no coding experience to well-seasoned developers to create beautiful, 3D websites with full control over the scene settings.
+== Short Description ==
+A powerfull ThreeJS WordPress plugin.
 
 == Installation ==
-
 This plugin is currently under development and therefore is only available via this Github Repository.
-
 1. Click the green "Code" button at the top-right of the repository.
 2. A dropdown menu should appear, click "Download ZIP" and remember where you save the ZIP folder.
 3. In your WordPress editor, click "Plugins" to view the plugins tab.
@@ -24,15 +22,10 @@ This plugin is currently under development and therefore is only available via t
 6. Browse and select (or drag-and-drop) the Three Importer ZIP folder into the Upload Plugin page.
 7. Click "Active" and you're good to go!
 
-
-
 == Frequently Asked Questions ==
-
 Q: Why cant I see my Geometry? 
     A: 3 reasons can cause this: Camera Position, Geometry Position, Geometry Rotation. Make sure your camera isn't inside the mesh by adjusting the camera or geometry x/y/z position settings.  Also try rotating the object some; the Circle Geometry, for example, is so thin that if viewed from the side it appears invisible. 
 
-
 == Changelog ==
-
 = 0.1.0 =
 * Release
