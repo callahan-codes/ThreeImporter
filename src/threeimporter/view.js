@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         assignedGeometry = new THREE.SphereGeometry(geometrySize, 64, 32);
                         break;
                     case 'ring':
-                        assignedGeometry = new THREE.RingGeometry(geometrySize, geometrySize * 5, 32);
+                        assignedGeometry = new THREE.RingGeometry(geometrySize, geometrySize + 3, 32);
                         break;
                     case 'plane':
                         assignedGeometry = new THREE.PlaneGeometry(geometrySize, geometrySize);
@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         assignedGeometry = new THREE.CapsuleGeometry(geometrySize, geometrySize, 4, 8);
                         break;
                     case 'torus':
-                        assignedGeometry = new THREE.TorusGeometry(geometrySize, geometrySize / 50, 16, 100);
+                        assignedGeometry = new THREE.TorusGeometry(geometrySize, geometrySize / 3, 16, 100);
                         break;
                     case 'box':
                         assignedGeometry = new THREE.BoxGeometry(geometrySize, geometrySize, geometrySize);

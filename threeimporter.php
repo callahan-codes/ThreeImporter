@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       Three Importer
- * Description:       Import and render Three.js scenes via Block or Shortcode.
- * Version:           0.1.0
+ * Description:       Create custom Three.js scenes via Block, Shortcode, or your own script.
+ * Version:           1.0.0
  * Requires at least: 6.7
  * Requires PHP:      7.4
  * Author:            Bryce Callahan
@@ -52,11 +52,11 @@ function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
 		'gltf_url' => '',
 		'trid_text' => 'TI',
 		'light' => 'ambient',
-		'light_color' => '#FFFFFF',
+		'light_color' => '#ffffff',
 		'light_intensity' => '1',
-		'light_xpos' => '1',
-		'light_ypos' => '1',
-		'light_zpos' => '1',
+		'light_xpos' => '0',
+		'light_ypos' => '0',
+		'light_zpos' => '0',
 		'light_helper' => false,
 		'camera_xpos' => '5',
 		'camera_ypos' => '0',
@@ -75,8 +75,8 @@ function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
 		'cubegrid_stretch' => '120',
 		'cubegrid_spacing' => '1',
 		'cubegrid_material' => 'phong',
-		'cubegrid_color' => '#FFFFFF',
-		'trid_color' => '#FFFFFF',
+		'cubegrid_color' => '#ffffff',
+		'trid_color' => '#ffffff',
 		'trid_size' => '1',
 	), $atts, 'scene' );
 

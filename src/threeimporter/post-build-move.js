@@ -1,13 +1,3 @@
-/**
- * 
- *  Script below written by Bryce Callahan
- *  Last Updated: 7/21/2025
- * 
- *  The following code moves stylesheets to the 
- *  /build/threeimporter folder.
- * 
-*/
-
 const fs = require('fs');
 const path = require('path');
 
