@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// register block
+// register TI block
 function ti_blocks_threeimporter_block_init() {
 	if ( function_exists( 'wp_register_block_types_from_metadata_collection' ) ) {
 		wp_register_block_types_from_metadata_collection( __DIR__ . '/build', __DIR__ . '/build/blocks-manifest.php' );
@@ -81,11 +81,7 @@ function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
 	), $atts, 'scene' );
 
 	$class_names = 'three-importer-container';
-
-	// Start building the div
 	$output = '<div class="' . esc_attr( $class_names ) . '"';
-
-	// Append each attribute as data-*
 	$output .= ' data-geometry-type="' . esc_attr( $atts['geometry'] ) . '"';
 	$output .= ' data-geometry-size="' . esc_attr( $atts['geometry_size'] ) . '"';
 	$output .= ' data-geometry-material="' . esc_attr( $atts['geometry_material'] ) . '"';
@@ -125,14 +121,8 @@ function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
 	$output .= ' data-cubegrid-color="' . esc_attr( $atts['cubegrid_color'] ) . '"';
 	$output .= ' data-tridText-color="' . esc_attr( $atts['trid_color'] ) . '"';
 	$output .= ' data-tridText-size="' . esc_attr( $atts['trid_size'] ) . '"';
-
-	// Close the opening div
 	$output .= '>';
-
-	// Add inner content
 	$output .= '<div class="ti-content">' . do_shortcode( $content ) . '</div>';
-
-	// Close the outer div
 	$output .= '</div>';
 
 	return $output;
@@ -140,31 +130,55 @@ function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
 add_shortcode( 'scene', 'ti_shortcodes_threeimporter_shortcode_init' );
 
 // register [sceneinject] shortcode
-function threeimporter_sceneinject_shortcode() {
-	// Enqueue the compiled sceneinject.js
-	wp_enqueue_script(
+function threeimporter_sceneinject_shortcode($atts = []) {
+
+    $allowed_modules = [
+        'orbitcontrols', 'flycontrols', 'firstpersoncontrols', 'pointerlockcontrols', 'trackballcontrols',
+        'gltfloader', 'objloader', 'fbxloader', 'textureloader', 'cubetextureloader',
+        'dracoloader', 'rgbeloader',
+        'effectcomposer', 'renderpass', 'unrealbloompass', 'shaderpass', 'ssaopass',
+        'fxaashader', 'copyshader', 'luminosityshader', 'sobeloperatorshader',
+        'boxlinegeometry', 'convexgeometry', 'parametricgeometry', 'teapotgeometry',
+        'gridhelper', 'axeshelper', 'camerahelper', 'directionallighthelper',
+        'animationmixer', 'gui'
+    ];
+
+    // sanitize and filter allowed modules from attribute keys
+    $sanitized_atts = array_map('strtolower', array_keys($atts));
+    $requested_modules = array_values(array_intersect($sanitized_atts, $allowed_modules));
+
+    // pass to JS as a global variable
+    $json_modules = json_encode($requested_modules);
+
+    wp_enqueue_script(
+        'three-sceneinject',
+        plugin_dir_url(__FILE__) . 'build/threeimporter/sceneinject.js',
+        [],
+        filemtime(plugin_dir_path(__FILE__) . 'build/threeimporter/sceneinject.js'),
+        true
+    );
+
+	wp_add_inline_script(
 		'three-sceneinject',
-		plugin_dir_url(__FILE__) . 'build/threeimporter/sceneinject.js',
-		array(), // No dependencies
-		filemtime(plugin_dir_path(__FILE__) . 'build/threeimporter/sceneinject.js'),
-		true
+		'window.sceneinject_modules = window.sceneinject_modules || []; window.sceneinject_modules = window.sceneinject_modules.concat(' . $json_modules . ');',
+		'before'
 	);
 
-	// enqueue css for three-importer-container
-	wp_enqueue_style(
-		'three-importer-style',
-		plugin_dir_url(__FILE__) . 'build/threeimporter/style-index.css',
-		array(), // No dependencies
-		filemtime(plugin_dir_path(__FILE__) . 'build/threeimporter/style-index.css')
-	);
+    wp_enqueue_style(
+        'three-importer-style',
+        plugin_dir_url(__FILE__) . 'build/threeimporter/style-index.css',
+        [],
+        filemtime(plugin_dir_path(__FILE__) . 'build/threeimporter/style-index.css')
+    );
 
-	return '<!-- [sceneinject] loaded three.js -->';
+	// echo '<pre>' . print_r($atts, true) . '</pre>';
+    return '<!-- [sceneinject] loaded three.js -->';
 }
-add_shortcode( 'sceneinject', 'threeimporter_sceneinject_shortcode' );
+add_shortcode('sceneinject', 'threeimporter_sceneinject_shortcode');
 
 // conditionally enqueue scripts and styles for block/shortcode
-add_action( 'wp_enqueue_scripts', 'ti_enqueue_threejs_assets_if_needed' );
 function ti_enqueue_threejs_assets_if_needed() {
+
 	global $post;
 	if ( ! isset( $post ) || ! $post instanceof WP_Post ) {
 		return;
@@ -197,3 +211,4 @@ function ti_enqueue_threejs_assets_if_needed() {
 	}
 
 }
+add_action( 'wp_enqueue_scripts', 'ti_enqueue_threejs_assets_if_needed' );
