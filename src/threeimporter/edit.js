@@ -1,11 +1,5 @@
 /**
  * 
- *  Script below written by Bryce Callahan
- *  Last Updated: 6/25/2025
- * 
- * 	The following code represents the edit functionality 
- * 	in WordPress's block editor. 
- * 
  *  - Geometry settings
  * 	- Light settings
  * 	- Camera settings

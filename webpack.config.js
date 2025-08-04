@@ -23,18 +23,15 @@ module.exports = {
   },
 
   plugins: [
-    // Remove old MiniCssExtractPlugin so we can replace it
     ...defaultConfig.plugins.filter(
       plugin => !(plugin instanceof MiniCssExtractPlugin)
     ),
 
-    // Re-add MiniCssExtractPlugin with correct CSS output path
     new MiniCssExtractPlugin({
       filename: 'threeimporter/[name].css',
       chunkFilename: 'threeimporter/[name].css',
     }),
 
-    // Copy static files (PHP + block.json)
     new CopyPlugin({
       patterns: [
         {
