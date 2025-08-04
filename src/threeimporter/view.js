@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // prevent multiple initializations
         if (container.dataset.initialized) return;
+        if (container.dataset.userDefined) return;
         container.dataset.initialized = 'true';
  
         // geometry attributes

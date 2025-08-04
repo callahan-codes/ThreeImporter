@@ -5,7 +5,7 @@ export default function save({ attributes }) {
 	const { block_height } = attributes;
 
 	return (
-		<div className="ti-adjustable" style={{ height: block_height }}>
+		<div>
 			<InnerBlocks.Content />
 		</div>
 	);
