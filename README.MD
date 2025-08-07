@@ -34,3 +34,4 @@ Q: Why do I see "WARNING: Multiple instances of Three.js being imported." in my 
 == Changelog ==
 = 1.0.0 =
 * Release
+https://wordpress.org/plugins/three-importer/
