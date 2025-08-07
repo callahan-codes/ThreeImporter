@@ -2,7 +2,7 @@
 Contributors:      Bryce Callahan
 Tags:              block, shortcode, script inject
 Tested up to:      6.8
-Stable tag:        1.0.0
+Stable tag:        1.0.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,6 @@ Q: Why do I see "WARNING: Multiple instances of Three.js being imported." in my 
     A: This warning is the byproduct of mixing the TI Block and Shortcodes. This will not break anything, but (depending on the scene) can reduce performance of your website. Please stick to either using just the Blocks or just the Shortcode on your page.
 
 == Changelog ==
-= 1.0.0 =
+= 1.0.1 =
 * Release
 https://wordpress.org/plugins/three-importer/
