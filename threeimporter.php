@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Three Importer
  * Description:       Create custom Three.js scenes via Block, Shortcode, or your own script.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Requires at least: 6.7
  * Requires PHP:      7.4
  * Author:            Bryce Callahan
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // register TI block
-function ti_blocks_threeimporter_block_init() {
+function threeimporter_block_init() {
 	if ( function_exists( 'wp_register_block_types_from_metadata_collection' ) ) {
 		wp_register_block_types_from_metadata_collection( __DIR__ . '/build', __DIR__ . '/build/blocks-manifest.php' );
 		return;
@@ -34,10 +34,10 @@ function ti_blocks_threeimporter_block_init() {
 		register_block_type( __DIR__ . "/build/{$block_type}" );
 	}
 }
-add_action( 'init', 'ti_blocks_threeimporter_block_init' );
+add_action( 'init', 'threeimporter_block_init' );
 
 // register [scene] shortcode
-function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
+function threeimporter_shortcodes_scene_init( $atts, $content = null ) {
 	$atts = shortcode_atts( array(
 		'geometry' => 'box',
 		'geometry_color' => '#000000',
@@ -127,10 +127,10 @@ function ti_shortcodes_threeimporter_shortcode_init( $atts, $content = null ) {
 
 	return $output;
 }
-add_shortcode( 'scene', 'ti_shortcodes_threeimporter_shortcode_init' );
+add_shortcode( 'scene', 'threeimporter_shortcodes_scene_init' );
 
 // register [sceneinject] shortcode
-function threeimporter_sceneinject_shortcode($atts = []) {
+function threeimporter_shortcodes_sceneinject_init($atts = []) {
 
     $allowed_modules = [
         'orbitcontrols', 'flycontrols', 'firstpersoncontrols', 'pointerlockcontrols', 'trackballcontrols',
@@ -148,7 +148,7 @@ function threeimporter_sceneinject_shortcode($atts = []) {
     $requested_modules = array_values(array_intersect($sanitized_atts, $allowed_modules));
 
     // pass to JS as a global variable
-    $json_modules = json_encode($requested_modules);
+    $json_modules = wp_json_encode($requested_modules);
 
     wp_enqueue_script(
         'three-sceneinject',
@@ -171,21 +171,20 @@ function threeimporter_sceneinject_shortcode($atts = []) {
         filemtime(plugin_dir_path(__FILE__) . 'build/threeimporter/style-index.css')
     );
 
-	// echo '<pre>' . print_r($atts, true) . '</pre>';
     return '<!-- [sceneinject] loaded three.js -->';
 }
-add_shortcode('sceneinject', 'threeimporter_sceneinject_shortcode');
+add_shortcode('sceneinject', 'threeimporter_shortcodes_sceneinject_init');
 
 // conditionally enqueue scripts and styles for block/shortcode
-function ti_enqueue_threejs_assets_if_needed() {
+function threeimporter_enqueue_threejs_assets_if_needed() {
 
-	global $post;
-	if ( ! isset( $post ) || ! $post instanceof WP_Post ) {
+	global $threeimporterPost;
+	if ( ! isset( $threeimporterPost ) || ! $threeimporterPost instanceof WP_Post ) {
 		return;
 	}
 
-	$content = $post->post_content;
-	$has_block                 = has_block( 'threeimporter/scene', $post );
+	$content = $threeimporterPost->post_content;
+	$has_block                 = has_block( 'threeimporter/scene', $threeimporterPost );
 	$has_scene_shortcode       = has_shortcode( $content, 'scene' );
 
 	if ( $has_block || $has_scene_shortcode ) {
@@ -211,4 +210,4 @@ function ti_enqueue_threejs_assets_if_needed() {
 	}
 
 }
-add_action( 'wp_enqueue_scripts', 'ti_enqueue_threejs_assets_if_needed' );
+add_action( 'wp_enqueue_scripts', 'threeimporter_enqueue_threejs_assets_if_needed' );

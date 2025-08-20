@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function loadTextGeo() {
             
             const loader = new FontLoader();
-            loader.load('https://raw.githubusercontent.com/callahan-codes/font/refs/heads/main/Open%20Sans%20Condensed_Bold.json', function (font) {
+            loader.load('/public/Open_Sans_Condensed_Bold.json', function (font) {
                 const geometry = new TextGeometry(tridText, {
                     font: font,
                     size: tridTextSize * 0.5,

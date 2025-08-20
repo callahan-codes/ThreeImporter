@@ -1,15 +1,15 @@
 === Three Importer ===
-Contributors:      Bryce Callahan
+Contributors:      callahancodes
 Tags:              block, shortcode, script inject
 Tested up to:      6.8
-Stable tag:        1.0.1
+Stable tag:        1.0.2
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
 A powerfull ThreeJS WordPress plugin.
 
 == Description ==
-Three Importer (TI) is a WordPress plugin that was built with all users in mind. A custom ThreeJS scene can be fabricated by the user using either a block, shortcode, or custom script injection. This allows people with little-to-no coding experience to well-seasoned developers to create beautiful, 3D websites with full control over the scene settings.
+Three Importer (TI) is a WordPress plugin that was built with all users in mind. A custom ThreeJS scene can be fabricated by the user using either a block, shortcode, or custom script injection. This allows people with little-to-no coding experience to well-seasoned developers to create beautiful, 3D websites with full control over the scene settings. You can view the open source and non-compiled code here: https://github.com/callahan-codes/ThreeImporter.
 
 == Installation ==
 This plugin is currently under development and therefore is only available via this Github Repository.
@@ -31,7 +31,11 @@ Q: Why is my lighting not being applied?
 Q: Why do I see "WARNING: Multiple instances of Three.js being imported." in my browser's console?
     A: This warning is the byproduct of mixing the TI Block and Shortcodes. This will not break anything, but (depending on the scene) can reduce performance of your website. Please stick to either using just the Blocks or just the Shortcode on your page.
 
+Q: How can i use the custom scene inject function?
+    A: In your page editor, place the shortcode [sceneinject] followed by the tools [sceneinject orbitcontrols="true" gltfloader="true"] you want. After doing so, place a div with the #ti ID and the script you want to render in a custom html block/space.
+    
+
 == Changelog ==
-= 1.0.1 =
+= 1.0.2 =
 * Release
 https://wordpress.org/plugins/three-importer/
