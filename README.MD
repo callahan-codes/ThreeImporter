@@ -33,6 +33,9 @@ Q: Why do I see "WARNING: Multiple instances of Three.js being imported." in my 
 
 Q: How can i use the custom scene inject function?
     A: In your page editor, place the shortcode [sceneinject] followed by the tools [sceneinject orbitcontrols="true" gltfloader="true"] you want. After doing so, place a div with the #ti ID and the script you want to render in a custom html block/space.
+
+Q: Where can I view the open-source code of this plugin?
+    A: You can view the open source and non-compiled code here: https://github.com/callahan-codes/ThreeImporter.
     
 
 == Changelog ==
