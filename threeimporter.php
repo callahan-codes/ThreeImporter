@@ -78,7 +78,7 @@ function ti3d_shortcodes_scene_init( $atts, $content = null ) {
         'cubegrid_color' => '#ffffff',
         'trid_color' => '#ffffff',
         'trid_size' => '1',
-    ), $atts, 'scene' );
+    ), $atts, 'ti3d_scene' );
 
     $class_names = 'three-importer-container';
     $output = '<div class="' . esc_attr( $class_names ) . '"';
@@ -127,7 +127,7 @@ function ti3d_shortcodes_scene_init( $atts, $content = null ) {
 
     return $output;
 }
-add_shortcode( 'scene', 'ti3d_shortcodes_scene_init' );
+add_shortcode( 'ti3d_scene', 'ti3d_shortcodes_scene_init' );
 
 // register [sceneinject] shortcode
 function ti3d_shortcodes_sceneinject_init($atts = []) {
@@ -171,9 +171,9 @@ function ti3d_shortcodes_sceneinject_init($atts = []) {
         filemtime(plugin_dir_path(__FILE__) . 'build/threeimporter/style-index.css')
     );
 
-    return '<!-- [sceneinject] loaded three.js -->';
+    return '<!-- [ti3d_sceneinject] loaded three.js -->';
 }
-add_shortcode('sceneinject', 'ti3d_shortcodes_sceneinject_init');
+add_shortcode('ti3d_sceneinject', 'ti3d_shortcodes_sceneinject_init');
 
 // conditionally enqueue scripts and styles for block/shortcode
 function ti3d_enqueue_assets() {

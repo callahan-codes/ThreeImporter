@@ -37,6 +37,11 @@ Q: How can i use the custom scene inject function?
 Q: Where can I view the open-source code of this plugin?
     A: You can view the open source and non-compiled code here: https://github.com/callahan-codes/ThreeImporter.
     
+== Source Code ==
+The full, human-readable, non-compiled source code for all JavaScript and CSS files (including those in the 'build' directory) is publicly maintained and available on GitHub:
+
+**Source Repository:** https://github.com/callahan-codes/ThreeImporter
+**Build Instructions:** Use `npm install` and `npm run build` to generate the production files.
 
 == Changelog ==
 = 1.0.2 =
