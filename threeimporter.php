@@ -185,14 +185,11 @@ function ti3d_enqueue_assets() {
 
     $content = $post->post_content;
     
-    // 1. Check for the block using the CORRECT block name
     $has_block = has_block( 'ti-blocks/threeimporter', $content ); 
-    
-    // 2. Check for the shortcodes
     $has_scene_shortcode = has_shortcode( $content, 'ti3d_scene' ); 
     $has_inject_shortcode = has_shortcode( $content, 'ti3d_sceneinject' );
     
-    // Check if the script is needed for the block OR any shortcode
+    // check if the script is needed for the block OR any shortcode
     if ( $has_block || $has_scene_shortcode || $has_inject_shortcode ) {
         
         $index_asset_path = __DIR__ . '/build/threeimporter/index.asset.php';
@@ -200,17 +197,14 @@ function ti3d_enqueue_assets() {
             ? require $index_asset_path
             : array( 'dependencies' => array(), 'version' => '0.1.0' );
 
-        // **CRITICAL:** wp_enqueue_script will only load the script once, 
-        // regardless of how many times it's called, if the handle is the same.
         wp_enqueue_script(
-            'threeimporter', // Use a single, consistent handle
+            'threeimporter', 
             plugins_url( 'build/threeimporter/view.js', __FILE__ ),
             $index_asset['dependencies'],
             $index_asset['version'],
             true
         );
 
-        // This ensures localization is attached to the consistent handle
         wp_localize_script(
             'threeimporter', 
             'threeImporterData', 
@@ -219,7 +213,6 @@ function ti3d_enqueue_assets() {
             )
         );
 
-        // Style is also loaded once
         wp_enqueue_style(
             'threeimporter-style',
             plugins_url( 'build/threeimporter/style-index.css', __FILE__ ),
