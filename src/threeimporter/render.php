@@ -7,20 +7,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$style = '';
+$ti3d_style = '';
 
 if ( ! empty( $attributes['style']['color']['background'] ) ) {
-	$style .= 'background-color:' . esc_attr( $attributes['style']['color']['background'] ) . ';';
+	$ti3d_style .= 'background-color:' . esc_attr( $attributes['style']['color']['background'] ) . ';';
 }
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'style' => $style,
+$ti3d_wrapper_attributes = get_block_wrapper_attributes( array(
+	'style' => $ti3d_style,
 	'class' => 'three-importer-container'
 ) );
 
 ?>
 
-<div <?php echo wp_kses_post($wrapper_attributes); ?>
+<div <?php echo wp_kses_post($ti3d_wrapper_attributes); ?>
 	data-geometry-type="<?php echo esc_attr($attributes['geometry']);?>"	
 	data-geometry-size="<?php echo esc_attr($attributes['geometry_size']);?>"
 	data-geometry-material="<?php echo esc_attr($attributes['geometry_material']);?>"

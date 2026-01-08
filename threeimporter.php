@@ -177,30 +177,49 @@ add_shortcode('ti3d_sceneinject', 'ti3d_shortcodes_sceneinject_init');
 
 // conditionally enqueue scripts and styles for block/shortcode
 function ti3d_enqueue_assets() {
+    global $post;
 
-    global $ti3d_current_post;
-    if ( ! isset( $ti3d_current_post ) || ! $ti3d_current_post instanceof WP_Post ) {
+    if ( ! is_singular() || ! is_a( $post, 'WP_Post' ) ) {
         return;
     }
 
-    $content = $ti3d_current_post->post_content;
-    $has_block           = has_block( 'threeimporter/scene', $ti3d_current_post );
-    $has_scene_shortcode       = has_shortcode( $content, 'scene' );
-
-    if ( $has_block || $has_scene_shortcode ) {
+    $content = $post->post_content;
+    
+    // 1. Check for the block using the CORRECT block name
+    $has_block = has_block( 'ti-blocks/threeimporter', $content ); 
+    
+    // 2. Check for the shortcodes
+    $has_scene_shortcode = has_shortcode( $content, 'ti3d_scene' ); 
+    $has_inject_shortcode = has_shortcode( $content, 'ti3d_sceneinject' );
+    
+    // Check if the script is needed for the block OR any shortcode
+    if ( $has_block || $has_scene_shortcode || $has_inject_shortcode ) {
+        
         $index_asset_path = __DIR__ . '/build/threeimporter/index.asset.php';
         $index_asset = file_exists( $index_asset_path )
             ? require $index_asset_path
             : array( 'dependencies' => array(), 'version' => '0.1.0' );
 
+        // **CRITICAL:** wp_enqueue_script will only load the script once, 
+        // regardless of how many times it's called, if the handle is the same.
         wp_enqueue_script(
-            'threeimporter',
+            'threeimporter', // Use a single, consistent handle
             plugins_url( 'build/threeimporter/view.js', __FILE__ ),
             $index_asset['dependencies'],
             $index_asset['version'],
             true
         );
 
+        // This ensures localization is attached to the consistent handle
+        wp_localize_script(
+            'threeimporter', 
+            'threeImporterData', 
+            array(
+                'fontUrl' => plugin_dir_url( __FILE__ ) . 'public/Open_Sans_Condensed_Bold.json',
+            )
+        );
+
+        // Style is also loaded once
         wp_enqueue_style(
             'threeimporter-style',
             plugins_url( 'build/threeimporter/style-index.css', __FILE__ ),
@@ -208,6 +227,5 @@ function ti3d_enqueue_assets() {
             '0.1.0'
         );
     }
-
 }
 add_action( 'wp_enqueue_scripts', 'ti3d_enqueue_assets' );

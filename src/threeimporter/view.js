@@ -1,6 +1,5 @@
 /**
  * 
- *  Script below written by Bryce Callahan
  *  Last Updated: 6/24/2025
  * 
  *  This code handles all the attributes in the TI DOM element
@@ -12,8 +11,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { FontLoader } from 'three/examples/jsm/Addons.js';
-import { TextGeometry } from 'three/examples/jsm/Addons.js';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'; 
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'; 
 
 // on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -379,8 +378,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // load 3d text
         function loadTextGeo() {
             
+            const threeData = window.threeImporterData || {};
+            const fontUrl = threeData.fontUrl; 
+            
+            // check if the URL was found before proceeding
+            if (!fontUrl) {
+                console.error("Font URL (threeImporterData.fontUrl) was not found. Localization failed.");
+                return; 
+            } 
+
             const loader = new FontLoader();
-            loader.load('/public/Open_Sans_Condensed_Bold.json', function (font) {
+            loader.load(fontUrl, function (font) { 
                 const geometry = new TextGeometry(tridText, {
                     font: font,
                     size: tridTextSize * 0.5,

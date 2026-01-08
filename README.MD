@@ -9,10 +9,9 @@ License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 A powerfull ThreeJS WordPress plugin.
 
 == Description ==
-Three Importer (TI) is a WordPress plugin that was built with all users in mind. A custom ThreeJS scene can be fabricated by the user using either a block, shortcode, or custom script injection. This allows people with little-to-no coding experience to well-seasoned developers to create beautiful, 3D websites with full control over the scene settings. You can view the open source and non-compiled code here: https://github.com/callahan-codes/ThreeImporter.
+Three Importer (TI) is allows users to insert custom ThreeJS scenes which can be implemented via Block editor, shortcode, or custom script injection. This allows people with little-to-no coding experience to well-seasoned developers to create beautiful, 3D websites with full control over the scene settings. You can view the open source and non-compiled code here: https://github.com/callahan-codes/ThreeImporter.
 
 == Installation ==
-This plugin is currently under development and therefore is only available via this Github Repository.
 1. Click the green "Code" button at the top-right of the repository.
 2. A dropdown menu should appear, click "Download ZIP" and remember where you save the ZIP folder.
 3. In your WordPress editor, click "Plugins" to view the plugins tab.
@@ -32,7 +31,8 @@ Q: Why do I see "WARNING: Multiple instances of Three.js being imported." in my 
     A: This warning is the byproduct of mixing the TI Block and Shortcodes. This will not break anything, but (depending on the scene) can reduce performance of your website. Please stick to either using just the Blocks or just the Shortcode on your page.
 
 Q: How can i use the custom scene inject function?
-    A: In your page editor, place the shortcode [sceneinject] followed by the tools [sceneinject orbitcontrols="true" gltfloader="true"] you want. After doing so, place a div with the #ti ID and the script you want to render in a custom html block/space.
+    A: In your page editor, place the shortcode [sceneinject] followed by the tools [sceneinject orbitcontrols="true" gltfloader="true"] you want. After doing so, place a div with the #ti ID and the script you want to render in a custom html block/space. Below is a basic scene injected by the user into their website:
+
 
 Q: Where can I view the open-source code of this plugin?
     A: You can view the open source and non-compiled code here: https://github.com/callahan-codes/ThreeImporter.
@@ -41,7 +41,7 @@ Q: Where can I view the open-source code of this plugin?
 The full, human-readable, non-compiled source code for all JavaScript and CSS files (including those in the 'build' directory) is publicly maintained and available on GitHub:
 
 **Source Repository:** https://github.com/callahan-codes/ThreeImporter
-**Build Instructions:** Use `npm install` and `npm run build` to generate the production files.
+**Build Instructions:** Use `npm install` and `npm run build` to generate the production files. Use `npm run zip` to generate the zip folder for manual Wordpress installation.
 
 == Changelog ==
 = 1.0.2 =
