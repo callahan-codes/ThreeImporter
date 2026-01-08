@@ -158,21 +158,21 @@ export default function Edit({ attributes, setAttributes }) {
 							<>
 								{/* geometry rotation */}
 								<TextControl
-									label={__("X Rotation", "ti_blocks")}
+									label={__("X Rotation Speed", "ti_blocks")}
 									value={attributes.geometry_xrotation}
 									type="number"
 									onChange={(value) => setAttributes({ geometry_xrotation: value })}
 								/>
 
 								<TextControl
-									label={__("Y Rotation", "ti_blocks")}
+									label={__("Y Rotation Speed", "ti_blocks")}
 									value={attributes.geometry_yrotation}
 									type="number"
 									onChange={(value) => setAttributes({ geometry_yrotation: value })}
 								/>
 
 								<TextControl
-									label={__("Z Rotation", "ti_blocks")}
+									label={__("Z Rotation Speed", "ti_blocks")}
 									value={attributes.geometry_zrotation}
 									type="number"
 									onChange={(value) => setAttributes({ geometry_zrotation: value })}
