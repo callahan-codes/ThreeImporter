@@ -1,8 +1,6 @@
-// core
+// controls
 import * as THREE from 'three';
 window.THREE = THREE;
-
-// controls
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FlyControls } from 'three/examples/jsm/controls/FlyControls.js';
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js';
@@ -140,7 +138,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (instance && className) {
         if (typeof window.THREE !== 'undefined') {
+          
+          // check if the property exists on THREE and is not the imported instance itself
+          if (window.THREE[className] && window.THREE[className] !== instance) {
+            
+            // skip re-assignment if it's already there to avoid the TypeError.
+            console.warn(`THREE.${className} already exists and will not be overwritten by threeimporter.`);
+            continue;
+          }
+
+          // only assign if it doesn't exist or is different.
           window.THREE[className] = instance;
+          
         } else {
           window[className] = instance;
         }

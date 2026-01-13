@@ -3,7 +3,7 @@ const path = require('path');
 
 // target folder and files to move
 const buildDir = path.resolve(__dirname, '../../build');
-const targetDir = path.join(buildDir, 'threeimporter');
+const targetDir = path.join(buildDir, 'three-importer');
 const filesToMove = ['index-rtl.css', 'style-index-rtl.css'];
 
 // ensure dir exist
@@ -18,7 +18,7 @@ filesToMove.forEach((fileName) => {
   if (fs.existsSync(source)) {
     try {
       fs.renameSync(source, destination);
-      console.log(`Moved ${fileName} to threeimporter/`);
+      console.log(`Moved ${fileName} to three-importer/`);
     } catch (error) {
       console.error(`Failed to move ${fileName}:`, error);
     }

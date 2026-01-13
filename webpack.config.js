@@ -9,17 +9,17 @@ module.exports = {
   ...defaultConfig,
 
   entry: {
-    index: path.resolve(__dirname, 'src/threeimporter/index.js'),
-    sceneinject: path.resolve(__dirname, 'src/threeimporter/sceneinject.js'),
-    view: path.resolve(__dirname, 'src/threeimporter/view.js'),
+    index: path.resolve(__dirname, 'src/three-importer/index.js'),
+    sceneinject: path.resolve(__dirname, 'src/three-importer/sceneinject.js'),
+    view: path.resolve(__dirname, 'src/three-importer/view.js'),
   },
 
   output: {
     ...defaultConfig.output,
     path: buildPath,
-    filename: 'threeimporter/[name].js',
-    chunkFilename: 'threeimporter/[name].js',
-    assetModuleFilename: 'threeimporter/[name][ext]',
+    filename: 'three-importer/[name].js',
+    chunkFilename: 'three-importer/[name].js',
+    assetModuleFilename: 'three-importer/[name][ext]',
   },
 
   plugins: [
@@ -28,19 +28,19 @@ module.exports = {
     ),
 
     new MiniCssExtractPlugin({
-      filename: 'threeimporter/[name].css',
-      chunkFilename: 'threeimporter/[name].css',
+      filename: 'three-importer/[name].css',
+      chunkFilename: 'three-importer/[name].css',
     }),
 
     new CopyPlugin({
       patterns: [
         {
-          from: 'src/threeimporter/block.json',
-          to: 'threeimporter/block.json',
+          from: 'src/three-importer/block.json',
+          to: 'three-importer/block.json',
         },
         {
-          from: 'src/threeimporter/render.php',
-          to: 'threeimporter/render.php',
+          from: 'src/three-importer/render.php',
+          to: 'three-importer/render.php',
         },
       ],
     }),

@@ -9,7 +9,13 @@ License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 A powerfull ThreeJS WordPress plugin.
 
 == Description ==
-Three Importer (TI) is allows users to insert custom ThreeJS scenes which can be implemented via Block editor, shortcode, or custom script injection. This allows people with little-to-no coding experience to well-seasoned developers to create beautiful, 3D websites with full control over the scene settings. You can view the open source and non-compiled code here: https://github.com/callahan-codes/ThreeImporter.
+Three Importer is allows users to insert custom ThreeJS scenes which can be implemented via Block editor, shortcode, or custom script injection. This allows people with little-to-no coding experience to well-seasoned developers to create beautiful, 3D scenes with full control over the settings.
+
+# Block Support
+Three Importer has full support with the official <a href="https://wordpress.org/documentation/article/wordpress-block-editor/">WordPress Block Editor</a>, making publishing 3D scenes easier than ever.
+
+### Block Command
+In the <a href="https://wordpress.org/documentation/article/wordpress-block-editor/">WordPress Block Editor</a>, simply type and select "/Three Importer" in your page editor and you'll see the 3D render notice for the public view.
 
 == Installation ==
 1. Click the green "Code" button at the top-right of the repository.
@@ -38,8 +44,6 @@ Q: Where can I view the open-source code of this plugin?
     A: You can view the open source and non-compiled code here: https://github.com/callahan-codes/ThreeImporter.
     
 == Source Code ==
-The full, human-readable, non-compiled source code for all JavaScript and CSS files (including those in the 'build' directory) is publicly maintained and available on GitHub:
-
 **Source Repository:** https://github.com/callahan-codes/ThreeImporter
 **Build Instructions:** Use `npm install` and `npm run build` to generate the production files. Use `npm run zip` to generate the zip folder for manual Wordpress installation.
 

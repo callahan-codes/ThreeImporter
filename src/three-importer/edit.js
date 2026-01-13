@@ -13,7 +13,10 @@ import { __ } from '@wordpress/i18n';
 import {
 	useBlockProps,
 	InspectorControls,
-	InnerBlocks
+	InnerBlocks,
+	BlockControls,
+	JustifyContentControl,
+	BlockVerticalAlignmentControl
 } from '@wordpress/block-editor';
 import {
 	Panel,
@@ -30,13 +33,28 @@ import './editor.scss';
 // block editor functionality
 export default function Edit({ attributes, setAttributes }) {
 
+	const { 
+        inner_alignment, 
+        inner_vertical_alignment, 
+        block_height 
+    } = attributes;
 	const numericHeight = parseInt(attributes.block_height, 10) || 400;
-
-	// blockProps for handling HTML structure of block
 	const blockProps = useBlockProps();
 
 	return (
 		<div {...blockProps}>
+
+			<BlockControls group="block">
+                <JustifyContentControl
+                    value={inner_alignment}
+                    onChange={(value) => setAttributes({ inner_alignment: value })}
+                />
+                <BlockVerticalAlignmentControl
+                    value={inner_vertical_alignment}
+                    onChange={(value) => setAttributes({ inner_vertical_alignment: value })}
+                />
+            </BlockControls>
+
 			<InspectorControls>
 				<Panel>
 
@@ -487,9 +505,9 @@ export default function Edit({ attributes, setAttributes }) {
 									label={__("Material", "ti_blocks")}
 									value={attributes.cubegrid_material}
 									options={[
+										{ label: __("Phong", "ti_blocks"), value: "phong" },
 										{ label: __("Basic", "ti_blocks"), value: "basic" },
 										{ label: __("Lambert", "ti_blocks"), value: "lambert" },
-										{ label: __("Phong", "ti_blocks"), value: "phong" },
 										{ label: __("Standard", "ti_blocks"), value: "standard" },
 										{ label: __("Physical", "ti_blocks"), value: "physical" },
 									]}
@@ -536,35 +554,45 @@ export default function Edit({ attributes, setAttributes }) {
 					height: numericHeight,
 					width: '100%',
 				}}
-				minHeight="100"
-				enable={{
-					top: false,
-					right: false,
-					bottom: true,
-					left: false,
-					topRight: false,
-					bottomRight: false,
-					bottomLeft: false,
-					topLeft: false,
-				}}
+				minHeight={400} 
+				enable={{ bottom: true }}
 				onResizeStop={(event, direction, elt, delta) => {
 					const newHeight = numericHeight + delta.height;
 					setAttributes({ block_height: `${newHeight}px` });
 				}}
 				className="ti-block-resizable-box"
 			>
-				<div style={{ height: attributes.block_height ? attributes.block_height : 'auto', width: '100%', overflow: 'hidden' }}>
-					<div className="ti-block-heading">
-						<h2>
-							{__('Your three.js scene will render on the front end.', 'threeimporter')}
-						</h2>
-						<p>
-							{__('Scene Settings can be found in the Block settings. Enter other blocks below.', 'threeimporter')}
-						</p>
+				<div style={{ 
+					minHeight: block_height || '400px', 
+					height: '100%',
+					width: '100%', 
+					display: 'flex',
+					flexDirection: 'column',
+					position: 'relative',
+					overflow: 'hidden',
+					paddingBottom: '40px'
+				}}>
+					<div className="ti-block-heading" style={{ width: '100%', flexShrink: 0 }}>
+						<h2>{__('Your three.js scene will render on the front end.', 'three-importer')}</h2>
+						<p>{__('Scene Settings can be found in the Block settings.', 'three-importer')}</p>
 					</div>
 					
-					<div className="ti-inner-wrapper" style={{ width: '100%' }}>
-						<InnerBlocks />
+					<div className="ti-inner-wrapper" style={{ 
+						width: '100%',
+						flexGrow: 1, 
+						display: 'flex',
+						flexDirection: 'column',
+						pointerEvents: 'none',
+						justifyContent: 
+							inner_vertical_alignment === 'bottom' ? 'flex-end' : 
+							inner_vertical_alignment === 'center' ? 'center' : 'flex-start',
+						alignItems: 
+							inner_alignment === 'right' ? 'flex-end' : 
+							inner_alignment === 'center' ? 'center' : 'stretch'
+					}}>
+						<div style={{ pointerEvents: 'auto', width: '100%', maxWidth: '100%' }}>
+							<InnerBlocks renderAppender={ InnerBlocks.ButtonBlockAppender } />
+						</div>
 					</div>
 				</div>
 			</ResizableBox>

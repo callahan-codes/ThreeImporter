@@ -1,12 +1,12 @@
 {
-  "name": "threeimporter",
+  "name": "three-importer",
   "version": "1.0.0",
   "description": "Example block scaffolded with Create Block tool.",
   "author": "The WordPress Contributors",
   "license": "GPL-2.0-or-later",
   "main": "build/index.js",
   "scripts": {
-    "build": "wp-scripts build --blocks-manifest && node src/threeimporter/post-build-move.js",
+    "build": "wp-scripts build --blocks-manifest && node src/three-importer/post-build-move.js",
     "zip": "wp-scripts plugin-zip"
   },
   "devDependencies": {

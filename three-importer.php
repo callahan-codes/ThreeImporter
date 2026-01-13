@@ -6,6 +6,7 @@
  * Requires at least: 6.7
  * Requires PHP:     7.4
  * Author:           Bryce Callahan
+ * Author URI:       https://www.brycecallahan.com/
  * License:          GPL-2.0-or-later
  * License URI:      https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:      three-importer
@@ -131,7 +132,6 @@ add_shortcode( 'ti3d_scene', 'ti3d_shortcodes_scene_init' );
 
 // register [ti3d_sceneinject] shortcode
 function ti3d_shortcodes_sceneinject_init($atts = []) {
-
     $allowed_modules = [
         'orbitcontrols', 'flycontrols', 'firstpersoncontrols', 'pointerlockcontrols', 'trackballcontrols',
         'gltfloader', 'objloader', 'fbxloader', 'textureloader', 'cubetextureloader',
@@ -143,35 +143,55 @@ function ti3d_shortcodes_sceneinject_init($atts = []) {
         'animationmixer', 'gui'
     ];
 
-    // sanitize and filter allowed modules from attribute keys
-    $sanitized_atts = array_map('strtolower', array_keys($atts));
-    $requested_modules = array_values(array_intersect($sanitized_atts, $allowed_modules));
+    // handles both [tag module="1"] (key) and [tag module] (value)
+    $requested_modules = [];
+    
+    if ( is_array( $atts ) ) {
+        foreach ( $atts as $key => $value ) {
+            $key_low   = strtolower( (string) $key );
+            $value_low = strtolower( (string) $value );
 
-    // pass to JS as a global variable
-    $json_modules = wp_json_encode($requested_modules);
+            // Check if the attribute KEY is a module name
+            if ( in_array( $key_low, $allowed_modules ) ) {
+                $requested_modules[] = $key_low;
+            }
+            // Check if the attribute VALUE is a module name (for shorthand [tag orbitcontrols])
+            elseif ( in_array( $value_low, $allowed_modules ) ) {
+                $requested_modules[] = $value_low;
+            }
+        }
+    }
 
+    // remove duplicates
+    $requested_modules = array_unique( $requested_modules );
+
+    // enqueue the sceneinject script
     wp_enqueue_script(
         'three-sceneinject',
-        plugin_dir_url(__FILE__) . 'build/threeimporter/sceneinject.js',
-        [],
-        filemtime(plugin_dir_path(__FILE__) . 'build/threeimporter/sceneinject.js'),
+        plugin_dir_url(__FILE__) . 'build/three-importer/sceneinject.js',
+        ['threeimporter'],
+        filemtime(plugin_dir_path(__FILE__) . 'build/three-importer/sceneinject.js'),
         true
     );
 
+    // pass the module list to the script
+    $json_modules = wp_json_encode( array_values( $requested_modules ) );
     wp_add_inline_script(
         'three-sceneinject',
-        'window.sceneinject_modules = window.sceneinject_modules || []; window.sceneinject_modules = window.sceneinject_modules.concat(' . $json_modules . ');',
+        'window.sceneinject_modules = window.sceneinject_modules || []; 
+         window.sceneinject_modules = window.sceneinject_modules.concat(' . $json_modules . ');',
         'before'
     );
 
+    // enqueue Styles
     wp_enqueue_style(
         'three-importer-style',
-        plugin_dir_url(__FILE__) . 'build/threeimporter/style-index.css',
-        [],
-        filemtime(plugin_dir_path(__FILE__) . 'build/threeimporter/style-index.css')
+        plugin_dir_url(__FILE__) . 'build/three-importer/style-index.css',
+        ['threeimporter'],
+        filemtime(plugin_dir_path(__FILE__) . 'build/three-importer/style-index.css')
     );
 
-    return '<!-- [ti3d_sceneinject] loaded three.js -->';
+    return '';
 }
 add_shortcode('ti3d_sceneinject', 'ti3d_shortcodes_sceneinject_init');
 
@@ -185,21 +205,21 @@ function ti3d_enqueue_assets() {
 
     $content = $post->post_content;
     
-    $has_block = has_block( 'ti-blocks/threeimporter', $content ); 
+    $has_block = has_block( 'ti-blocks/three-importer', $content ); 
     $has_scene_shortcode = has_shortcode( $content, 'ti3d_scene' ); 
     $has_inject_shortcode = has_shortcode( $content, 'ti3d_sceneinject' );
     
     // check if the script is needed for the block OR any shortcode
     if ( $has_block || $has_scene_shortcode || $has_inject_shortcode ) {
         
-        $index_asset_path = __DIR__ . '/build/threeimporter/index.asset.php';
+        $index_asset_path = __DIR__ . '/build/three-importer/index.asset.php';
         $index_asset = file_exists( $index_asset_path )
             ? require $index_asset_path
             : array( 'dependencies' => array(), 'version' => '0.1.0' );
 
         wp_enqueue_script(
             'threeimporter', 
-            plugins_url( 'build/threeimporter/view.js', __FILE__ ),
+            plugins_url( 'build/three-importer/view.js', __FILE__ ),
             $index_asset['dependencies'],
             $index_asset['version'],
             true
@@ -215,7 +235,7 @@ function ti3d_enqueue_assets() {
 
         wp_enqueue_style(
             'threeimporter-style',
-            plugins_url( 'build/threeimporter/style-index.css', __FILE__ ),
+            plugins_url( 'build/three-importer/style-index.css', __FILE__ ),
             array(),
             '0.1.0'
         );
