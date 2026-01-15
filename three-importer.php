@@ -140,7 +140,7 @@ function ti3d_shortcodes_sceneinject_init($atts = []) {
         'fxaashader', 'copyshader', 'luminosityshader', 'sobeloperatorshader',
         'boxlinegeometry', 'convexgeometry', 'parametricgeometry', 'teapotgeometry',
         'gridhelper', 'axeshelper', 'camerahelper', 'directionallighthelper',
-        'animationmixer', 'gui'
+        'animationmixer', 'stats', 'gui'
     ];
 
     // handles both [tag module="1"] (key) and [tag module] (value)

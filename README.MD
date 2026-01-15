@@ -80,38 +80,64 @@ When using the inject shortcode (e.g., `[ti3d_sceneinject orbitcontrols gltfload
 == Frequently Asked Questions ==
 
 Q: Why cant I see my Geometry? 
-A: Check your Camera Position, Geometry Position, or Geometry Rotation. Ensure the camera isn't inside the mesh.
+A: Check your Camera Position, Geometry Position, or Geometry Rotation. Ensure the camera position isn't inside the mesh position.
+
+Q: Why are multiple instances of THREE being imported?
+A: This happens when using multiple TI implementations. Stick to using just blocks or either shortcodes on a single page (avoid mixmatching both TI blocks and TI shortcodes on a single page). This warning shouldn't break anything, as it's just a warning, but will slow that page's loading speed.
 
 Q: How can I use the custom scene inject function?
 A: Place the shortcode `[ti3d_sceneinject orbitcontrols axeshelper]`, then add a div and your script in a Custom HTML block:
 
-    <div id="ti" style="width: 100%; height: 400px;"></div>
+    <div class="three-importer-container" id="ti"></div>
     <script>
     document.addEventListener('three-modules-ready', () => {
-        const container = document.getElementById('ti');
+
         const scene = new THREE.Scene();
+        const container = document.getElementById('ti');
         const width = container.clientWidth;
         const height = container.clientHeight;
+
         const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
         camera.position.z = 5;
+
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(width, height);
         container.appendChild(renderer.domElement);
+
         const geometry = new THREE.BoxGeometry(2, 2, 2);
         const material = new THREE.MeshNormalMaterial();
         const cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
-        if (THREE.AxesHelper) scene.add(new THREE.AxesHelper(3));
-        if (THREE.OrbitControls) new THREE.OrbitControls(camera, renderer.domElement);
+
+        if (THREE.AxesHelper) {
+            const axesHelper = new THREE.AxesHelper(3);
+            scene.add(axesHelper);
+        }
+
+        let controls;
+        if (THREE.OrbitControls) {
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+        }
+
         function animate() {
             requestAnimationFrame(animate);
             cube.rotation.x += 0.01;
             cube.rotation.y += 0.01;
+            if (controls) controls.update();
             renderer.render(scene, camera);
         }
+
         animate();
     });
     </script>
+
+== Screenshots ==
+1. Sample Page using Block
+2. Editor Page using Block
+3. Sample Page using `[ti3d_scene]` shortcode
+4. Editor Page using `[ti3d_scene]` shortcode
+5. Sample Page using `[ti3d_sceneinject]` shortcode
+6. Editor Page using `[ti3d_sceneinject]` shortcode
 
 == Source Code ==
 Source Repository: https://github.com/callahan-codes/ThreeImporter

@@ -43,8 +43,9 @@ import { DirectionalLightHelper } from 'three/src/helpers/DirectionalLightHelper
 // animation
 import { AnimationMixer } from 'three/src/animation/AnimationMixer.js';
 
-// gui
+// gui & stats
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
+import Stats from 'three/examples/jsm/libs/stats.module.js';
 
 // modules mapping
 const moduleMap = {
@@ -84,6 +85,7 @@ const moduleMap = {
     directionallighthelper: DirectionalLightHelper,
 
     animationmixer: AnimationMixer,
+    stats: Stats,
     gui: GUI
 };
 
@@ -125,6 +127,7 @@ const nameMap = {
     directionallighthelper: 'DirectionalLightHelper',
 
     animationmixer: 'AnimationMixer',
+    stats: 'Stats',
     gui: 'GUI'
 };
 
