@@ -1,33 +1,30 @@
 <?php
 /**
- * Plugin Name:      Three Importer
- * Description:      Create custom Three.js scenes via Block, Shortcode, or your own script.
- * Version:          1.0.3
+ * Plugin Name:       Three Importer
+ * Description:       Create custom Three.js scenes via Block, Shortcode, or your own script.
+ * Version:           1.0.3
  * Requires at least: 6.7
- * Requires PHP:     7.4
- * Author:           Bryce Callahan
- * Author URI:       https://www.brycecallahan.com/
- * License:          GPL-2.0-or-later
- * License URI:      https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:      three-importer
+ * Requires PHP:      7.4
+ * Author:            Bryce Callahan
+ * Author URI:        https://www.brycecallahan.com/
+ * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       three-importer
  *
  * @package TiBlocks
  */
 
-// direct access - exit
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// register TI block
+/**
+ * 1. REGISTER THE BLOCK
+ */
 function ti3d_block_init() {
     if ( function_exists( 'wp_register_block_types_from_metadata_collection' ) ) {
         wp_register_block_types_from_metadata_collection( __DIR__ . '/build', __DIR__ . '/build/blocks-manifest.php' );
         return;
-    }
-
-    if ( function_exists( 'wp_register_block_metadata_collection' ) ) {
-        wp_register_block_metadata_collection( __DIR__ . '/build', __DIR__ . '/build/blocks-manifest.php' );
     }
 
     $manifest_data = require __DIR__ . '/build/blocks-manifest.php';
@@ -37,8 +34,20 @@ function ti3d_block_init() {
 }
 add_action( 'init', 'ti3d_block_init' );
 
-// register [ti3d_scene] shortcode
+/**
+ * 2. AUTOMATED SCENE SHORTCODE [ti3d_scene]
+ */
 function ti3d_shortcodes_scene_init( $atts, $content = null ) {
+    // DENY LOGIC: If Manual mode is active OR a Block already ran, kill the shortcode logic.
+    if ( defined( 'TI3D_MODE_MANUAL' ) || defined( 'TI3D_MODE_BLOCK_ACTIVE' ) ) {
+        return '';
+    }
+
+    // LOCK MODE: Automated (Shortcode version)
+    if ( ! defined( 'TI3D_MODE_AUTOMATED' ) ) {
+        define( 'TI3D_MODE_AUTOMATED', true );
+    }
+
     $atts = shortcode_atts( array(
         'geometry' => 'box',
         'geometry_color' => '#000000',
@@ -130,8 +139,20 @@ function ti3d_shortcodes_scene_init( $atts, $content = null ) {
 }
 add_shortcode( 'ti3d_scene', 'ti3d_shortcodes_scene_init' );
 
-// register [ti3d_sceneinject] shortcode
+/**
+ * 3. MANUAL INJECTION SHORTCODE [ti3d_sceneinject]
+ */
 function ti3d_shortcodes_sceneinject_init($atts = []) {
+    // DENY LOGIC: If automated mode is already active (Block or ti3d_scene), abort.
+    if ( defined( 'TI3D_MODE_AUTOMATED' ) || defined( 'TI3D_MODE_BLOCK_ACTIVE' ) ) {
+        return '';
+    }
+
+    // LOCK MODE: Manual
+    if ( ! defined( 'TI3D_MODE_MANUAL' ) ) {
+        define( 'TI3D_MODE_MANUAL', true );
+    }
+
     $allowed_modules = [
         'orbitcontrols', 'flycontrols', 'firstpersoncontrols', 'pointerlockcontrols', 'trackballcontrols',
         'gltfloader', 'objloader', 'fbxloader', 'textureloader', 'cubetextureloader',
@@ -143,38 +164,25 @@ function ti3d_shortcodes_sceneinject_init($atts = []) {
         'animationmixer', 'stats', 'gui'
     ];
 
-    // handles both [tag module="1"] (key) and [tag module] (value)
     $requested_modules = [];
-    
     if ( is_array( $atts ) ) {
         foreach ( $atts as $key => $value ) {
             $key_low   = strtolower( (string) $key );
             $value_low = strtolower( (string) $value );
-
-            // Check if the attribute KEY is a module name
-            if ( in_array( $key_low, $allowed_modules ) ) {
-                $requested_modules[] = $key_low;
-            }
-            // Check if the attribute VALUE is a module name (for shorthand [tag orbitcontrols])
-            elseif ( in_array( $value_low, $allowed_modules ) ) {
-                $requested_modules[] = $value_low;
-            }
+            if ( in_array( $key_low, $allowed_modules ) ) $requested_modules[] = $key_low;
+            elseif ( in_array( $value_low, $allowed_modules ) ) $requested_modules[] = $value_low;
         }
     }
-
-    // remove duplicates
     $requested_modules = array_unique( $requested_modules );
 
-    // enqueue the sceneinject script
     wp_enqueue_script(
         'three-sceneinject',
         plugin_dir_url(__FILE__) . 'build/three-importer/sceneinject.js',
-        ['threeimporter'],
+        [], 
         filemtime(plugin_dir_path(__FILE__) . 'build/three-importer/sceneinject.js'),
         true
     );
 
-    // pass the module list to the script
     $json_modules = wp_json_encode( array_values( $requested_modules ) );
     wp_add_inline_script(
         'three-sceneinject',
@@ -183,35 +191,33 @@ function ti3d_shortcodes_sceneinject_init($atts = []) {
         'before'
     );
 
-    // enqueue Styles
-    wp_enqueue_style(
-        'three-importer-style',
-        plugin_dir_url(__FILE__) . 'build/three-importer/style-index.css',
-        ['threeimporter'],
-        filemtime(plugin_dir_path(__FILE__) . 'build/three-importer/style-index.css')
-    );
-
     return '';
 }
 add_shortcode('ti3d_sceneinject', 'ti3d_shortcodes_sceneinject_init');
 
-// conditionally enqueue scripts and styles for block/shortcode
+/**
+ * 4. CONDITIONAL ASSET ENQUEUING
+ */
 function ti3d_enqueue_assets() {
     global $post;
-
-    if ( ! is_singular() || ! is_a( $post, 'WP_Post' ) ) {
-        return;
-    }
+    if ( ! is_singular() || ! is_a( $post, 'WP_Post' ) ) return;
 
     $content = $post->post_content;
-    
     $has_block = has_block( 'ti-blocks/three-importer', $content ); 
     $has_scene_shortcode = has_shortcode( $content, 'ti3d_scene' ); 
     $has_inject_shortcode = has_shortcode( $content, 'ti3d_sceneinject' );
     
-    // check if the script is needed for the block OR any shortcode
-    if ( $has_block || $has_scene_shortcode || $has_inject_shortcode ) {
+    // Check if a shortcode claimed the page before the block logic runs
+    if ( $has_block && ( defined('TI3D_MODE_MANUAL') || defined('TI3D_MODE_AUTOMATED') ) ) {
+        // We do not load view.js because a shortcode is already taking priority
+        return;
+    }
+
+    if ( ( $has_block || $has_scene_shortcode ) && ! defined( 'TI3D_MODE_MANUAL' ) ) {
         
+        // Lock that a block-style logic is active to prevent shortcodes from rendering later
+        if (!defined('TI3D_MODE_BLOCK_ACTIVE')) define('TI3D_MODE_BLOCK_ACTIVE', true);
+
         $index_asset_path = __DIR__ . '/build/three-importer/index.asset.php';
         $index_asset = file_exists( $index_asset_path )
             ? require $index_asset_path
@@ -232,7 +238,9 @@ function ti3d_enqueue_assets() {
                 'fontUrl' => plugin_dir_url( __FILE__ ) . 'public/Open_Sans_Condensed_Bold.json',
             )
         );
+    }
 
+    if ( $has_block || $has_scene_shortcode || $has_inject_shortcode ) {
         wp_enqueue_style(
             'threeimporter-style',
             plugins_url( 'build/three-importer/style-index.css', __FILE__ ),
@@ -242,3 +250,21 @@ function ti3d_enqueue_assets() {
     }
 }
 add_action( 'wp_enqueue_scripts', 'ti3d_enqueue_assets' );
+
+/**
+ * 5. EDITOR WARNING ENQUEUE
+ */
+function ti3d_enqueue_editor_warnings() {
+    $file_path = plugin_dir_path(__FILE__) . 'build/three-importer/warning.js';
+    
+    if ( file_exists( $file_path ) ) {
+        wp_enqueue_script(
+            'ti3d-editor-warnings',
+            plugin_dir_url(__FILE__) . 'build/three-importer/warning.js',
+            array('wp-data', 'wp-editor', 'wp-notices', 'wp-core-data', 'wp-dom-ready'),
+            filemtime( $file_path ),
+            true
+        );
+    }
+}
+add_action('enqueue_block_editor_assets', 'ti3d_enqueue_editor_warnings');

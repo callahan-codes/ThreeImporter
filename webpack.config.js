@@ -12,6 +12,8 @@ module.exports = {
     index: path.resolve(__dirname, 'src/three-importer/index.js'),
     sceneinject: path.resolve(__dirname, 'src/three-importer/sceneinject.js'),
     view: path.resolve(__dirname, 'src/three-importer/view.js'),
+    // Add the warning script here
+    warning: path.resolve(__dirname, 'src/three-importer/warning.js'),
   },
 
   output: {
