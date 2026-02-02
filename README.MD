@@ -1,8 +1,8 @@
 === Three Importer ===
 Contributors:      callahancodes
-Tags:              block, shortcode, script inject, threejs, 3d
+Tags:              threejs, 3D
 Tested up to:      6.9
-Stable tag:        1.0.3
+Stable tag:        1.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,7 +86,8 @@ Q: Why are multiple instances of THREE being imported?
 A: This happens when using multiple TI implementations. Stick to using just blocks or either shortcodes on a single page (avoid mixmatching both TI blocks and TI shortcodes on a single page). This warning shouldn't break anything, as it's just a warning, but will slow that page's loading speed.
 
 Q: How can I use the custom scene inject function?
-A: Place the shortcode `[ti3d_sceneinject orbitcontrols axeshelper]`, then add a div and your script in a Custom HTML block:
+A: Place the shortcode `[ti3d_sceneinject module1 module2 ...]`, then add the TI id to a div and your script in a Custom HTML block.
+    [ti3d_sceneinject orbitcontrols axeshelper]
 
     <div class="three-importer-container" id="ti"></div>
     <script>
@@ -143,7 +144,5 @@ A: Place the shortcode `[ti3d_sceneinject orbitcontrols axeshelper]`, then add a
 Source Repository: https://github.com/callahan-codes/ThreeImporter
 
 == Changelog ==
-= 1.0.3 =
-* Added full parameter list and module injection documentation.
-= 1.0.2 =
+= 1.0.0 =
 * Initial Release.
