@@ -61,8 +61,6 @@ $ti3d_wrapper_attributes = get_block_wrapper_attributes( array(
 	data-tridText-color="<?php echo esc_attr($attributes['trid_color']);?>"
 	data-tridText-size="<?php echo esc_attr($attributes['trid_size']);?>">
 	
-	<div class="ti-content">
-		<?php echo wp_kses_post($content); ?>
-	</div>
+	<?php echo $content; ?>
 
 </div>

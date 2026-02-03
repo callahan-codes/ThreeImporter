@@ -1,8 +1,6 @@
 (function(wp) {
     wp.domReady(() => {
         const { subscribe, select, dispatch } = wp.data;
-        
-        // This variable persists outside the subscription loop
         let isWarningDisplayed = false;
         let timeoutId = null;
 
@@ -15,7 +13,7 @@
             const blocks = blockEditor.getBlocks();
             const content = editor.getEditedPostContent() || '';
 
-            // Check for TI Block
+            // check for TI Block
             const hasTiBlock = (blockList) => {
                 return blockList.some(block => 
                     block.name === 'ti-blocks/three-importer' || 
@@ -23,7 +21,7 @@
                 );
             };
 
-            // Check for shortcodes in blocks
+            // check for shortcodes in blocks
             const hasShortcodeInBlocks = (blockList, target) => {
                 return blockList.some(block => {
                     const text = block.attributes.text || '';
@@ -35,42 +33,39 @@
             const automatedShortcodeExists = content.includes('[ti3d_scene ') || hasShortcodeInBlocks(blocks, '[ti3d_scene ');
             const manualShortcodeExists = content.includes('[ti3d_sceneinject]') || hasShortcodeInBlocks(blocks, '[ti3d_sceneinject]');
 
-            // The conflict condition
+            // the conflict condition
             const hasConflict = (blockExists && (automatedShortcodeExists || manualShortcodeExists)) || 
                                (automatedShortcodeExists && manualShortcodeExists);
 
             if (hasConflict) {
-                // IMPORTANT: Only dispatch if we haven't already flagged it
+                // dispatch if flagged
                 if (!isWarningDisplayed) {
-                    isWarningDisplayed = true; // LOCK immediately
+                    isWarningDisplayed = true; // lock
                     
                     dispatch('core/notices').createNotice(
                         'error',
                         'Three Importer Conflict: Multiple scene methods detected. Please use only one (Block or Shortcode) to avoid errors.',
                         { 
-                            id: 'ti3d-conflict-notice', // Fixed ID prevents duplicates
+                            id: 'ti3d-conflict-notice',
                             isDismissible: true 
                         }
                     );
                 }
             } else {
                 if (isWarningDisplayed) {
-                    isWarningDisplayed = false; // UNLOCK
+                    isWarningDisplayed = false; // unlock
                     dispatch('core/notices').removeNotice('ti3d-conflict-notice');
                 }
             }
         }
 
-        // Debounce to stop the "flood"
+        // debounce to stop the "flood"
         const debouncedCheck = () => {
             if (timeoutId) clearTimeout(timeoutId);
             timeoutId = setTimeout(checkConsistency, 500);
         };
 
-        // Listen for changes
         subscribe(debouncedCheck);
-        
-        // Run once on load
         debouncedCheck();
     });
 })(window.wp);

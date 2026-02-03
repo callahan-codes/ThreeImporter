@@ -9,15 +9,9 @@
 	"description": "Example block scaffolded with Create Block tool.",
 	"example": {},
 	"attributes": {
-		"attributes": {
-			"inner_alignment": {
-				"type": "string",
-				"default": "left"
-			},
-			"inner_vertical_alignment": {
-				"type": "string",
-				"default": "top"
-			}
+		"inner_vertical_alignment": {
+			"type": "string",
+			"default": "top"
 		},
 		"block_height" :{
 			"type":"string",
@@ -193,12 +187,11 @@
 			"gradients": true
 		},
 			"typography": {
-			"textAlign": true,
 			"lineHeight": true,
 			"fontSize": true
 		},
 		"layout": {
-			"allowJustification": true,
+			"allowJustification": false,
 			"allowOrientation": false
 		}
 	},
