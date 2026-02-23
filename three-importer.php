@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Three Importer
  * Description:       Create custom Three.js scenes via Block, Shortcode, or your own script.
- * Version:           1.0.0
+ * Version:           1.0.5
  * Requires at least: 6.7
  * Requires PHP:      7.4
  * Author:            Bryce Callahan

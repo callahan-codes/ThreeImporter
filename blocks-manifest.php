@@ -5,7 +5,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
 		'name' => 'ti-blocks/three-importer',
-		'version' => '1.0.3',
+		'version' => '1.0.5',
 		'title' => 'Three Importer',
 		'category' => 'widgets',
 		'icon' => 'smiley',
