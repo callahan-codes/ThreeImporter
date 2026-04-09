@@ -1,40 +1,51 @@
+/* Editor-Only Styles */
+
 .wp-block-ti-blocks-three-importer {
-	background-color: thsl(0, 100%, 50%)parent !important;
-	overflow: visible;
-	outline: 3px solid black;
+    background-color: transparent !important; 
+    
+    // Target the inner wrapper specifically
+    .ti-inner-wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        
+        // This targets the auto-generated Gutenberg list
+        .block-editor-block-list__layout {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            
+            // Inherit alignment from the parent .ti-content settings
+            justify-content: inherit;
+            align-items: inherit;
+
+            // FIX: Ensure the text inside the blocks follows the alignment
+            text-align: inherit;
+
+            & > .wp-block {
+                width: fit-content;
+                max-width: 100%;
+                
+                // Forces Paragraphs and Headings in the editor to follow the parent justification
+                text-align: inherit !important;
+
+                // Ensure the actual rich-text editable area spans the width
+                .rich-text {
+                    width: 100%;
+                }
+            }
+        }
+    }
 }
 
-.wp-block-ti-blocks-three-importer .ti-block-resizable-box {
-	outline: 2px solid blue;
-	box-sizing: border-box;
-	padding: 10px;
-}
-
+// UI Polishing for the "Three Importer" header in the editor
 .wp-block-ti-blocks-three-importer .ti-block-heading {
-	background-color: #000;
-	color: white;
-	box-sizing: border-box;
-	padding: 10px;
-	border: 1.5px solid white;
-	width: 100%;
-	text-align: left !important;
-}
-
-.wp-block-ti-blocks-three-importer .ti-block-resizable-box .components-resizable-box__handle {
-	width: 12px;
-	height: 12px;
-
-	position: absolute;
-	bottom: 0;
-	left: 50%;
-	transform: translate(-50%, -50%);
-}
-
-.wp-block-ti-blocks-three-importer .ti-inner-wrapper {
-	width: 100%;
-	box-sizing: border-box;
-}
-
-.wp-block-ti-blocks-three-importer .ti-inner-wrapper > .block-editor-block-list__layout {
-	width: 100% !important;
+    background-color: #000;
+    color: white;
+    padding: 8px;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase; // Adds to that minimalist professional look
 }

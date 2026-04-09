@@ -2,7 +2,7 @@
 Contributors:      callahancodes
 Tags:              threejs, 3D
 Tested up to:      6.9
-Stable tag:        1.0.0
+Stable tag:        1.1.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -146,3 +146,9 @@ Source Repository: https://github.com/callahan-codes/ThreeImporter
 == Changelog ==
 = 1.0.0 =
 * Initial Release.
+= 1.1.0 =
+* Added "None" geometry option for background-focused functionality. Removed non-essential settings when selected to improve UI.
+* Added orbitcontrols toggle (default = true).
+* Fixed item justification bug of horizontal-misalignment for block inner content.
+* Fixed TI Block height adjustment bug; was working in the page editor but not the frontend (block previously stayed at default 400px height).
+* Changed geometry X/Y/Z rotation to float from int to support more specific rotation speeds.

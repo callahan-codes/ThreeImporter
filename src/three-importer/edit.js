@@ -26,7 +26,8 @@ import {
 	TextControl,
 	ColorPalette,
 	Notice,
-	ResizableBox
+	ResizableBox,
+	ToolbarGroup
 } from '@wordpress/components';
 import './editor.scss';
 
@@ -38,6 +39,7 @@ export default function Edit({ attributes, setAttributes }) {
         inner_vertical_alignment, 
         block_height 
     } = attributes;
+
 	const numericHeight = parseInt(attributes.block_height, 10) || 400;
 	const blockProps = useBlockProps();
 
@@ -45,23 +47,23 @@ export default function Edit({ attributes, setAttributes }) {
 		<div {...blockProps}>
 
 			<BlockControls group="block">
-                <JustifyContentControl
-                    value={inner_alignment}
-                    onChange={(value) => setAttributes({ inner_alignment: value })}
-                />
-                <BlockVerticalAlignmentControl
-                    value={inner_vertical_alignment}
-                    onChange={(value) => setAttributes({ inner_vertical_alignment: value })}
-                />
+				<ToolbarGroup>
+					<JustifyContentControl
+						value={inner_alignment}
+						onChange={(value) => setAttributes({ inner_alignment: value })}
+					/>
+					<BlockVerticalAlignmentControl
+						value={inner_vertical_alignment}
+						onChange={(value) => setAttributes({ inner_vertical_alignment: value })}
+					/>
+				</ToolbarGroup>
             </BlockControls>
 
 			<InspectorControls>
 				<Panel>
-
 					{/* geometry settings */}
 					<PanelBody title={__("Geometry Settings", "ti_blocks")}>
 
-						{/* geometry type */}
 						<SelectControl
 							label={__("Type", "ti_blocks")}
 							value={attributes.geometry}
@@ -82,113 +84,106 @@ export default function Edit({ attributes, setAttributes }) {
 								{ label: __("Torus Knot", "ti_blocks"), value: "torusknot" },
 								{ label: __("GLTF Model", "ti_blocks"), value: "gltf" },
 								{ label: __("3D Text", "ti_blocks"), value: "3dtext" },
+								{ label: __("None (no geometry)", "ti_blocks"), value: "none" }
 							]}
 							onChange={(geometry) => setAttributes({ geometry })}
 						/>
-						
 
-						{/* geometry/gltf size */}
-						{attributes.geometry === "gltf" ? (
-
-							<TextControl
-								label={__("GLTF Model URL", "ti_blocks")}
-								value={attributes.gltf_url}
-								onChange={(gltf_url) => setAttributes({ gltf_url })}
-							/>
-
-						) : attributes.geometry === "3dtext" ? (
+						{/* Only show further settings if geometry is NOT "none" */}
+						{attributes.geometry !== "none" && (
 							<>
-								<TextControl
-									label={__("Text to show", "ti_blocks")}
-									value={attributes.trid_text}
-									onChange={(trid_text) => setAttributes({ trid_text })}
-								/>	
-
-								<fieldset>
-									<legend>{__("Color", "ti_blocks")}</legend>
-									<ColorPalette
-										value={attributes.trid_color}
-										colors={[
-											{ name: "Black", color: "#000000" },
-											{ name: "White", color: "#ffffff" },
-											{ name: "Red", color: "#ff0000" },
-											{ name: "Orange", color: "#ffa500" },
-											{ name: "Yellow", color: "#ffff00" },
-											{ name: "Green", color: "#00ff00" },
-											{ name: "Blue", color: "#0000ff" },
-											{ name: "Indigo", color: "#4b0082" },
-											{ name: "Violet", color: "#ee82ee" }
-										]}
-										onChange={(trid_color) => setAttributes({ trid_color })}
+								{/* GLTF Specific Settings */}
+								{attributes.geometry === "gltf" && (
+									<TextControl
+										label={__("GLTF Model URL", "ti_blocks")}
+										value={attributes.gltf_url}
+										onChange={(gltf_url) => setAttributes({ gltf_url })}
 									/>
-								</fieldset>		
+								)}
 
-								<TextControl
-									label={__("Size", "ti_blocks")}
-									value={attributes.trid_size}
-									type="number"
-									onChange={(value) => setAttributes({ trid_size: value })}
-								/>	
-							
-							</>
+								{attributes.geometry === "3dtext" && (
+									<>
+										<TextControl
+											label={__("Text to show", "ti_blocks")}
+											value={attributes.trid_text}
+											onChange={(trid_text) => setAttributes({ trid_text })}
+										/>
+										<fieldset>
+											<legend>{__("Color", "ti_blocks")}</legend>
+											<ColorPalette
+												value={attributes.trid_color}
+												colors={[
+													{ name: "Black", color: "#000000" },
+													{ name: "White", color: "#ffffff" },
+													{ name: "Red", color: "#ff0000" },
+													{ name: "Orange", color: "#ffa500" },
+													{ name: "Yellow", color: "#ffff00" },
+													{ name: "Green", color: "#00ff00" },
+													{ name: "Blue", color: "#0000ff" },
+													{ name: "Indigo", color: "#4b0082" },
+													{ name: "Violet", color: "#ee82ee" }
+												]}
+												onChange={(trid_color) => setAttributes({ trid_color })}
+											/>
+										</fieldset>
+										<TextControl
+											label={__("Size", "ti_blocks")}
+											value={attributes.trid_size}
+											type="number"
+											onChange={(value) => setAttributes({ trid_size: value })}
+										/>
+									</>
+								)}
 
-						) : (
-							<>
-								{/* gltf type not selected, show geometry options */}
+								{/* Default Geometry Settings (Material/Color) - Hidden for GLTF/3D Text/None */}
+								{attributes.geometry !== "gltf" && attributes.geometry !== "3dtext" && (
+									<>
+										<SelectControl
+											label={__("Material", "ti_blocks")}
+											value={attributes.geometry_material}
+											options={[
+												{ label: __("Basic", "ti_blocks"), value: "basic" },
+												{ label: __("Lambert", "ti_blocks"), value: "lambert" },
+												{ label: __("Phong", "ti_blocks"), value: "phong" },
+												{ label: __("Standard", "ti_blocks"), value: "standard" },
+												{ label: __("Physical", "ti_blocks"), value: "physical" },
+											]}
+											onChange={(geometry_material) => setAttributes({ geometry_material })}
+										/>
+										<fieldset>
+											<legend>{__("Color", "ti_blocks")}</legend>
+											<ColorPalette
+												value={attributes.geometry_color}
+												colors={[
+													{ name: "Black", color: "#000000" },
+													{ name: "White", color: "#ffffff" },
+													{ name: "Red", color: "#ff0000" },
+													{ name: "Orange", color: "#ffa500" },
+													{ name: "Yellow", color: "#ffff00" },
+													{ name: "Green", color: "#00ff00" },
+													{ name: "Blue", color: "#0000ff" },
+													{ name: "Indigo", color: "#4b0082" },
+													{ name: "Violet", color: "#ee82ee" }
+												]}
+												onChange={(geometry_color) => setAttributes({ geometry_color })}
+											/>
+										</fieldset>
+									</>
+								)}
 
-								{/* geometry material */}
-								<SelectControl
-									label={__("Material", "ti_blocks")}
-									value={attributes.geometry_material}
-									options={[
-										{ label: __("Basic", "ti_blocks"), value: "basic" },
-										{ label: __("Lambert", "ti_blocks"), value: "lambert" },
-										{ label: __("Phong", "ti_blocks"), value: "phong" },
-										{ label: __("Standard", "ti_blocks"), value: "standard" },
-										{ label: __("Physical", "ti_blocks"), value: "physical" },
-									]}
-									onChange={(geometry_material) => setAttributes({ geometry_material })}
-								/>
-
-								{/* geometry color */}
-								<fieldset>
-									<legend>{__("Color", "ti_blocks")}</legend>
-									<ColorPalette
-										value={attributes.geometry_color}
-										colors={[
-											{ name: "Black", color: "#000000" },
-											{ name: "White", color: "#ffffff" },
-											{ name: "Red", color: "#ff0000" },
-											{ name: "Orange", color: "#ffa500" },
-											{ name: "Yellow", color: "#ffff00" },
-											{ name: "Green", color: "#00ff00" },
-											{ name: "Blue", color: "#0000ff" },
-											{ name: "Indigo", color: "#4b0082" },
-											{ name: "Violet", color: "#ee82ee" }
-										]}
-										onChange={(geometry_color) => setAttributes({ geometry_color })}
-									/>
-								</fieldset>
-							</>
-						)}
-
-						{attributes.geometry !== "3dtext" && (
-							<>
-								{/* geometry rotation */}
+								{/* Rotation Controls - Always show if not "none" */}
 								<TextControl
 									label={__("X Rotation Speed", "ti_blocks")}
 									value={attributes.geometry_xrotation}
 									type="number"
 									onChange={(value) => setAttributes({ geometry_xrotation: value })}
 								/>
-
 								<TextControl
 									label={__("Y Rotation Speed", "ti_blocks")}
 									value={attributes.geometry_yrotation}
 									type="number"
 									onChange={(value) => setAttributes({ geometry_yrotation: value })}
 								/>
-
 								<TextControl
 									label={__("Z Rotation Speed", "ti_blocks")}
 									value={attributes.geometry_zrotation}
@@ -197,7 +192,6 @@ export default function Edit({ attributes, setAttributes }) {
 								/>
 							</>
 						)}
-
 					</PanelBody>
 
 					{/* light settings */}
@@ -287,6 +281,12 @@ export default function Edit({ attributes, setAttributes }) {
 					<PanelBody title={__("Camera Settings", "ti_blocks")}>
 
 						<ToggleControl
+							label={__("Orbit Controls", "ti_blocks")}
+							checked={attributes.camera_orbit}
+							onChange={(value) => setAttributes({ camera_orbit: value })}
+						/>
+
+						<ToggleControl
 							label={__("Mouse Follow", "ti_blocks")}
 							checked={attributes.camera_followmouse}
 							onChange={(value) => setAttributes({ camera_followmouse: value })}
@@ -348,7 +348,7 @@ export default function Edit({ attributes, setAttributes }) {
 					<PanelBody title={__("Instancing Settings", "ti_blocks")}>
 
 						{/* toggle instancing */}
-						{attributes.geometry !== "gltf" ? (
+						{attributes.geometry !== "gltf" && attributes.geometry != "none" && attributes.geometry != "3dtext" ? (
 							<>
 								<ToggleControl
 									label={__("Instancing", "ti_blocks")}
@@ -382,7 +382,7 @@ export default function Edit({ attributes, setAttributes }) {
 							// no instancing for gltf
 							<>
 								<Notice status="warning" isDismissible={false}>
-									{__("Instancing is not supported for URL-based models.", "ti_blocks")}
+									{__("Instancing is not supported for the selected geometry.", "ti_blocks")}
 								</Notice>
 							</>
 						)}
@@ -590,7 +590,7 @@ export default function Edit({ attributes, setAttributes }) {
 							inner_alignment === 'right' ? 'flex-end' : 
 							inner_alignment === 'center' ? 'center' : 'stretch'
 					}}>
-						<div style={{ pointerEvents: 'auto', width: '100%', maxWidth: '100%' }}>
+						<div style={{ pointerEvents: 'auto', minWidth: '200px', maxWidth: '100%' }}>
 							<InnerBlocks renderAppender={ InnerBlocks.ButtonBlockAppender } />
 						</div>
 					</div>

@@ -60,11 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const cameraYTarget = parseInt(container.getAttribute('data-camera-ytarget'), 10) || 0;
         const cameraZTarget = parseInt(container.getAttribute('data-camera-ztarget'), 10) || 0;
         const cameraFollowMouse = container.getAttribute('data-camera-followmouse') === 'true';
+        const cameraOrbitAllowed = container.getAttribute('data-camera-orbitallowed') === 'true';
 
         // rotation attributes
-        const geometryXRotation = parseInt(container.getAttribute('data-geometry-xrotation'), 10) || 0;
-        const geometryYRotation = parseInt(container.getAttribute('data-geometry-yrotation'), 10) || 0;
-        const geometryZRotation = parseInt(container.getAttribute('data-geometry-zrotation'), 10) || 0;
+        const geometryXRotation = parseFloat(container.getAttribute('data-geometry-xrotation'), 10) || 0;
+        const geometryYRotation = parseFloat(container.getAttribute('data-geometry-yrotation'), 10) || 0;
+        const geometryZRotation = parseFloat(container.getAttribute('data-geometry-zrotation'), 10) || 0;
 
         // background attributes
         const background = container.getAttribute('data-scene-background') || 'none';
@@ -106,13 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
             requestAnimationFrame(animate);
 
             // rotate mesh
-            if(geometryType != "3dtext") {
+            if(mesh && geometryType !== "none") {
                 if(geometryXRotation != 0) rotateObject('x', geometryXRotation);
                 if(geometryYRotation != 0) rotateObject('y', geometryYRotation);
                 if(geometryZRotation != 0) rotateObject('z', geometryZRotation);
             }
             
-
             // camera mouse follow
             if (cameraFollowMouse) {
                 updateCameraFollowMouse(camera);
@@ -166,9 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 cubegridInstance.instanceMatrix.needsUpdate = true;
             }
-
             
-            if (controls) controls.update();
+            if (controls && controls.enabled && !cameraFollowMouse) controls.update();
             renderer.render(scene, camera);
         }
         animate();
@@ -188,6 +187,9 @@ document.addEventListener('DOMContentLoaded', () => {
         function buildCamera() {
             camera.position.set(cameraXPos, cameraYPos, cameraZPos);
             controls.target.set(cameraXTarget, cameraYTarget, cameraZTarget);
+            controls.enabled = cameraOrbitAllowed;
+
+            if (!cameraOrbitAllowed) camera.lookAt(0,0,0);
 
             if(cameraFollowMouse) {
                 document.addEventListener('mousemove', (event) => {
@@ -205,6 +207,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } 
             else if (geometryType === '3dtext'){
                 loadTextGeo();
+            }
+            else if (geometryType === 'none'){
+
             }
             else {
                 let assignedMaterial, assignedGeometry;
@@ -397,10 +402,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 const material = new THREE.MeshStandardMaterial({ color: tridTextColor });
-                const textMesh = new THREE.Mesh(geometry, material);
+                mesh = new THREE.Mesh(geometry, material);
                 geometry.center(); 
-                textMesh.rotation.y = Math.PI / 2;
-                scene.add(textMesh);
+                mesh.rotation.y = Math.PI / 2;
+                scene.add(mesh);
             });
         }
 
@@ -440,10 +445,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // background
         function buildBackground() {
 
-            if(background === "none") {
+            if(background === "none" && cameraOrbitAllowed) {
                 controls.enabled = true;
             } else {
                 controls.enabled = false;
+                camera.lookAt(0,0,0);
             }
 
             // type
