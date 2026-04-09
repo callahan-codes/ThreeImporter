@@ -2,7 +2,6 @@
     wp.domReady(() => {
         const { subscribe, select, dispatch } = wp.data;
         
-        // This variable persists outside the subscription loop
         let isWarningDisplayed = false;
         let timeoutId = null;
 
@@ -15,62 +14,50 @@
             const blocks = blockEditor.getBlocks();
             const content = editor.getEditedPostContent() || '';
 
-            // Check for TI Block
-            const hasTiBlock = (blockList) => {
-                return blockList.some(block => 
-                    block.name === 'ti-blocks/three-importer' || 
-                    (block.innerBlocks && hasTiBlock(block.innerBlocks))
-                );
-            };
-
-            // Check for shortcodes in blocks
-            const hasShortcodeInBlocks = (blockList, target) => {
-                return blockList.some(block => {
-                    const text = block.attributes.text || '';
-                    return text.includes(target) || (block.innerBlocks && hasShortcodeInBlocks(block.innerBlocks, target));
+            const countBlocks = (blockList, targetName) => {
+                let count = 0;
+                blockList.forEach(block => {
+                    if (block.name === targetName) count++;
+                    if (block.innerBlocks && block.innerBlocks.length > 0) {
+                        count += countBlocks(block.innerBlocks, targetName);
+                    }
                 });
+                return count;
             };
 
-            const blockExists = hasTiBlock(blocks);
-            const automatedShortcodeExists = content.includes('[ti3d_scene ') || hasShortcodeInBlocks(blocks, '[ti3d_scene ');
-            const manualShortcodeExists = content.includes('[ti3d_sceneinject]') || hasShortcodeInBlocks(blocks, '[ti3d_sceneinject]');
+            const tiBlockCount = countBlocks(blocks, 'ti-blocks/three-importer');
+            
+            const hasShortcode = content.includes('[ti3d_scene') || 
+                                content.includes('[ti3d_sceneinject]');
 
-            // The conflict condition
-            const hasConflict = (blockExists && (automatedShortcodeExists || manualShortcodeExists)) || 
-                               (automatedShortcodeExists && manualShortcodeExists);
+            const hasConflict = (tiBlockCount > 1) || (tiBlockCount >= 1 && hasShortcode);
 
             if (hasConflict) {
-                // IMPORTANT: Only dispatch if we haven't already flagged it
                 if (!isWarningDisplayed) {
-                    isWarningDisplayed = true; // LOCK immediately
-                    
+                    isWarningDisplayed = true;
                     dispatch('core/notices').createNotice(
                         'error',
-                        'Three Importer Conflict: Multiple scene methods detected. Please use only one (Block or Shortcode) to avoid errors.',
+                        'Three Importer Conflict: Multiple scene methods detected. Please use only one (Block or Shortcode) to avoid rendering errors.',
                         { 
-                            id: 'ti3d-conflict-notice', // Fixed ID prevents duplicates
+                            id: 'ti3d-conflict-notice',
                             isDismissible: true 
                         }
                     );
                 }
             } else {
                 if (isWarningDisplayed) {
-                    isWarningDisplayed = false; // UNLOCK
+                    isWarningDisplayed = false;
                     dispatch('core/notices').removeNotice('ti3d-conflict-notice');
                 }
             }
         }
 
-        // Debounce to stop the "flood"
         const debouncedCheck = () => {
             if (timeoutId) clearTimeout(timeoutId);
             timeoutId = setTimeout(checkConsistency, 500);
         };
 
-        // Listen for changes
         subscribe(debouncedCheck);
-        
-        // Run once on load
         debouncedCheck();
     });
 })(window.wp);

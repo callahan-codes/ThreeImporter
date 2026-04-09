@@ -1,20 +1,19 @@
-/* Public Frontend & Editor Styles */
-
 .three-importer-container {
     width: 100%;
     min-height: 400px;
     position: relative;
     overflow: hidden;
     display: block;
+    padding: 0 !important;
 
     &.alignfull {
-        width: 100vw;
-        position: relative;
-        left: 50%;
-        right: 50%;
-        margin-left: -50vw;
-        margin-right: -50vw;
+        width: auto;
         max-width: none;
+        position: relative;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        left: 0;
+        right: 0;
     }
 
     .ti-content {
@@ -28,14 +27,12 @@
         height: 100%;
         pointer-events: none;
         box-sizing: border-box;
-        padding: 0; 
+        padding: inherit; 
 
-        /* Vertical Alignment (Main Axis: Column) */
         &.is-vertically-aligned-top { justify-content: flex-start; }
         &.is-vertically-aligned-center { justify-content: center; }
         &.is-vertically-aligned-bottom { justify-content: flex-end; }
 
-        /* Horizontal Justification (Cross Axis: Column) */
         &.items-justified-left { 
             align-items: flex-start; 
             text-align: left;
@@ -49,25 +46,24 @@
             text-align: right;
         }
 
-        /* Target all immediate children (Paragraphs, Headings, etc.) */
         & > * {
             pointer-events: auto;
             width: fit-content;
             max-width: 100%;
+            text-align: inherit !important; 
+            background-color: transparent !important;
+            background: none !important;
             margin-top: 0;
             margin-bottom: 0;
-            
-            /* CRITICAL FIX: Force internal text alignment to match the parent */
-            text-align: inherit !important; 
         }
 
-        /* Target specific WP blocks to ensure they don't use their own internal alignment */
-        p, h1, h2, h3, h4, h5, h6 {
+        p, h1, h2, h3, h4, h5, h6, div {
             text-align: inherit !important;
-            width: 100%; /* Allows the text-align to actually work within the block */
+            width: 100%; 
+            background-color: transparent !important;
+            background: none !important;
         }
 
-        /* Margin Management for fit-content centering */
         &.items-justified-left > * {
             margin-left: 0;
             margin-right: auto;

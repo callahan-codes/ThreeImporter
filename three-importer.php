@@ -260,7 +260,15 @@ function ti3d_enqueue_editor_warnings() {
         wp_enqueue_script(
             'ti3d-editor-warnings',
             plugin_dir_url(__FILE__) . 'build/three-importer/warning.js',
-            array('wp-data', 'wp-editor', 'wp-notices', 'wp-core-data', 'wp-dom-ready'),
+            array(
+                'wp-data', 
+                'wp-editor', 
+                'wp-notices', 
+                'wp-core-data', 
+                'wp-dom-ready', 
+                'wp-edit-post', 
+                'wp-blocks'
+            ),
             filemtime( $file_path ),
             true
         );

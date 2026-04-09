@@ -1,37 +1,30 @@
-/* Editor-Only Styles */
-
 .wp-block-ti-blocks-three-importer {
     background-color: transparent !important; 
+    border: 1.5px solid black;
     
-    // Target the inner wrapper specifically
     .ti-inner-wrapper {
         display: flex;
         flex-direction: column;
         height: 100%;
         width: 100%;
         
-        // This targets the auto-generated Gutenberg list
         .block-editor-block-list__layout {
             display: flex;
             flex-direction: column;
             width: 100%;
             height: 100%;
-            
-            // Inherit alignment from the parent .ti-content settings
+            padding: inherit; 
             justify-content: inherit;
             align-items: inherit;
-
-            // FIX: Ensure the text inside the blocks follows the alignment
             text-align: inherit;
 
             & > .wp-block {
                 width: fit-content;
                 max-width: 100%;
-                
-                // Forces Paragraphs and Headings in the editor to follow the parent justification
                 text-align: inherit !important;
+                background-color: transparent !important;
+                background: none !important;
 
-                // Ensure the actual rich-text editable area spans the width
                 .rich-text {
                     width: 100%;
                 }
@@ -40,12 +33,11 @@
     }
 }
 
-// UI Polishing for the "Three Importer" header in the editor
 .wp-block-ti-blocks-three-importer .ti-block-heading {
     background-color: #000;
     color: white;
     padding: 8px;
     font-size: 11px;
     letter-spacing: 0.05em;
-    text-transform: uppercase; // Adds to that minimalist professional look
+    text-transform: uppercase;
 }
