@@ -292,15 +292,16 @@ export default function Edit({ attributes, setAttributes }) {
 							onChange={(value) => setAttributes({ camera_followmouse: value })}
 						/>
 
+						{/* camera x position */}
+						<TextControl
+							label={__("X Position", "ti_blocks")}
+							value={attributes.camera_xpos}
+							type="number"
+							onChange={(value) => setAttributes({ camera_xpos: value })}
+						/>
+
 						{attributes.camera_followmouse !== true && (
 							<>
-								{/* camera x position */}
-								<TextControl
-									label={__("X Position", "ti_blocks")}
-									value={attributes.camera_xpos}
-									type="number"
-									onChange={(value) => setAttributes({ camera_xpos: value })}
-								/>
 
 								{/* camera y position */}
 								<TextControl
@@ -400,10 +401,37 @@ export default function Edit({ attributes, setAttributes }) {
 								{ label: __("None", "ti_blocks"), value: "none" },
 								{ label: __("Particles", "ti_blocks"), value: "particles" },
 								{ label: __("CubeGrid", "ti_blocks"), value: "cubegrid" },
+								{ label: __("Shader", "ti_blocks"), value: "shader" },
 							]}
-							onChange={(scene_background) => setAttributes({ scene_background })}
+							onChange={(scene_background) => {
+								const updates = { scene_background };
+								
+								if (scene_background !== "none") {
+									updates.camera_orbit = false;
+								}
+								
+								setAttributes(updates);
+							}}
 						/>
 
+						{ attributes.scene_background === 'none' ? (
+							<ToggleControl
+								label={__("Orbit Controls", "ti_blocks")}
+								checked={attributes.camera_orbit}
+								onChange={(value) => setAttributes({ camera_orbit: value })}
+							/>
+						) : (
+							<div style={{ 
+								padding: '10px', 
+								backgroundColor: '#fff8e1', 
+								borderLeft: '4px solid #ffc107',
+								fontSize: '12px',
+								color: '#856404',
+								marginBottom: '15px'
+							}}>
+								<strong>{__("Note:", "ti_blocks")}</strong> {__("Orbit Controls aren't supported with backgrounds enabled.", "ti_blocks")}
+							</div>
+						)}
 							
 						{attributes.scene_background === "particles" && (
 							<>
@@ -541,6 +569,59 @@ export default function Edit({ attributes, setAttributes }) {
 										{__("Using a negative numeric value will affect the CubeGrid's layout. Your negative input will be converted to positive.", "ti_blocks")}
 									</Notice>
 								)}
+							</>
+						)}
+
+						{attributes.scene_background === "shader" && (
+							<>
+								{/* shader stretch */}
+								<TextControl
+									label={__("Stretch", "ti_blocks")}
+									help={__("Determines the scale of the background plane.", "ti_blocks")}
+									value={attributes.shader_stretch}
+									type="number"
+									onChange={(value) => setAttributes({ shader_stretch: value })}
+								/>
+
+								{/* primary shader color */}
+								<fieldset style={{ marginBottom: '20px' }}>
+									<legend style={{ marginBottom: '10px' }}>{__("Primary Color", "ti_blocks")}</legend>
+									<ColorPalette
+										value={attributes.shader_color_primary}
+										colors={[
+											{ name: "Black", color: "#000000" },
+											{ name: "White", color: "#ffffff" },
+											{ name: "Red", color: "#ff0000" },
+											{ name: "Orange", color: "#ffa500" },
+											{ name: "Yellow", color: "#ffff00" },
+											{ name: "Green", color: "#00ff00" },
+											{ name: "Blue", color: "#0000ff" },
+											{ name: "Indigo", color: "#4b0082" },
+											{ name: "Violet", color: "#ee82ee" }
+										]}
+										onChange={(shader_color_primary) => setAttributes({ shader_color_primary })}
+									/>
+								</fieldset>
+
+								{/* secondary shader color */}
+								<fieldset>
+									<legend style={{ marginBottom: '10px' }}>{__("Secondary Color", "ti_blocks")}</legend>
+									<ColorPalette
+										value={attributes.shader_color_secondary}
+										colors={[
+											{ name: "Black", color: "#000000" },
+											{ name: "White", color: "#ffffff" },
+											{ name: "Red", color: "#ff0000" },
+											{ name: "Orange", color: "#ffa500" },
+											{ name: "Yellow", color: "#ffff00" },
+											{ name: "Green", color: "#00ff00" },
+											{ name: "Blue", color: "#0000ff" },
+											{ name: "Indigo", color: "#4b0082" },
+											{ name: "Violet", color: "#ee82ee" }
+										]}
+										onChange={(shader_color_secondary) => setAttributes({ shader_color_secondary })}
+									/>
+								</fieldset>
 							</>
 						)}
 					</PanelBody>

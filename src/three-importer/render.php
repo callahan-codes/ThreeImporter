@@ -70,6 +70,9 @@ $ti3d_content_class_string = implode( ' ', $ti3d_content_classes );
     data-cubegrid-spacing="<?php echo esc_attr( $attributes['cubegrid_spacing'] ); ?>"
     data-cubegrid-material="<?php echo esc_attr( $attributes['cubegrid_material'] ); ?>"
     data-cubegrid-color="<?php echo esc_attr( $attributes['cubegrid_color'] ); ?>"
+    data-shader-stretch="<?php echo esc_attr( $attributes['shader_stretch'] ); ?>"
+    data-shader-color-primary="<?php echo esc_attr( $attributes['shader_color_primary'] ); ?>"
+    data-shader-color-secondary="<?php echo esc_attr( $attributes['shader_color_secondary'] ); ?>"
     data-tridText-color="<?php echo esc_attr( $attributes['trid_color'] ); ?>"
     data-tridText-size="<?php echo esc_attr( $attributes['trid_size'] ); ?>">
     

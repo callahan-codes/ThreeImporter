@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Three Importer
  * Description:       Create custom Three.js scenes via Block, Shortcode, or your own script.
- * Version:           1.1.1
+ * Version:           1.1.2
  * Requires at least: 6.7
  * Requires PHP:      7.4
  * Author:            Bryce Callahan
@@ -80,9 +80,12 @@ function ti3d_shortcodes_scene_init( $atts, $content = null ) {
         'particle_color' => '#000000',
         'particle_stretch' => '5',
         'cubegrid_stretch' => '120',
+        'shader_stretch' => '120',
         'cubegrid_spacing' => '1',
         'cubegrid_material' => 'phong',
         'cubegrid_color' => '#ffffff',
+        'shader_color_primary' => '#FFFFFF',
+        'shader_color_secondary' => '#000000',
         'trid_color' => '#ffffff',
         'trid_size' => '1',
     ), $atts, 'ti3d_scene' );
@@ -127,6 +130,9 @@ function ti3d_shortcodes_scene_init( $atts, $content = null ) {
     $output .= ' data-cubegrid-spacing="' . esc_attr( $atts['cubegrid_spacing'] ) . '"';
     $output .= ' data-cubegrid-material="' . esc_attr( $atts['cubegrid_material'] ) . '"';
     $output .= ' data-cubegrid-color="' . esc_attr( $atts['cubegrid_color'] ) . '"';
+    $output .= ' data-shader-stretch="' . esc_attr( $atts['shader_stretch'] ) . '"';
+    $output .= ' data-shader-color-primary="' . esc_attr( $atts['shader_color_primary'] ) . '"';
+    $output .= ' data-shader-color-secondary="' . esc_attr( $atts['shader_color_secondary'] ) . '"';
     $output .= ' data-tridText-color="' . esc_attr( $atts['trid_color'] ) . '"';
     $output .= ' data-tridText-size="' . esc_attr( $atts['trid_size'] ) . '"';
     $output .= '>';

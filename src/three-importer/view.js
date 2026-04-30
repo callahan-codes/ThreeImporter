@@ -79,13 +79,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const cubegridSpacing = parseInt(container.getAttribute('data-cubegrid-spacing'), 10) || 1;
         const cubegridMaterial = container.getAttribute('data-cubegrid-material') || 'phong';
         const cubegridColor = container.getAttribute('data-cubegrid-color') || '#FFFFFF';
+        const shaderStretch = parseInt(container.getAttribute('data-shader-stretch'), 10) || 120;
+        const shaderPrimary = container.getAttribute('data-shader-color-primary') || '#ff0000';
+        const shaderSecondary = container.getAttribute('data-shader-color-secondary') || '#0000ff';
 
         // other variables
         const clock = new THREE.Clock();
         const cubegridOffsets = [];
         let mesh,
             particles, particlesGeo, particlesMat,
-            cubegridInstance, mouse = { x: 0, y: 0 };
+            cubegridInstance, mouse = { x: 0, y: 0 },
+            shaderMesh, shaderUniforms;
 
         // threejs scene setup
         const scene = new THREE.Scene();
@@ -105,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // threejs main animation loop
         function animate(){
             requestAnimationFrame(animate);
+            const delta = clock.getDelta();
 
             // rotate mesh
             if(mesh && geometryType !== "none") {
@@ -166,8 +171,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 cubegridInstance.instanceMatrix.needsUpdate = true;
             }
+            if (background === 'shader' && shaderUniforms) {
+                shaderUniforms.iTime.value += delta;
+            }
             
-            if (controls && controls.enabled && !cameraFollowMouse) controls.update();
+            if (controls && controls.enabled) controls.update();
             renderer.render(scene, camera);
         }
         animate();
@@ -459,6 +467,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'cubegrid':
                     buildBackground_Cubes();
+                    break;
+                case 'shader':
+                    buildBackground_Shader();
+                    break;
                 case 'none':
                 default:
                     break;
@@ -533,16 +545,85 @@ document.addEventListener('DOMContentLoaded', () => {
             cubegridInstance.instanceMatrix.needsUpdate = true;
         }
 
+        // background shader
+        function buildBackground_Shader() {
+
+            const vertexShader = `
+                uniform float iTime;
+                varying vec2 vUv;
+                varying float vDepth;
+
+                void main() {
+                    vUv = uv;
+                    vec3 pos = position;
+
+                    float x = pos.x * 0.1;
+                    float y = pos.y * 0.1;
+                    float z = sin(x + iTime) + 
+                            sin((y + iTime) * 0.5) + 
+                            sin((x + y + iTime) * 0.5);
+                    
+                    z += sin(sqrt(x*x + y*y + 1.0) + iTime);
+                    
+                    vDepth = z; 
+                    pos.z += z * 10.0; // Adjust height intensity here
+
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+                }
+            `;
+
+            const fragmentShader = `
+                uniform float iTime;
+                uniform vec3 colorPrimary;
+                uniform vec3 colorSecondary;
+                varying vec2 vUv;
+                varying float vDepth;
+
+                void main() {
+                    float intensity = smoothstep(-2.0, 2.0, vDepth);
+                    vec3 color = mix(colorPrimary, colorSecondary, intensity);
+                    
+                    float shimmer = sin(vDepth * 5.0 + iTime) * 0.1;
+                    color += shimmer;
+
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `;
+
+            shaderUniforms = {
+                iTime: { value: 0 },
+                colorPrimary: { value: new THREE.Color(shaderPrimary) },
+                colorSecondary: { value: new THREE.Color(shaderSecondary) }
+            };
+
+            const geometry = new THREE.PlaneGeometry(shaderStretch * 2, shaderStretch * 2, 200, 200);
+            
+            const material = new THREE.ShaderMaterial({
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
+                uniforms: shaderUniforms,
+                side: THREE.DoubleSide
+            });
+
+            shaderMesh = new THREE.Mesh(geometry, material);
+            shaderMesh.position.set(-30, 0, 0); 
+            shaderMesh.rotation.y = Math.PI / 2;
+
+            scene.add(shaderMesh);
+        }
+
         // camera shake
-        function updateCameraFollowMouse(camera, target = new THREE.Vector3(cameraXTarget, cameraYTarget, cameraZTarget), radius = 5) {
-            const angleHorizontal = mouse.x * (Math.PI / 3) * 0.1;        
-            const angleVertical = mouse.y * (Math.PI / 3) * 0.1; 
+        function updateCameraFollowMouse(camera) {
+            // Calculate an offset based on mouse position
+            const offsetX = mouse.x * 2; // Adjust multiplier for intensity
+            const offsetY = mouse.y * 2;
 
-            camera.position.x = target.x + radius * Math.cos(angleHorizontal) * Math.cos(angleVertical);
-            camera.position.y = target.y + radius * Math.sin(angleVertical);
-            camera.position.z = target.z + radius * Math.sin(angleHorizontal) * Math.cos(angleVertical);
-
-            camera.lookAt(target);
+            // Use the attribute-defined positions as the base
+            camera.position.x = cameraXPos + offsetX;
+            camera.position.y = cameraYPos + offsetY;
+            
+            // Ensure it still looks at the intended target
+            camera.lookAt(cameraXTarget, cameraYTarget, cameraZTarget);
         }
 
     });

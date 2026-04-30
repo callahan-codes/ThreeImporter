@@ -2,7 +2,7 @@
 Contributors:      callahancodes
 Tags:              threejs, 3D
 Tested up to:      6.9
-Stable tag:        1.1.1
+Stable tag:        1.1.2
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -156,3 +156,6 @@ Source Repository: https://github.com/callahan-codes/ThreeImporter
 * Added outline to TI Block in editor.
 * Fixed warning.js not showing warning in editor when TI Blocks are nested within each other.
 * Attempted fix at incorrect padding and full-width styling.
+= 1.1.2 =
+* Added message in editor for disabled Orbit Controls when backgrounds are used to prevent users escaping the background viewpoint.
+* Added Shader background option.
