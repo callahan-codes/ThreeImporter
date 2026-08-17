@@ -40,7 +40,7 @@ export default function Edit({ attributes, setAttributes }) {
         block_height 
     } = attributes;
 
-	const numericHeight = parseInt(attributes.block_height, 10) || 400;
+	const numericHeight = parseInt(attributes.block_height, 10) || 100;
 	const blockProps = useBlockProps();
 
 	return (
@@ -635,7 +635,7 @@ export default function Edit({ attributes, setAttributes }) {
 					height: numericHeight,
 					width: '100%',
 				}}
-				minHeight={400} 
+				minHeight={100} 
 				enable={{ bottom: true }}
 				onResizeStop={(event, direction, elt, delta) => {
 					const newHeight = numericHeight + delta.height;
@@ -644,7 +644,7 @@ export default function Edit({ attributes, setAttributes }) {
 				className="ti-block-resizable-box"
 			>
 				<div style={{ 
-					minHeight: block_height || '400px', 
+					minHeight: block_height || '100px', 
 					height: '100%',
 					width: '100%', 
 					display: 'flex',
@@ -672,7 +672,7 @@ export default function Edit({ attributes, setAttributes }) {
 						}}
 					>
 						<div style={{ pointerEvents: 'auto', width: '100%' }}>
-							<InnerBlocks renderAppender={ false } />
+							<InnerBlocks />
 						</div>
 					</div>
 				</div>
