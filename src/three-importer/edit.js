@@ -658,21 +658,21 @@ export default function Edit({ attributes, setAttributes }) {
 						<p>{__('Scene Settings can be found in the Block settings.', 'three-importer')}</p>
 					</div>
 					
-					<div className="ti-inner-wrapper" style={{ 
-						width: '100%',
-						flexGrow: 1, 
-						display: 'flex',
-						flexDirection: 'column',
-						pointerEvents: 'none',
-						justifyContent: 
-							inner_vertical_alignment === 'bottom' ? 'flex-end' : 
-							inner_vertical_alignment === 'center' ? 'center' : 'flex-start',
-						alignItems: 
-							inner_alignment === 'right' ? 'flex-end' : 
-							inner_alignment === 'center' ? 'center' : 'stretch'
-					}}>
-						<div style={{ pointerEvents: 'auto', minWidth: '200px', maxWidth: '100%' }}>
-							<InnerBlocks renderAppender={ InnerBlocks.ButtonBlockAppender } />
+					<div 
+						className="ti-inner-wrapper" 
+						style={{ 
+							width: '100%',
+							flexGrow: 1, 
+							display: 'flex',
+							flexDirection: 'column',
+							pointerEvents: 'none',
+							justifyContent: 
+								inner_vertical_alignment === 'bottom' ? 'flex-end' : 
+								inner_vertical_alignment === 'center' ? 'center' : 'flex-start'
+						}}
+					>
+						<div style={{ pointerEvents: 'auto', width: '100%' }}>
+							<InnerBlocks renderAppender={ false } />
 						</div>
 					</div>
 				</div>

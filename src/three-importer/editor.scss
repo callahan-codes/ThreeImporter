@@ -1,33 +1,24 @@
 .wp-block-ti-blocks-three-importer {
     background-color: transparent !important; 
     border: 1.5px solid black;
-    
+    width: 100%;
+
     .ti-inner-wrapper {
         display: flex;
         flex-direction: column;
         height: 100%;
         width: 100%;
-        
-        .block-editor-block-list__layout {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            height: 100%;
-            padding: inherit; 
-            justify-content: inherit;
-            align-items: inherit;
-            text-align: inherit;
 
-            & > .wp-block {
-                width: fit-content;
-                max-width: 100%;
-                text-align: inherit !important;
-                background-color: transparent !important;
-                background: none !important;
+        /* Target ONLY top-level direct children inside the inner block container */
+        > div > .block-editor-inner-blocks > .block-editor-block-list__layout {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box;
 
-                .rich-text {
-                    width: 100%;
-                }
+            > .block-editor-block-list__block {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box;
             }
         }
     }
@@ -40,4 +31,5 @@
     font-size: 11px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
+    width: 100%;
 }

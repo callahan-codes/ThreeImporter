@@ -1,3 +1,4 @@
+// style.scss
 .three-importer-container {
     width: 100%;
     min-height: 400px;
@@ -7,13 +8,20 @@
     padding: 0 !important;
 
     &.alignfull {
-        width: auto;
-        max-width: none;
+        width: 100vw;
+        max-width: 100vw;
         position: relative;
         margin-left: calc(50% - 50vw);
         margin-right: calc(50% - 50vw);
         left: 0;
         right: 0;
+    }
+
+    &.alignwide {
+        width: 100%;
+        max-width: var(--wp--style--global--wide-size, 1400px);
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .ti-content {
@@ -46,15 +54,19 @@
             text-align: right;
         }
 
+        /* Restrict content width to layout constraints while canvas remains full-width */
         & > * {
             pointer-events: auto;
-            width: fit-content;
-            max-width: 100%;
+            width: 100%;
+            max-width: var(--wp--style--global--content-size, 1200px);
             text-align: inherit !important; 
             background-color: transparent !important;
             background: none !important;
             margin-top: 0;
             margin-bottom: 0;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
         }
 
         p, h1, h2, h3, h4, h5, h6, div {

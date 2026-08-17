@@ -363,6 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // valid string
             if (gltfURL) {
                 const loader = new GLTFLoader();
+                loader.setCrossOrigin('anonymous');
                 loader.load(gltfURL, (gltf) => {
 
                     mesh = gltf.scene;
